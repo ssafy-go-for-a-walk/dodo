@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import CloseButton from "../button/CloseButton";
-import { MdContentCopy } from "react-icons/md";
+import CloseButton from "../../button/CloseButton";
 
 const Modal = styled.div`
   position: fixed;
@@ -10,13 +9,20 @@ const Modal = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 728px;
-  height: 360px;
+  height: 728px;
   border-radius: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #ffffff;
+`;
+
+const Header = styled.div`
+  width: 580px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Title = styled.div`
@@ -58,10 +64,7 @@ export default function GroupModal(props) {
       <CloseButton />
       <Title>참여코드</Title>
       <Content>참여코드는 N분간 유효합니다.</Content>
-      <Code>
-        BCD2E90
-        <MdContentCopy className="copy" />
-      </Code>
+      <Code>BCD2E90</Code>
       <Copy>복사되었습니다.</Copy>
     </Modal>
   );

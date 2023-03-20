@@ -2,20 +2,20 @@ import React from "react";
 import styled from "styled-components";
 
 const ButtonBox = styled.button`
-  width: 260px;
+  width: 530px;
   height: 67px;
   border-radius: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #1c9bff;
+  border: 1px solid #ff6666;
   background-color: #ffffff;
+  color: #ff6666;
   font-size: 24px;
   font-weight: bold;
-  border: 1px solid #1c9bff;
   cursor: pointer;
 `;
 
-export default function ColorButton(props) {
-  return <ButtonBox onClick={props.onClick}>{props.children}</ButtonBox>;
+export default function DeleteButton(props) {
+  return <ButtonBox onClick={props.onClick}>삭제하기</ButtonBox>;
 }
