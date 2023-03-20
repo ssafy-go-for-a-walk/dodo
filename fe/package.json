@@ -17,6 +17,7 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
     "router-dom": "^2.2.10",
+    "styled-components": "^5.3.9",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

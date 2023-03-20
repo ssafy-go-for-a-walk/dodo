@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './user';
-import { CombineReducers } from '@reduxjs/toolkit';
+import { combineReducers } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, PERSIST, PURGE } from 'redux-persist';
 import logger from 'redux-logger';
 
-const reducers = CombineReducers({
+const reducers = combineReducers({
 	user: userReducer,
 });
 
