@@ -1,7 +1,15 @@
 import logo from "./logo.svg";
 import "./App.css";
+import React, { useState } from "react";
 
 function App() {
+  const [counter, setCounter] = useState(0);
+  const minus = () => {
+    setCounter(num => num - 1)
+  }
+  const plus = () => {
+    setCounter(num => num + 1)
+  }
   return (
     <div className="App">
       <header className="App-header">
