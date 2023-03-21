@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Survey from "./Survey";
 import LogIn from "./LogIn";
+import { useNavigate } from "react-router-dom";
 
 const list = [
   {
@@ -45,11 +46,14 @@ const DivTop = styled.div`
 `;
 
 const Div = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-`;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+`
 
 const Title = styled.h3`
   width: 100%;
@@ -74,34 +78,51 @@ const NextButton = styled.button`
   margin-top: 20px;
 `;
 
-const brTag = (
-  <div style={{ lineHeight: "500%" }}>
-    <br />
-  </div>
-);
+const brTag = <div style={{lineHeight: "500%"}}><br/></div>
 
 export default function SurveyPage() {
-  const [selected, setSelected] = useState([]);
-  const changeData = id => {
-    console.log(id);
-    if (selected.includes(id)) {
-      setSelected(selec => selec.filter(v => v !== id));
-    } else {
-      setSelected(selec => selec.concat(id));
+    const [selected, setSelected] = useState([])
+    const navigate = useNavigate();
+    const changeData = (id) => {
+        if (selected.includes(id)) {
+            setSelected(selec => selec.filter(v => v !== id))
+        } else {
+            setSelected(selec => selec.concat(id))
+        }
     }
-  };
-  return (
-    <DivTop>
-      <LogIn />
-      {brTag}
-      <Div>
-        <Title>관심있는 버킷 리스트를 선택해주세요.</Title>
-        <Title>{selected.length !== 0 ? selected.length : null}</Title>
-        {list.map(data => (
-          <Survey select={selected.includes(data.id)} content={data.content} id={data.id} key={data.id} propFunction={changeData} />
-        ))}
-        <NextButton>다 골랐어요!</NextButton>
-      </Div>
-    </DivTop>
-  );
+    const goToSignUp = () => {
+        navigate("/survey/signup", {
+            state: {
+                selected,
+            }
+        })
+    }
+    return (
+        <DivTop>
+            <LogIn/>
+            {brTag}
+            <Title>
+                관심있는 버킷 리스트를 선택해주세요.
+            </Title>
+            <Title>
+                {selected.length !== 0 ? selected.length : null}
+            </Title>
+            <Div style={{ minHeight: "400px", height: "34vw", overflow: "auto"}}>
+                {list.map(data => (
+                    <Survey
+                    select={selected.includes(data.id)}
+                    content={data.content}
+                    id={data.id}
+                    key={data.id}
+                    propFunction={changeData}
+                    />
+                ))}
+            </Div>
+            <Div>
+                <NextButton onClick={goToSignUp}>
+                    다 골랐어요!
+                </NextButton>
+            </Div>
+        </DivTop>
+    )
 }
