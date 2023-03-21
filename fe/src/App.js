@@ -9,11 +9,17 @@ import SignUpPage from "./pages/Survey/SignUpPage";
 // import SharePage from "./pages/SharePage";
 // import Page404 from "./pages/Page404";
 
+import MainLayout from "./components/layout/MainLayout";
+import { routes } from "./routes";
+
 function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<SearchPage />} />
+        <Route path="/" element={<MainLayout />}>
+          {routes}
+        </Route>
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/survey" element={<SurveyPage />} />
         <Route path="/survey/signup" element={<SignUpPage />} />
         {/* <Route path="/login" element={<LoginPage />} />

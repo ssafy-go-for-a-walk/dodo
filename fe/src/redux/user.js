@@ -9,10 +9,15 @@ const initialStateValue = {
 	loginBucketNumber: "",
 };
 
+const initialStateValue2 = {
+  appState: ""
+};
+
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
     value: initialStateValue,
+    appState : initialStateValue2,
   },
   reducers: {
     login: (state, action) => {
@@ -24,8 +29,11 @@ export const userSlice = createSlice({
 		change: (state, action) => {
       state.value.loginBucketNumber = action.payload.bucketNumber;
     },
+    setAppState: (state, action) => {
+      state.appState = action.payload;
+    },
   },
 });
 
-export const { login, logout, change } = userSlice.actions;
+export const { login, logout, change, setAppState } = userSlice.actions;
 export default userSlice.reducer;
