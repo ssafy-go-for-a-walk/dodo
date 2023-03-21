@@ -69,7 +69,7 @@ public class JwtProvider {
                         .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
         User principal = new User(claims.getSubject(), "", authorities);
-
+        CustomOAuth2User customOAuth2User = new CustomOAuth2User(claims.getAudience(), claims.getId());
         return new UsernamePasswordAuthenticationToken(principal, accessToken, authorities);
     }
 

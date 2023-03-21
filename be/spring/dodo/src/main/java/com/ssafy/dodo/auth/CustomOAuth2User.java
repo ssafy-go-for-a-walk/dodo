@@ -28,4 +28,10 @@ public class CustomOAuth2User extends DefaultOAuth2User {
         this.email = email;
         this.profileImage = profileImage;
     }
+
+    public CustomOAuth2User(String seq, String email) {
+        super(null, null, null);
+        this.seq = seq;
+        this.email = email;
+    }
 }

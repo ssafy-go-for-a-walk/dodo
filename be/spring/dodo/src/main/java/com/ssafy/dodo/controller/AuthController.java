@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,9 @@ public class AuthController {
     @GetMapping("/hello")
     public String hello(@AuthenticationPrincipal UserDetails userDetails){
         log.info(userDetails.getUsername());
+        log.info(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        log.info(((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPassword());
+
         return "hello";
     }
 
