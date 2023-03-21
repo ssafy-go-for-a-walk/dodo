@@ -30,7 +30,7 @@ const CodeInput = styled.input`
   height: 44px;
   font-size: 22px;
   text-align: center;
-  border: 0;
+  border: none;
   border-bottom: 1px solid #ced4da;
   outline: none;
   margin: 40px 0;
