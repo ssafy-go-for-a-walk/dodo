@@ -22,7 +22,6 @@ const ButtonBox = styled.button`
 
 export default function AddButton(props) {
   const { isAdd, bucketId } = props;
-  console.log(props);
   const addBucket = event => {
     event.preventDefault();
     props.propFunction(bucketId);
