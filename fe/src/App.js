@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import SearchPage from "./pages/SearchPage";
-import SurveyPage from "./pages/SurveyPage";
+import SurveyPage from "./pages/Survey/SurveyPage";
 import LoginPage from "./pages/LoginPage";
 import InfoPage from "./pages/InfoPage";
 import ManagePage from "./pages/ManagePage";

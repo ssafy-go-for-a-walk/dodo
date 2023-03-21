@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import CodeModal from "../components/common/modal/CodeModal";
-import Backdrop from "../components/common/modal/Backdrop";
-import GroupModal from "../components/common/modal/GroupModal";
-import DetailModal from "../components/common/modal/detailBucket/DetailModal";
+// import CodeModal from "../components/common/modal/CodeModal";
+// import Backdrop from "../components/common/modal/Backdrop";
+// import GroupModal from "../components/common/modal/GroupModal";
 import SlideUp from "../components/common/button/SlideUp";
 import SearchBar from "../components/search/SearchBar";
 import Banner from "../components/search/Banner";

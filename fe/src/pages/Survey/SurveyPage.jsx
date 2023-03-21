@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Survey from "../components/survey/Survey";
-import LogIn from "../components/survey/LogIn";
+import Survey from "./Survey";
+import LogIn from "./LogIn";
 
 const list = [
   {
