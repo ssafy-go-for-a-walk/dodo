@@ -1,6 +1,7 @@
 package com.ssafy.dodo.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -9,8 +10,8 @@ import javax.persistence.*;
 @Table(name = "bookmarks")
 @IdClass(BookmarkSeq.class)
 @Getter
-@ToString
-public class Bookmark {
+@NoArgsConstructor
+public class Bookmark extends BaseEntity {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)

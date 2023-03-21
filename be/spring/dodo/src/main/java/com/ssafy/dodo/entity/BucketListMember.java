@@ -1,6 +1,9 @@
 package com.ssafy.dodo.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -8,7 +11,8 @@ import javax.persistence.*;
 @Table(name = "bucketlist_members")
 @IdClass(BucketListMemberSeq.class)
 @Getter
-public class BucketListMember {
+@NoArgsConstructor
+public class BucketListMember extends BaseEntity {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)

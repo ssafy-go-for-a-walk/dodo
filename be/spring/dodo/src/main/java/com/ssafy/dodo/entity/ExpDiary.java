@@ -1,7 +1,6 @@
 package com.ssafy.dodo.entity;
 
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,8 +9,9 @@ import java.util.List;
 @Entity
 @Table(name = "exp_diaries")
 @Getter
-@ToString
-public class ExpDiary {
+@ToString(exclude = {"addedBucket", "images"})
+@NoArgsConstructor
+public class ExpDiary extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
@@ -24,4 +24,10 @@ public class ExpDiary {
 
     @OneToMany(mappedBy = "expDiary", fetch = FetchType.LAZY)
     private List<ExpDiaryImage> images = new ArrayList<>();
+
+    @Builder
+    public ExpDiary(Long seq, String content) {
+        this.seq = seq;
+        this.content = content;
+    }
 }

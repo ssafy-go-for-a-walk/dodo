@@ -5,12 +5,12 @@ import java.util.Objects;
 
 public class BookmarkSeq implements Serializable {
 
-    private Long userSeq;
-    private Long bucketListSeq;
+    private Long user;
+    private Long bucketList;
 
     @Override
     public int hashCode() {
-        return Objects.hash(userSeq, bucketListSeq);
+        return Objects.hash(user, bucketList);
     }
 
     @Override
@@ -18,7 +18,7 @@ public class BookmarkSeq implements Serializable {
         if(this == obj) return true;
         if(obj == null || getClass() != obj.getClass()) return false;
         BookmarkSeq bookmarkSeq = (BookmarkSeq) obj;
-        return Objects.equals(this.userSeq, bookmarkSeq.userSeq)
-                && Objects.equals(this.bucketListSeq, bookmarkSeq.bucketListSeq);
+        return Objects.equals(this.user, bookmarkSeq.user)
+                && Objects.equals(this.bucketList, bookmarkSeq.bucketList);
     }
 }
