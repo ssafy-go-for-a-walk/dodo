@@ -32,7 +32,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
         
         User user = saveOrUpdate(registrationId, attributes);
-        log.info("현재 접근한 유저 : {}", user.toString());
+
         return new CustomOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
                 attributes.getAttributes(),

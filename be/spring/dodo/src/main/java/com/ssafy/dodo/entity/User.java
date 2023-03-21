@@ -34,4 +34,8 @@ public class User extends BaseEntity {
         this.lastLoginAt = LocalDateTime.now();
         this.refreshToken = refreshToken;
     }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }
