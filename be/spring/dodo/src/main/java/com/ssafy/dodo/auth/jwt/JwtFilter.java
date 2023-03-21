@@ -30,9 +30,8 @@ public class JwtFilter extends OncePerRequestFilter {
         log.info("request method: {}", request.getMethod());
         log.info(jwt);
 
-        jwtProvider.validateToken(jwt);
         // 토큰이 정상적이면 SecurityContext에 set.
-        if (StringUtils.hasText(jwt)) {
+        if (StringUtils.hasText(jwt) && jwtProvider.validateToken(jwt)) {
             Authentication authentication = jwtProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);

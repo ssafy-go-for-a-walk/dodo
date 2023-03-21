@@ -1,6 +1,7 @@
 package com.ssafy.dodo.auth.jwt;
 
 import com.ssafy.dodo.auth.CustomOAuth2User;
+import com.ssafy.dodo.exception.ErrorCode;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -80,19 +81,19 @@ public class JwtProvider {
         }
     }
 
-    public void validateToken(String token) {
+    public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
-//            return true;
+            return true;
         } catch (ExpiredJwtException e) {
             log.info("만료된 토큰입니다.");
-//            throw new ExpiredJwtException(e.getHeader(), e.getClaims(), ErrorCode.EXPIRED_TOKEN.getMessage());
+            throw new ExpiredJwtException(e.getHeader(), e.getClaims(), ErrorCode.EXPIRED_TOKEN.getMessage());
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 토큰입니다.");
-//            throw new UnsupportedJwtException(ErrorCode.EXPIRED_TOKEN.getMessage());
+            throw new UnsupportedJwtException(ErrorCode.EXPIRED_TOKEN.getMessage());
         } catch (JwtException e) {
             log.info("토큰이 잘못되었습니다.");
-//            throw new JwtException(ErrorCode.WRONG_TOKEN.getMessage());
+            throw new JwtException(ErrorCode.WRONG_TOKEN.getMessage());
         }
 
     }
