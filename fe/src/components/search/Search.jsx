@@ -5,7 +5,6 @@ import SearchBar from "./SearchBar";
 import Banner from "./Banner";
 import SearchBucket from "./SearchBucket";
 import Category from "./Category";
-import ManageBucket from "../manage/ManageBucket";
 
 const categoryList = [
   {
@@ -149,11 +148,8 @@ export default function Search() {
       </Categorys>
       <Banner />
       <Buckets>
-        {/* {bucketList.map(bucket => (
-          <SearchBucket bucket={bucket} key={bucket.id} />
-        ))} */}
         {bucketList.map(bucket => (
-          <ManageBucket bucket={bucket} key={bucket.id} />
+          <SearchBucket bucket={bucket} key={bucket.id} />
         ))}
       </Buckets>
       <SlideUp />

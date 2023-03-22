@@ -16,7 +16,7 @@ const BucketInfo = styled.div`
   width: ${props => (props.activate ? "688px" : "752px")};
   height: 52px;
   border-radius: 8px;
-  background: #ffffff;
+  background: ${props => (props.isComplete ? "#E9F5FF" : "#ffffff")};
   position: absolute;
   display: flex;
   justify-content: space-between;
@@ -54,7 +54,7 @@ const DeleteBox = styled.div`
   align-items: center;
 `;
 
-const DeleteBtn = styled.div`
+const DeleteBtn = styled.button`
   width: 48px;
   height: 32px;
   display: flex;
@@ -69,17 +69,25 @@ export default function Bucket(props) {
   const bucket = props.bucket;
   const [activateDelete, setActivateDelete] = useState(false);
 
+  const openDetailModal = () => {
+    console.log("open");
+  };
+
   const activateBtn = () => {
     setActivateDelete(!activateDelete);
   };
 
-  const deleteBucket = () => {
-    return;
+  const deleteBucket = event => {
+    if (event.stopPropagation) {
+      event.stopPropagation();
+    }
+    event.cancelBubble = true;
+    console.log("delete");
   };
 
   return (
     <BucketBox>
-      <BucketInfo activate={activateDelete}>
+      <BucketInfo activate={activateDelete} isComplete={bucket.isComplete} onClick={openDetailModal}>
         <BucketHeader>
           <Tag tagName={bucket.category} />
           <BucketImoge />
