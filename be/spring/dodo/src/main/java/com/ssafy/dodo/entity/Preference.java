@@ -23,8 +23,9 @@ public class Preference extends BaseEntity {
     private PublicBucket publicBucket;
 
     @Builder
-    public Preference(Long seq, User user) {
+    public Preference(Long seq, User user, PublicBucket publicBucket) {
         this.seq = seq;
         this.user = user;
+        this.publicBucket = publicBucket;
     }
 }

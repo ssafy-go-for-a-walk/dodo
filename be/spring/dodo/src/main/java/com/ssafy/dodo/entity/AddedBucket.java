@@ -29,12 +29,14 @@ public class AddedBucket extends BaseEntity {
     private PublicBucket publicBucket;
 
     @Builder
-    public AddedBucket(Long seq, boolean isComplete, String emoji, String dDay, String location, String desc) {
+    public AddedBucket(Long seq, boolean isComplete, String emoji, String dDay, String location, String desc, BucketList bucketList, PublicBucket publicBucket) {
         this.seq = seq;
         this.isComplete = isComplete;
         this.emoji = emoji;
         this.dDay = dDay;
         this.location = location;
         this.desc = desc;
+        this.bucketList = bucketList;
+        this.publicBucket = publicBucket;
     }
 }

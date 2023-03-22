@@ -33,4 +33,15 @@ public class BucketListController {
         return ResponseEntity.ok(bucketListService.getBucketListBuckets(userDetails, bucketListSeq, pageable));
     }
 
+    @PostMapping("/{bucketlist-seq}/buckets")
+    public ResponseEntity<?> addCustomBucket(
+            @PathVariable("bucketlist-seq") Long bucketListSeq,
+            CustomBucketDto customBucketDto,
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+
+        publicBucketSerice.addCustomBucket(bucketListSeq, customBucketDto, userDetails);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 }
