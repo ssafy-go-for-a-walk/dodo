@@ -23,7 +23,7 @@ public class ErrorResponse extends CommonResponse {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setSuccess(false);
         errorResponse.setCode("errorCode");
-        errorResponse.setMessage(errorResponse.getMessage());
+        errorResponse.setMessage(errorCode.getMessage());
         return errorResponse;
     }
 }

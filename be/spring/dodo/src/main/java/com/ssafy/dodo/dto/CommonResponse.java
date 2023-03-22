@@ -1,7 +1,6 @@
 package com.ssafy.dodo.dto;
 
 import lombok.*;
-import org.springframework.http.ResponseEntity;
 
 @Getter
 @Setter
@@ -11,5 +10,4 @@ import org.springframework.http.ResponseEntity;
 public class CommonResponse {
 
     private boolean isSuccess;
-    ResponseEntity
 }
