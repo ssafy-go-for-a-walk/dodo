@@ -1,0 +1,36 @@
+package com.ssafy.dodo.controller;
+
+import com.ssafy.dodo.dto.CustomBucketDto;
+import com.ssafy.dodo.repository.AddedBucketRepository;
+import com.ssafy.dodo.service.BucketListService;
+import com.ssafy.dodo.service.PublicBucketSerice;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/api/bucketlist")
+public class BucketListController {
+
+    private final BucketListService bucketListService;
+    private final PublicBucketSerice publicBucketSerice;
+
+    @GetMapping("/{bucketlist-seq}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<?> getBucketListBuckets(
+            @PathVariable("bucketlist-seq") Long bucketListSeq,
+            @AuthenticationPrincipal UserDetails userDetails,
+            Pageable pageable
+    ){
+
+        return ResponseEntity.ok(bucketListService.getBucketListBuckets(userDetails, bucketListSeq, pageable));
+    }
+
+}
