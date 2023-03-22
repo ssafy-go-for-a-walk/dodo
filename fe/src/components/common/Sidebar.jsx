@@ -12,7 +12,6 @@ const Sidebar = () => {
       variant="permanent"
       sx={{
         height: `calc(100% - ${sizeConfigs.sidebar.width})`,
-        top: "80px",
         width: sizeConfigs.sidebar.width,
         flexShrink: 0,
         "& .MuiDrawer-paper": {

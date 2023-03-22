@@ -1,5 +1,5 @@
 import SearchPage from "../pages/SearchPage";
-import SocialPage from "../pages/SocialPage"
+import SocialPage from "../pages/social/SocialPage"
 import SearchIcon from '@mui/icons-material/Search';
 import LanguageIcon from '@mui/icons-material/Language';
 
