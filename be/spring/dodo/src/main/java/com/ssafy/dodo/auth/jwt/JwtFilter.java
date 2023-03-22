@@ -28,13 +28,14 @@ public class JwtFilter extends OncePerRequestFilter {
         String requestURI = httpServletRequest.getRequestURI();
 
         log.info("request method : {}", request.getMethod());
+        log.info("request uri : {}", requestURI);
         log.info("request access token : {}" ,jwt);
 
         // 토큰이 정상적이면 SecurityContext에 set.
         if (StringUtils.hasText(jwt) && jwtProvider.validateToken(jwt)) {
             Authentication authentication = jwtProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+            log.info("Security Context에 '{}' 인증 정보를 저장했습니다", authentication.getName());
         }else{
             log.info("유효하지 않은 토큰입니다.");
         }
