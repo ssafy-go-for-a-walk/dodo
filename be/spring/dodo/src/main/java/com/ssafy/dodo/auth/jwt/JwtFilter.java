@@ -27,8 +27,8 @@ public class JwtFilter extends OncePerRequestFilter {
         String jwt = resolveToken(httpServletRequest);
         String requestURI = httpServletRequest.getRequestURI();
 
-        log.info("request method: {}", request.getMethod());
-        log.info(jwt);
+        log.info("request method : {}", request.getMethod());
+        log.info("request access token : {}" ,jwt);
 
         // 토큰이 정상적이면 SecurityContext에 set.
         if (StringUtils.hasText(jwt) && jwtProvider.validateToken(jwt)) {
