@@ -31,7 +31,11 @@ public class User extends BaseEntity {
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.authProvider = authProvider;
-        this.lastLoginAt = lastLoginAt;
+        this.lastLoginAt = LocalDateTime.now();
+        this.refreshToken = refreshToken;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
 }
