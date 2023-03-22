@@ -1,5 +1,6 @@
 package com.ssafy.dodo.config;
 
+import com.ssafy.dodo.auth.CustomOAuth2User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
@@ -19,7 +20,7 @@ public class JpaAuditConfig implements AuditorAware<Long> {
         if (null == authentication || !authentication.isAuthenticated()) {
             return null;
         }
-        User user = (User) authentication.getPrincipal();
-        return Optional.of(Long.parseLong(user.getUsername()));
+        Long userSeq = ((CustomOAuth2User) authentication.getPrincipal()).getSeq();
+        return Optional.of(userSeq);
     }
 }

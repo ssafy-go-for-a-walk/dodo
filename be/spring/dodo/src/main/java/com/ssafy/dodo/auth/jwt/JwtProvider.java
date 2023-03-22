@@ -32,10 +32,14 @@ public class JwtProvider {
         Date now = new Date();
         Date validity = new Date(now.getTime() + ACCESS_TOKEN_VALIDATE_TIME);
 
-        String email = ((CustomOAuth2User)authentication.getPrincipal()).getEmail();
-        log.info("email in authentication principal : {}" , email);
+//        String email = ((CustomOAuth2User)authentication.getPrincipal()).getEmail();
 
-        Long seq = ((CustomOAuth2User)authentication.getPrincipal()).getSeq();
+        Long seq;
+        try{
+            seq = ((CustomOAuth2User)authentication.getPrincipal()).getSeq();
+        }catch (Exception e){
+            seq = Long.parseLong(((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername());
+        }
 
         Map<String, Object> claims = new HashMap<>();
         claims.put(AUTHORITIES_KEY, "ROLE_USER");
@@ -44,7 +48,8 @@ public class JwtProvider {
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .setClaims(claims)
-                .setSubject(email)
+//                .setAudience(email)
+                .setSubject(seq.toString())
                 .setIssuer("issuer")
                 .setIssuedAt(now)
                 .setExpiration(validity)
@@ -74,6 +79,9 @@ public class JwtProvider {
                         .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
         User principal = new User(seq, "", authorities);
+
+        // principal CustomOAuth2User로 만들수없을까
+//        CustomOAuth2User principal2 = new CustomOAuth2User(Long.parseLong(seq), claims.getAudience());
 
         return new UsernamePasswordAuthenticationToken(principal, accessToken, authorities);
     }
