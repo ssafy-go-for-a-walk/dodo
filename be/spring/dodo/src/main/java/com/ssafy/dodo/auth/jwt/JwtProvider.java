@@ -12,10 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -38,9 +35,15 @@ public class JwtProvider {
         String email = ((CustomOAuth2User)authentication.getPrincipal()).getEmail();
         log.info("email in authentication principal : {}" , email);
 
+        Long seq = ((CustomOAuth2User)authentication.getPrincipal()).getSeq();
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(AUTHORITIES_KEY, "ROLE_USER");
+        claims.put("userSeq", seq);
+
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
-                .claim(AUTHORITIES_KEY, "ROLE_USER")
+                .setClaims(claims)
                 .setSubject(email)
                 .setIssuer("issuer")
                 .setIssuedAt(now)
@@ -64,12 +67,14 @@ public class JwtProvider {
     public Authentication getAuthentication(String accessToken) {
         Claims claims = parseClaims(accessToken);
 
+        String seq = ((Map<String, Object>) claims).get("userSeq").toString();
+
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
-        CustomOAuth2User customOAuth2User = new CustomOAuth2User(claims.getAudience(), claims.getId());
+        User principal = new User(seq, "", authorities);
+
         return new UsernamePasswordAuthenticationToken(principal, accessToken, authorities);
     }
 

@@ -2,6 +2,7 @@ package com.ssafy.dodo.auth;
 
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 
 import java.util.Collection;
@@ -27,11 +28,5 @@ public class CustomOAuth2User extends DefaultOAuth2User {
         this.seq = seq;
         this.email = email;
         this.profileImage = profileImage;
-    }
-
-    public CustomOAuth2User(String seq, String email) {
-        super(null, null, null);
-        this.seq = seq;
-        this.email = email;
     }
 }

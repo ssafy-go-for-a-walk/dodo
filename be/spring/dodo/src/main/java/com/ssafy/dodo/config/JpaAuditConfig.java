@@ -15,12 +15,11 @@ public class JpaAuditConfig implements AuditorAware<Long> {
 
     @Override
     public Optional<Long> getCurrentAuditor() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (null == authentication || !authentication.isAuthenticated()) {
-//            return null;
-//        }
-//        User user = (User) authentication.getPrincipal();
-//        return Optional.of(user.getUsername());
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (null == authentication || !authentication.isAuthenticated()) {
+            return null;
+        }
+        User user = (User) authentication.getPrincipal();
+        return Optional.of(Long.parseLong(user.getUsername()));
     }
 }
