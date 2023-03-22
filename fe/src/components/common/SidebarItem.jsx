@@ -5,7 +5,8 @@ import colorConfigs from "../../configs/colorConfigs";
 
 
 const SidebarItem = (props) => {
-  const { appState } = useSelector((state) => state.user.appState);
+  const { user } = useSelector((state) => state);
+  const appState = user.appState
   const item = props.item
   return (
     item.sidebarProps && item.path ? (
@@ -17,8 +18,9 @@ const SidebarItem = (props) => {
             backgroundColor: colorConfigs.sidebar.hoverBg
           },
           backgroundColor: appState === item.state ? colorConfigs.sidebar.activeBg : "unset",
-          paddingY: "12px",
-          paddingX: "24px"
+          paddingY: "8px",
+          paddingX: "24px",
+          fontWeight: "700",
         }}
       >
         <ListItemIcon sx={{
