@@ -1,16 +1,18 @@
-import { Avatar, Drawer, List, Stack, Toolbar } from "@mui/material";
-import assets from "../../assets";
+import { Drawer, List} from "@mui/material";
 import colorConfigs from "../../configs/colorConfigs";
 import sizeConfigs from "../../configs/sizeConfigs";
-import appRoutes from "../../routes/appRoutes";
-import SidebarItem from "./SidebarItem";
-import SidebarItemCollapse from "./SidebarItemCollapse";
+import SidebarNav from "./SidebarNav";
 
 const Sidebar = () => {
   return (
     <Drawer
+      PaperProps={{
+        sx: { top: "64px"}
+      }}
       variant="permanent"
       sx={{
+        height: `calc(100% - ${sizeConfigs.sidebar.width})`,
+        top: "80px",
         width: sizeConfigs.sidebar.width,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
@@ -22,25 +24,8 @@ const Sidebar = () => {
         }
       }}
     >
-      <List disablePadding>
-        <Toolbar sx={{ marginBottom: "20px" }}>
-          <Stack
-            sx={{ width: "100%" }}
-            direction="row"
-            justifyContent="center"
-          >
-            <Avatar src={assets.images.logo} />
-          </Stack>
-        </Toolbar>
-        {appRoutes.map((route, index) => (
-          route.sidebarProps ? (
-            route.child ? (
-              <SidebarItemCollapse item={route} key={index} />
-            ) : (
-              <SidebarItem item={route} key={index} />
-            )
-          ) : null
-        ))}
+      <List>
+        <SidebarNav />
       </List>
     </Drawer>
   );

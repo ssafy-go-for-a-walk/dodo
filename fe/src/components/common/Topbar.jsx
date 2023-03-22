@@ -1,26 +1,61 @@
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import { AppBar, Toolbar } from "@mui/material";
 import colorConfigs from "../../configs/colorConfigs";
-import sizeConfigs from "../../configs/sizeConfigs";
+import ReorderIcon from '@mui/icons-material/Reorder';
+// import { useSelector } from "react-redux";
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import styled from "styled-components"
 
-const Topbar = () => {
+const TopDiv = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const Div = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`
+
+const UserImg = styled.img`
+  margin-right: 8px;
+	height: 40px;
+  width: 40px;
+  border-radius: 100px;
+`
+
+export default function Topbar() {
+  // const { user } = useSelector((state) => state);
+  const userNickname = "짱구는 못말려"
   return (
     <AppBar
       position="fixed"
       sx={{
-        width: `calc(100% - ${sizeConfigs.sidebar.width})`,
-        ml: sizeConfigs.sidebar.width,
+        width: "100%",
         boxShadow: "unset",
         backgroundColor: colorConfigs.topbar.bg,
         color: colorConfigs.topbar.color
       }}
     >
       <Toolbar>
-        <Typography variant="h6">
-          React sidebar with dropdown
-        </Typography>
+        <TopDiv>
+          <ReorderIcon sx={{
+            "&: hover": {
+              cursor: "pointer",
+            },
+          }}/>
+          <Div>
+            <UserImg
+              src="data:image/jpeg;base64,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"
+              alt="#"
+            />
+            {/* {console.log(user.value.loginUserNickname, "sjp2")} */}
+            {userNickname}
+            <ExpandMoreOutlinedIcon/>
+          </Div>
+        </TopDiv>
       </Toolbar>
     </AppBar>
   );
 };
-
-export default Topbar;
