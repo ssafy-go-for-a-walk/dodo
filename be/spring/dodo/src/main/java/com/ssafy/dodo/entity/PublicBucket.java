@@ -31,4 +31,8 @@ public class PublicBucket extends BaseEntity {
         this.isPublic = isPublic;
         this.addedCount = addedCount;
     }
+
+    public void updateAddedCount(){
+        this.addedCount += 1;
+    }
 }
