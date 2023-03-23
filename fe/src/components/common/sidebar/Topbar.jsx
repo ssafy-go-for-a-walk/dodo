@@ -1,5 +1,5 @@
 import { AppBar, Toolbar } from "@mui/material";
-import colorConfigs from "../../configs/colorConfigs";
+import colorConfigs from "../../../configs/colorConfigs";
 import ReorderIcon from '@mui/icons-material/Reorder';
 // import { useSelector } from "react-redux";
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
@@ -26,7 +26,9 @@ const UserImg = styled.img`
 
 export default function Topbar() {
   // const { user } = useSelector((state) => state);
-  const userNickname = "짱구는 못말려"
+  const userNickname = "짱구는 못말려" // 로그인 기능과 redux가 연결되면 삭제
+  // const userImg = user.value.loginUserImg
+  // const userNickname = user.value.loginUserNickname
   return (
     <AppBar
       position="fixed"
@@ -46,10 +48,10 @@ export default function Topbar() {
           }}/>
           <Div>
             <UserImg
+              // src={userImg}
               src="https://img.danawa.com/prod_img/500000/017/350/img/13350017_1.jpg?shrink=330:*&_v=20210224095944"
               alt="#"
             />
-            {/* {console.log(user.value.loginUserNickname, "sjp2")} */}
             {userNickname}
             <ExpandMoreOutlinedIcon/>
           </Div>

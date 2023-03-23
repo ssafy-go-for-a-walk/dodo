@@ -6,18 +6,14 @@ const initialStateValue = {
 	loginUserEmail: "",
 	loginUserImg: "",
   loginUserNickname: "",
-	loginBucketNumber: "",
-};
-
-const initialStateValue2 = {
-  appState: ""
+	loginBucketName: "",
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
     value: initialStateValue,
-    appState : initialStateValue2,
+    appState : "",
   },
   reducers: {
     login: (state, action) => {
@@ -27,7 +23,7 @@ export const userSlice = createSlice({
       state.value = initialStateValue;
     },
 		change: (state, action) => {
-      state.value.loginBucketNumber = action.payload.bucketNumber;
+      state.value.loginBucketName = action.payload;
     },
     setAppState: (state, action) => {
       state.appState = action.payload;

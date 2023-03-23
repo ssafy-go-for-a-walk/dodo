@@ -2,8 +2,8 @@ import { Outlet } from "react-router-dom";
 import { Box, Toolbar } from "@mui/material";
 import colorConfigs from "../../configs/colorConfigs";
 import sizeConfigs from "../../configs/sizeConfigs";
-import Sidebar from "../common/Sidebar";
-import Topbar from "../common/Topbar";
+import Sidebar from "../common/sidebar/Sidebar";
+import Topbar from "../common/sidebar/Topbar";
 
 const MainLayout = () => {
   return (

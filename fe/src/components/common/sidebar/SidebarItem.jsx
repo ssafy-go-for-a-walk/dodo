@@ -1,7 +1,7 @@
 import { ListItemButton, ListItemIcon } from "@mui/material";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import colorConfigs from "../../configs/colorConfigs";
+import colorConfigs from "../../../configs/colorConfigs";
 
 
 const SidebarItem = (props) => {
