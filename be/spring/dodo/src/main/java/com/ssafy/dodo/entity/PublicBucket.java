@@ -39,4 +39,8 @@ public class PublicBucket extends BaseEntity {
         this.category = category;
         this.isDelete = isDelete;
     }
+
+    public void updateAddedCount(){
+        this.addedCount += 1;
+    }
 }

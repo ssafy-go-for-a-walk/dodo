@@ -20,7 +20,13 @@ public class JpaAuditConfig implements AuditorAware<Long> {
         if (null == authentication || !authentication.isAuthenticated()) {
             return null;
         }
-        Long userSeq = ((CustomOAuth2User) authentication.getPrincipal()).getSeq();
-        return Optional.of(userSeq);
+
+        Long seq;
+        if(authentication.getPrincipal() instanceof CustomOAuth2User){
+            seq = ((CustomOAuth2User)authentication.getPrincipal()).getSeq();
+        }else{
+            seq = Long.parseLong(((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername());
+        }
+        return Optional.of(seq);
     }
 }

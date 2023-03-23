@@ -32,14 +32,18 @@ public class JwtProvider {
         Date now = new Date();
         Date validity = new Date(now.getTime() + ACCESS_TOKEN_VALIDATE_TIME);
 
-//        String email = ((CustomOAuth2User)authentication.getPrincipal()).getEmail();
-
         Long seq;
-        try{
+        if(authentication.getPrincipal() instanceof CustomOAuth2User){
             seq = ((CustomOAuth2User)authentication.getPrincipal()).getSeq();
-        }catch (Exception e){
+        }else{
             seq = Long.parseLong(((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername());
         }
+
+//        try{
+//            seq = ((CustomOAuth2User)authentication.getPrincipal()).getSeq();
+//        }catch (Exception e){
+//            seq = Long.parseLong(((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername());
+//        }
 
         Map<String, Object> claims = new HashMap<>();
         claims.put(AUTHORITIES_KEY, "ROLE_USER");
