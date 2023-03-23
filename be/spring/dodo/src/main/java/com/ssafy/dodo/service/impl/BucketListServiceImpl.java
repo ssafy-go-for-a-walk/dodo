@@ -1,9 +1,11 @@
 package com.ssafy.dodo.service.impl;
 
 import com.ssafy.dodo.dto.AddedBucketDto;
+import com.ssafy.dodo.dto.BucketListInfoDto;
 import com.ssafy.dodo.entity.*;
 import com.ssafy.dodo.repository.*;
 import com.ssafy.dodo.service.BucketListService;
+import com.ssafy.dodo.service.S3FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
@@ -27,6 +30,7 @@ public class BucketListServiceImpl implements BucketListService {
     private final BucketListRepository bucketListRepository;
     private final PublicBucketRepository publicBucketRepository;
     private final PreferenceRepository preferenceRepository;
+    private final S3FileService s3FileService;
 
     @Override
     public Page<AddedBucketDto> getBucketListBuckets(UserDetails userDetails, Long bucketListSeq, Pageable pageable) {
@@ -105,5 +109,20 @@ public class BucketListServiceImpl implements BucketListService {
 
         // 버킷리스트 삭제
 //        bucketListRepository.delete(bucketList);
+    }
+
+    @Override
+    public void updateBucketListInfo(Long bucketListSeq, BucketListInfoDto bucketListInfoDto, MultipartFile file, UserDetails userDetails) {
+        User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        BucketList bucketList = bucketListRepository.findById(bucketListSeq)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(file != null)
+            bucketList.updateBucketListImage(s3FileService.uploadFile(file));
+
+        bucketList.updateBucketListInfo(bucketListInfoDto.getTitle(), bucketListInfoDto.getIsPublic());
+
     }
 }

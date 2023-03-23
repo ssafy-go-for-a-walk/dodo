@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -16,6 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Where(clause = "is_delete = false")
 @SQLDelete(sql = "UPDATE bucketlists SET is_delete = true WHERE seq = ?")
+@DynamicUpdate
 public class BucketList extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,5 +48,15 @@ public class BucketList extends BaseEntity {
         this.isPublic = isPublic;
         this.type = type;
         this.isDelete = isDelete;
+    }
+
+    public void updateBucketListInfo(String title, boolean isPublic){
+        this.title = title;
+        this.image = image;
+        this.isPublic = isPublic;
+    }
+
+    public void updateBucketListImage(String image){
+        this.image = image;
     }
 }

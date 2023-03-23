@@ -1,5 +1,6 @@
 package com.ssafy.dodo.controller;
 
+import com.ssafy.dodo.dto.BucketListInfoDto;
 import com.ssafy.dodo.dto.CustomBucketDto;
 import com.ssafy.dodo.dto.DataResponse;
 import com.ssafy.dodo.service.BucketListService;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -52,6 +54,17 @@ public class BucketListController {
             @AuthenticationPrincipal UserDetails userDetails
     ){
         bucketListService.addSearchedBucket(bucketListSeq, publicBucketSeq, userDetails);
+    }
+
+    @PatchMapping("/{bucketlist-seq}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateBucketListInfo(
+            @PathVariable("bucketlist-seq") Long bucketListSeq,
+            @RequestPart("bucketlistinfo") BucketListInfoDto bucketListInfoDto,
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+         bucketListService.updateBucketListInfo(bucketListSeq, bucketListInfoDto, file, userDetails);
     }
 
     @DeleteMapping("/{bucketlist-seq}")
