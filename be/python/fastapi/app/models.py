@@ -19,6 +19,8 @@ class User(Base):
     auth_provider = Column(VARCHAR(10), nullable=False)
     last_login_at = Column(DATETIME, nullable=True)
     refresh_token = Column(VARCHAR(255), nullable=True)
+    is_delete = Column(TINYINT, nullable=False, default=0)
+    
 
 
 class BucketList(Base):
@@ -29,6 +31,7 @@ class BucketList(Base):
     image = Column(VARCHAR(255), nullable=False)
     is_public = Column(TINYINT, default=0, nullable=False)
     type = Column(VARCHAR(10), nullable=False)
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
 
 class Category(Base):
@@ -36,6 +39,7 @@ class Category(Base):
 
     seq = Column(BIGINT, primary_key=True, autoincrement=True, nullable=False)
     item = Column(VARCHAR(50), nullable=False)
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
 
 
@@ -48,6 +52,7 @@ class PublicBucket(Base):
     title = Column(VARCHAR(100), nullable=False)
     is_public = Column(TINYINT, nullable=False, default=0)
     added_count = Column(BIGINT, nullable=False, default=1)
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
     category_seq = Column(BIGINT, ForeignKey("categories.seq"))
 
@@ -61,6 +66,7 @@ class AddedBucket(Base):
     d_day = Column(VARCHAR(100), nullable=False)
     location = Column(VARCHAR(255), nullable=True)
     desc = Column(TEXT, nullable=True)
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
     bucketlist_seq = Column(BIGINT, ForeignKey('bucketlists.seq'))
     bucket_seq = Column(BIGINT, ForeignKey("public_buckets.seq"))
@@ -75,6 +81,7 @@ class ExpDiary(Base):
 
     seq = Column(BIGINT, primary_key=True, autoincrement=True, nullable=False)
     content = Column(TEXT, nullable=False)
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
     bucket_seq = Column(BIGINT, ForeignKey("added_buckets.seq"))
 
@@ -85,6 +92,7 @@ class DiaryImage(Base):
     seq = Column(BIGINT, primary_key=True, autoincrement=True, nullable=False)
     path = Column(VARCHAR(255), nullable=False)
     original_name = Column(VARCHAR(255), nullable=False)
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
     exp_diary_seq = Column(BIGINT, ForeignKey("exp_diaries.seq"))
        
@@ -95,6 +103,7 @@ class Bookmark(Base):
     __table_args__ = (PrimaryKeyConstraint("user_seq", "bucketlist_seq", name = "bookmark_id"), )
     user_seq = Column(BIGINT, ForeignKey("users.seq"))
     bucketlist_seq = Column(BIGINT, ForeignKey("bucketlists.seq"))
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
     # def __init__(self):
     #     print(self.user_seq)
@@ -106,6 +115,7 @@ class BucketListMember(Base):
     __table_args__ = (PrimaryKeyConstraint("user_seq", "bucketlist_seq", name = "bucketlist_mamber_id"), )
     user_seq = Column(BIGINT, ForeignKey("users.seq"))
     bucketlist_seq = Column(BIGINT, ForeignKey("bucketlists.seq"))
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
 
 class Preference(Base):
@@ -113,6 +123,7 @@ class Preference(Base):
 
     seq = Column(BIGINT, primary_key=True, autoincrement=True, nullable=False)
     user_seq = Column(BIGINT, ForeignKey("users.seq"))
+    is_delete = Column(TINYINT, nullable=False, default=0)
     bucketlist_seq = Column(BIGINT, ForeignKey("bucketlists.seq"))
 
 
