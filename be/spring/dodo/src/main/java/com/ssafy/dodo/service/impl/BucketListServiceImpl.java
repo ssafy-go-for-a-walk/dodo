@@ -5,10 +5,7 @@ import com.ssafy.dodo.entity.AddedBucket;
 import com.ssafy.dodo.entity.BucketList;
 import com.ssafy.dodo.entity.PublicBucket;
 import com.ssafy.dodo.entity.User;
-import com.ssafy.dodo.repository.AddedBucketRepository;
-import com.ssafy.dodo.repository.BucketListRepository;
-import com.ssafy.dodo.repository.PublicBucketRepository;
-import com.ssafy.dodo.repository.UserRepository;
+import com.ssafy.dodo.repository.*;
 import com.ssafy.dodo.service.BucketListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -31,6 +29,7 @@ public class BucketListServiceImpl implements BucketListService {
     private final UserRepository userRepository;
     private final BucketListRepository bucketListRepository;
     private final PublicBucketRepository publicBucketRepository;
+    private final PreferenceRepository preferenceRepository;
 
     @Override
     public Page<AddedBucketDto> getBucketListBuckets(UserDetails userDetails, Long bucketListSeq, Pageable pageable) {
@@ -89,5 +88,24 @@ public class BucketListServiceImpl implements BucketListService {
 
         // public_bucket 담은 수 +1
         publicBucket.updateAddedCount();
+    }
+
+    @Override
+    public void deleteBucketList(Long bucketListSeq, UserDetails userDetails) {
+        User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        BucketList bucketList = bucketListRepository.findById(bucketListSeq)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        // 버킷리스트에 있는 added_buckets 다 삭제
+//        addedBucketRepository.deleteAllByBucketList(bucketListSeq);
+
+        // added_buckets의 public_buckets의 선호도 삭제
+        // added의 버킷 식별자로 pref에서 삭제
+
+
+        // 버킷리스트 삭제
+        bucketListRepository.delete(bucketList);
     }
 }

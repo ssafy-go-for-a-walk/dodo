@@ -53,4 +53,13 @@ public class BucketListController {
     ){
         bucketListService.addSearchedBucket(bucketListSeq, publicBucketSeq, userDetails);
     }
+
+    @DeleteMapping("/{bucketlist-seq}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteBucketList(
+            @PathVariable("bucketlist-seq") Long bucketListSeq,
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+       bucketListService.deleteBucketList(bucketListSeq, userDetails);
+    }
 }

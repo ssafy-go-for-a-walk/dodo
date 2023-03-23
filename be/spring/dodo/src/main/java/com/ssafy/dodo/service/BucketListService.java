@@ -10,4 +10,6 @@ public interface BucketListService {
     Page<AddedBucketDto> getBucketListBuckets(UserDetails userDetails, Long bucketListSeq, Pageable pageable);
 
     void addSearchedBucket(Long bucketListSeq, Long publicBucketSeq, UserDetails userDetails);
+
+    void deleteBucketList(Long bucketListSeq, UserDetails userDetails);
 }
