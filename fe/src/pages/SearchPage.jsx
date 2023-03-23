@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import Header from "../components/header/Header";
-import SideBar from "../components/sideBar/SideBar";
+// import Header from "../components/header/Header";
+// import SideBar from "../components/sideBar/SideBar";
 import Search from "../components/search/Search";
 // import CodeModal from "../components/common/modal/CodeModal";
 // import Backdrop from "../components/common/modal/Backdrop";

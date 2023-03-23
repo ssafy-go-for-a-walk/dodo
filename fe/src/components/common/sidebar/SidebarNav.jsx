@@ -1,12 +1,12 @@
 import React from "react";
-import appRoutes from "../../routes/appRoutes";
+import appRoutes from "../../../routes/appRoutes";
 import SidebarItem from "./SidebarItem";
 import SidebarItemCollapse from "./SidebarItemCollapse";
-import colorConfigs from "../../configs/colorConfigs";
+import colorConfigs from "../../../configs/colorConfigs";
 import { ListItemButton, ListItemIcon } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import LoginIcon from '@mui/icons-material/Login';
-import { useSelector } from "react-redux";
+import SelectedItem from "./SelectedItem";
 
 function popUp(icon, text) {
 	return (<ListItemButton
@@ -76,10 +76,8 @@ const groupItem = {
 }
 
 export default function SidebarNav() {
-	const { user } = useSelector((state) => state);
 	return (
 		<>
-		{console.log(user.appState, "sjp")}
 		{popUp(<AddIcon />, "새로운 버킷리스트 만들기")}
 		{popUp(<LoginIcon />, "그룹 버킷리스트 참여하기")}
 		{appRoutes.map((route, index) => (
@@ -87,7 +85,7 @@ export default function SidebarNav() {
 				<SidebarItem item={route} key={index} />
 				) : null
 				))}
-		{/* 선택된 버킷리스트 해야함 */}
+		<SelectedItem />
 		<SidebarItemCollapse item={myItem} name={"나의 버킷리스트"} />
 		<SidebarItemCollapse item={groupItem} name={"그룹 버킷리스트"} />
 		</>

@@ -1,6 +1,6 @@
 import { Drawer, List} from "@mui/material";
-import colorConfigs from "../../configs/colorConfigs";
-import sizeConfigs from "../../configs/sizeConfigs";
+import colorConfigs from "../../../configs/colorConfigs";
+import sizeConfigs from "../../../configs/sizeConfigs";
 import SidebarNav from "./SidebarNav";
 
 const Sidebar = () => {
