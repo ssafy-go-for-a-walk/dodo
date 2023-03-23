@@ -44,7 +44,7 @@ public class BucketListController {
         publicBucketSerice.addCustomBucket(bucketListSeq, customBucketDto, userDetails);
     }
 
-    @PostMapping("/bucketlists/{bucketlist-seq}/buckets/{public-bucket-seq}")
+    @PostMapping("/{bucketlist-seq}/buckets/{public-bucket-seq}")
     @ResponseStatus(HttpStatus.CREATED)
     public void addSearchedBucket(
             @PathVariable("bucketlist-seq") Long bucketListSeq,
