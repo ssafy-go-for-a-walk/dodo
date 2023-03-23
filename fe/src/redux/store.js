@@ -3,7 +3,7 @@ import userReducer from "./user";
 import { combineReducers } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, PERSIST, PURGE } from "redux-persist";
-import logger from "redux-logger";
+// import logger from "redux-logger";
 
 const reducers = combineReducers({
   user: userReducer,
@@ -25,5 +25,5 @@ export default configureStore({
       serializableCheck: {
         ignoredActions: [PERSIST, PURGE],
       },
-    }).concat(logger),
+    }),
 });
