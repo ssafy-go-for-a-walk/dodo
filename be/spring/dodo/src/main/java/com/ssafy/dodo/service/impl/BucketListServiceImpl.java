@@ -1,10 +1,7 @@
 package com.ssafy.dodo.service.impl;
 
 import com.ssafy.dodo.dto.AddedBucketDto;
-import com.ssafy.dodo.entity.AddedBucket;
-import com.ssafy.dodo.entity.BucketList;
-import com.ssafy.dodo.entity.PublicBucket;
-import com.ssafy.dodo.entity.User;
+import com.ssafy.dodo.entity.*;
 import com.ssafy.dodo.repository.*;
 import com.ssafy.dodo.service.BucketListService;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +37,7 @@ public class BucketListServiceImpl implements BucketListService {
         BucketList bucketList = bucketListRepository.findById(bucketListSeq)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        Page<AddedBucket> allByBucketList = addedBucketRepository.findAllByBucketList(bucketListSeq, pageable);
+        Page<AddedBucket> allByBucketList = addedBucketRepository.findAllByBucketList(bucketList, pageable);
 
         Page<AddedBucketDto> addedBucketDtos = allByBucketList
                 .map(a -> AddedBucketDto.builder()
@@ -98,11 +95,12 @@ public class BucketListServiceImpl implements BucketListService {
         BucketList bucketList = bucketListRepository.findById(bucketListSeq)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        // 버킷리스트에 있는 added_buckets 다 삭제
-//        addedBucketRepository.deleteAllByBucketList(bucketListSeq);
+        // added_buckets의 public_buckets의 선호도 삭제 -> added_buckets를 다 불러와서
+        // added의 버킷 식별자로 pref에서 삭제 -> 걔네로 pref에서 찾아서 지운다
+        List<AddedBucket> addedBuckets = addedBucketRepository.findAllByBucketList(bucketList, null).getContent();
 
-        // added_buckets의 public_buckets의 선호도 삭제
-        // added의 버킷 식별자로 pref에서 삭제
+        // 버킷리스트에 있는 added_buckets 다 삭제
+//        addedBucketRepository.deleteByBucketList(bucketList);
 
 
         // 버킷리스트 삭제
