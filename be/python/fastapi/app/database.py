@@ -18,19 +18,14 @@ class conn:
         # 커넥션 풀 생성
         self.engine = create_engine(DB_URL)
     
-    def sessionMaker(self):
+    def get_session(self):
         SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
         session = SessionLocal()
-        return session
+        try:
+            yield session
+        finally:
+            session.close()
     
     def connection(self):
         conn = self.engine.connect()
         return conn
-
-    # def connection(self):
-    #     conn = self.engine.connect()
-    #     return conn
-        
-
-
-

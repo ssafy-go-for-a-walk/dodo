@@ -71,11 +71,9 @@ class AddedBucket(Base):
     bucketlist_seq = Column(BIGINT, ForeignKey('bucketlists.seq'))
     bucket_seq = Column(BIGINT, ForeignKey("public_buckets.seq"))
 
-    # 이렇게 해야하는지는 좀 더 고민중
-    BucketList = relationship("BucketList")
+    # 이렇게 해야하는지는 고민중
+    bucketLists = relationship("BucketList")
 
-
-# 경험일기 - 경험일기 이미지 양방향 해야댐
 class ExpDiary(Base):
     __tablename__ = "exp_diaries"
 
@@ -84,6 +82,10 @@ class ExpDiary(Base):
     is_delete = Column(TINYINT, nullable=False, default=0)
 
     bucket_seq = Column(BIGINT, ForeignKey("added_buckets.seq"))
+
+    # 양방향
+    # diaryImages = relationship("DiaryImage", back_populates="expDiaries")
+    diaryImages = relationship("DiaryImage", backref="exp_diaries")
 
 
 class DiaryImage(Base):
@@ -95,6 +97,9 @@ class DiaryImage(Base):
     is_delete = Column(TINYINT, nullable=False, default=0)
 
     exp_diary_seq = Column(BIGINT, ForeignKey("exp_diaries.seq"))
+    
+    # 양방향
+    # expDiaries = relationship("ExpDiary", back_populates="diaryImages")
        
 class Bookmark(Base):
     __tablename__ = "bookmarks"
