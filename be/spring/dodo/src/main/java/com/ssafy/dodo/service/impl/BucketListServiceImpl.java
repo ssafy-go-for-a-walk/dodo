@@ -106,6 +106,6 @@ public class BucketListServiceImpl implements BucketListService {
 
 
         // 버킷리스트 삭제
-        bucketListRepository.delete(bucketList);
+//        bucketListRepository.delete(bucketList);
     }
 }
