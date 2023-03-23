@@ -1,17 +1,25 @@
-from fastapi import FastAPI, Depends, Path, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database import conn
 from models import Category
+
+from recomm import testt
 
 app = FastAPI()
 
 engine = conn()
 
-class Item(BaseModel):
-	seq: int
-	item: str
-	is_delete: int
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.get('/')
 def home():
@@ -23,3 +31,7 @@ def session_test(db: Session = Depends(engine.get_session)): # Depends : api가 
 	example = db.query(Category).all()
 	return example
 
+@app.get('/hello')
+def myname(db: Session = Depends(engine.get_session)):
+	data = db.query(Category).all()
+	testt(data)
