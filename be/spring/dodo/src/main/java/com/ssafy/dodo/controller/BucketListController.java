@@ -24,13 +24,13 @@ public class BucketListController {
 
     @GetMapping("/{bucketlist-seq}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> getBucketListBuckets(
+    public DataResponse<?> getBucketListBuckets(
             @PathVariable("bucketlist-seq") Long bucketListSeq,
             @AuthenticationPrincipal UserDetails userDetails,
             Pageable pageable
     ){
 
-        return ResponseEntity.ok(bucketListService.getBucketListBuckets(userDetails, bucketListSeq, pageable));
+        return new DataResponse<>(bucketListService.getBucketListBuckets(userDetails, bucketListSeq, pageable));
     }
 
     @PostMapping("/{bucketlist-seq}/buckets")
