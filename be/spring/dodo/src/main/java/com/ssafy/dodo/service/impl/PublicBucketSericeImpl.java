@@ -37,7 +37,8 @@ public class PublicBucketSericeImpl implements PublicBucketSerice {
         // public에 추가
         PublicBucket publicBucket = publicBucketRepository.save(PublicBucket.builder()
                 .title(customBucketDto.getTitle())
-                // TODO 이모지 랜덤 생성
+                .emoji("\uD83D\uDE00") // 😀
+                .addedCount(1l)
                 .build());
 
         // 내 버킷리스트에 추가

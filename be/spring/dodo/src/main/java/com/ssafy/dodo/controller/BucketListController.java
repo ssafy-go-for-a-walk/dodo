@@ -1,7 +1,7 @@
 package com.ssafy.dodo.controller;
 
 import com.ssafy.dodo.dto.CustomBucketDto;
-import com.ssafy.dodo.repository.AddedBucketRepository;
+import com.ssafy.dodo.dto.DataResponse;
 import com.ssafy.dodo.service.BucketListService;
 import com.ssafy.dodo.service.PublicBucketSerice;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class BucketListController {
     @PostMapping("/{bucketlist-seq}/buckets")
     public ResponseEntity<?> addCustomBucket(
             @PathVariable("bucketlist-seq") Long bucketListSeq,
-            CustomBucketDto customBucketDto,
+            @RequestBody CustomBucketDto customBucketDto,
             @AuthenticationPrincipal UserDetails userDetails
     ){
 
