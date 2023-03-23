@@ -13,8 +13,7 @@ import java.util.List;
 
 public interface AddedBucketRepository extends JpaRepository<AddedBucket, Long> {
 
-    @Query("select ab from AddedBucket ab where ab.bucketList.seq = :bucketListSeq")
-    Page<AddedBucket> findAllByBucketList(@Param("bucketListSeq") Long bucketListSeq, Pageable pageable);
+    Page<AddedBucket> findAllByBucketList(BucketList bucketList, Pageable pageable);
 
     @Query("select ab from AddedBucket ab where ab.bucketList.seq = :bucketListSeq")
     List<AddedBucket> findAllByBucketList(@Param("bucketListSeq") Long bucketListSeq);
