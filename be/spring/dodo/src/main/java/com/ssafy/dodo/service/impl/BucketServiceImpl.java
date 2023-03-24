@@ -1,13 +1,20 @@
 package com.ssafy.dodo.service.impl;
 
 import com.ssafy.dodo.dto.BucketInfoDto;
+import com.ssafy.dodo.dto.PublicBucketDto;
 import com.ssafy.dodo.entity.AddedBucket;
+import com.ssafy.dodo.entity.Category;
+import com.ssafy.dodo.entity.PublicBucket;
 import com.ssafy.dodo.entity.User;
 import com.ssafy.dodo.repository.AddedBucketRepository;
+import com.ssafy.dodo.repository.CategoryRepository;
+import com.ssafy.dodo.repository.PublicBucketRepository;
 import com.ssafy.dodo.repository.UserRepository;
 import com.ssafy.dodo.service.BucketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -23,6 +30,33 @@ public class BucketServiceImpl implements BucketService {
 
     private final UserRepository userRepository;
     private final AddedBucketRepository addedBucketRepository;
+    private final PublicBucketRepository publicBucketRepository;
+    private final CategoryRepository categoryRepository;
+
+    @Override
+    public Page<PublicBucketDto> searchBucket(String word, Long category, Pageable pageable, UserDetails userDetails) {
+
+        Page<PublicBucket> publicBuckets = null;
+        if(category != null){
+
+            Category findCategory = categoryRepository.findById(category)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+            publicBuckets = publicBucketRepository.findAllByTitleContainingAndCategory(word, findCategory, pageable);
+        }else{
+            publicBuckets = publicBucketRepository.findAllByTitleContaining(word, pageable);
+        }
+
+        Page<PublicBucketDto> publicBucketDtos = publicBuckets.map(pb -> PublicBucketDto.builder()
+                                                                                .publicBucketSeq(pb.getSeq())
+                                                                                .emoji(pb.getEmoji())
+                                                                                .title(pb.getTitle())
+                                                                                .category(pb.getCategory().getItem())
+                                                                                .addedCount(pb.getAddedCount())
+                                                                                .build());
+
+        return publicBucketDtos;
+    }
 
     @Override
     public void completeBucket(Long bucketSeq, UserDetails userDetails) {
