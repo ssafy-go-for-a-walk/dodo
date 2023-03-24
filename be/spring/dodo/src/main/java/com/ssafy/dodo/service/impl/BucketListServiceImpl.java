@@ -2,6 +2,7 @@ package com.ssafy.dodo.service.impl;
 
 import com.ssafy.dodo.dto.AddedBucketDto;
 import com.ssafy.dodo.dto.BucketListInfoDto;
+import com.ssafy.dodo.dto.CreateBucketListDto;
 import com.ssafy.dodo.entity.*;
 import com.ssafy.dodo.repository.*;
 import com.ssafy.dodo.service.BucketListService;
@@ -27,12 +28,15 @@ import java.util.stream.Collectors;
 @Transactional
 public class BucketListServiceImpl implements BucketListService {
 
+    private static final String DEFAULT_BUCKETLIST_IAMGE = "https://dodo-walk-bucket.s3.ap-northeast-2.amazonaws.com/default-bucklist-image.jpg";
+
     private final AddedBucketRepository addedBucketRepository;
     private final UserRepository userRepository;
     private final BucketListRepository bucketListRepository;
     private final PublicBucketRepository publicBucketRepository;
     private final PreferenceRepository preferenceRepository;
     private final S3FileService s3FileService;
+    private final BucketListMemberRepository bucketListMemberRepository;
 
     @Override
     public Page<AddedBucketDto> getBucketListBuckets(UserDetails userDetails, Long bucketListSeq, Pageable pageable) {
@@ -131,5 +135,34 @@ public class BucketListServiceImpl implements BucketListService {
 
         // 버킷리스트 삭제
         bucketListRepository.delete(bucketList);
+    }
+
+    @Override
+    public BucketList createBucketList(User user, CreateBucketListDto dto, MultipartFile image) {
+        return createBucketList(user, dto.getTitle(), dto.getType(), image);
+    }
+
+    @Override
+    public BucketList createBucketList(User user, String title, BucketListType type, MultipartFile image) {
+        // 업로드된 이미지가 없으면 디폴트 이미지로 저장
+        // 업로드된 이미지가 있으면 S3에 업로드 후 이미지 경로 저장
+        String bucketListImage = image == null ? DEFAULT_BUCKETLIST_IAMGE : s3FileService.uploadFile(image);
+
+        // 버킷리스트 생성
+        BucketList bucketList = BucketList.builder()
+                .title(title)
+                .type(type)
+                .image(bucketListImage)
+                .build();
+        bucketList = bucketListRepository.save(bucketList);
+
+        // 사용자를 버킷리스트 멤버로 등록
+        BucketListMember bucketListMember = BucketListMember.builder()
+                .user(user)
+                .bucketList(bucketList)
+                .build();
+        bucketListMemberRepository.save(bucketListMember);
+
+        return bucketList;
     }
 }
