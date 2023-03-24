@@ -1,5 +1,6 @@
 package com.ssafy.dodo.controller;
 
+import com.ssafy.dodo.dto.DataResponse;
 import com.ssafy.dodo.dto.UserInfoDto;
 import com.ssafy.dodo.entity.User;
 import com.ssafy.dodo.exception.CustomException;
@@ -27,11 +28,11 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public UserInfoDto getUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
+    public DataResponse<UserInfoDto> getUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
         Long userSeq = Long.parseLong(userDetails.getUsername());
         User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        return UserInfoDto.of(user);
+        return new DataResponse<>(UserInfoDto.of(user));
     }
 }
