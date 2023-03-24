@@ -11,7 +11,7 @@ const Div = styled.div`
   left: 0px;
   width: ${props => props.open ? sizeConfigs.sidebar.width : "0"};
   flex-shrink: 0;
-  transition: all 1s ease-out;
+  transition: all 0.5s ease-out;
 `
 
 const MainLayout = () => {
