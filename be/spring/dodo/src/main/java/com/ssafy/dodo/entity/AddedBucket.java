@@ -1,6 +1,7 @@
 package com.ssafy.dodo.entity;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Where(clause = "is_delete = false")
 @SQLDelete(sql = "UPDATE added_buckets SET is_delete = true WHERE seq = ?")
+@DynamicUpdate
 public class AddedBucket extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,5 +47,12 @@ public class AddedBucket extends BaseEntity {
         this.bucketList = bucketList;
         this.publicBucket = publicBucket;
         this.isDelete = isDelete;
+    }
+
+    public void updateBucketInfo(String emoji, String dDay, String location, String desc) {
+        this.emoji = emoji;
+        this.dDay = dDay;
+        this.location = location;
+        this.desc = desc;
     }
 }
