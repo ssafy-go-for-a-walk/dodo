@@ -20,7 +20,7 @@ pipeline{
                     sh 'pwd'
                     sh 'ls'
                     sh 'ls ../resources'
-                    sh 'cp ../resources/db-application.json ./app/db-application.json'
+                    sh 'cp ../resources/db-application.json ./app/database/db-application.json'
                     sh 'ls ./app'
                     sh "docker build --no-cache -t eello/dodo-fastapi:latest ."
                 }
