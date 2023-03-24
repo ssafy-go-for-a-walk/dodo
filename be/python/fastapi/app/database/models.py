@@ -126,8 +126,8 @@ class Preference(Base):
 
     seq = Column(BIGINT, primary_key=True, autoincrement=True, nullable=False)
     user_seq = Column(BIGINT, ForeignKey("users.seq"))
+    bucket_seq = Column(BIGINT, ForeignKey("buckets.seq"))
     is_delete = Column(TINYINT, nullable=False, default=0)
-    bucketlist_seq = Column(BIGINT, ForeignKey("bucketlists.seq"))
 
 
 # enum
