@@ -22,8 +22,8 @@ const UserImg = styled.img`
 	height: 150px;
   width: 150px;
   border-radius: 100px;
-	/* border: thick double #32a1ce; */
-	box-shadow: 0px 4px 4px rgba(28, 155, 255, 0.75);;
+	border:1px solid #9A9A9A;
+	/* box-shadow: 0px 4px 4px #343A40; */
 `
 
 export default function SettingProfile(props) {
