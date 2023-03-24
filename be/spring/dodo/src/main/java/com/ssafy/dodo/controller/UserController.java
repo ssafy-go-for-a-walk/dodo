@@ -1,5 +1,6 @@
 package com.ssafy.dodo.controller;
 
+import com.ssafy.dodo.dto.CommonResponse;
 import com.ssafy.dodo.dto.CreateBucketListDto;
 import com.ssafy.dodo.dto.DataResponse;
 import com.ssafy.dodo.dto.UserInfoDto;
@@ -39,7 +40,7 @@ public class UserController {
 
     @PostMapping("/bucketlist")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createBucketList(
+    public CommonResponse createBucketList(
             @RequestPart("data") CreateBucketListDto dto,
             @RequestPart(value = "image", required = false) MultipartFile image,
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -50,5 +51,6 @@ public class UserController {
 
         // 버킷리스트 생성
         bucketListService.createBucketList(user, dto, image);
+        return new CommonResponse(true);
     }
 }
