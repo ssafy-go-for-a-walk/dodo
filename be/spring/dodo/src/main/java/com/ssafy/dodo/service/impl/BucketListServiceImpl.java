@@ -17,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -88,27 +90,7 @@ public class BucketListServiceImpl implements BucketListService {
                 .build());
 
         // public_bucket 담은 수 +1
-        publicBucket.updateAddedCount();
-    }
-
-    @Override
-    public void deleteBucketList(Long bucketListSeq, UserDetails userDetails) {
-        User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        BucketList bucketList = bucketListRepository.findById(bucketListSeq)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        // added_buckets의 public_buckets의 선호도 삭제 -> added_buckets를 다 불러와서
-        // added의 버킷 식별자로 pref에서 삭제 -> 걔네로 pref에서 찾아서 지운다
-        List<AddedBucket> addedBuckets = addedBucketRepository.findAllByBucketList(bucketList, null).getContent();
-
-        // 버킷리스트에 있는 added_buckets 다 삭제
-//        addedBucketRepository.deleteByBucketList(bucketList);
-
-
-        // 버킷리스트 삭제
-//        bucketListRepository.delete(bucketList);
+        publicBucketRepository.plusAddedCount(Arrays.asList(publicBucket));
     }
 
     @Override
@@ -123,6 +105,31 @@ public class BucketListServiceImpl implements BucketListService {
             bucketList.updateBucketListImage(s3FileService.uploadFile(file));
 
         bucketList.updateBucketListInfo(bucketListInfoDto.getTitle(), bucketListInfoDto.getIsPublic());
+    }
 
+    @Override
+    public void deleteBucketList(Long bucketListSeq, UserDetails userDetails) {
+        User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        BucketList bucketList = bucketListRepository.findById(bucketListSeq)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        // added_buckets의 public_buckets의 선호도 삭제
+        List<AddedBucket> addedBuckets = addedBucketRepository.findAllByBucketList(bucketList, null).getContent();
+
+        List<PublicBucket> publicBuckets = addedBuckets.stream()
+                .map(a -> a.getPublicBucket()).collect(Collectors.toList());
+
+        preferenceRepository.deleteAllByUserAndPublicBucketIn(user, publicBuckets);
+
+        // public_buckets의 담은 수 -1
+        publicBucketRepository.minusAddedCount(publicBuckets);
+
+        // 버킷리스트에 있는 added_buckets 다 삭제
+        addedBucketRepository.deleteByBucketList(bucketList);
+
+        // 버킷리스트 삭제
+        bucketListRepository.delete(bucketList);
     }
 }
