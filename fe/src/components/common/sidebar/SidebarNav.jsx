@@ -78,16 +78,16 @@ const groupItem = {
 export default function SidebarNav() {
 	return (
 		<>
-		{popUp(<AddIcon />, "새로운 버킷리스트 만들기")}
-		{popUp(<LoginIcon />, "그룹 버킷리스트 참여하기")}
-		{appRoutes.map((route, index) => (
-			route.sidebarProps ? (
-				<SidebarItem item={route} key={index} />
-				) : null
-				))}
-		<SelectedItem />
-		<SidebarItemCollapse item={myItem} name={"나의 버킷리스트"} />
-		<SidebarItemCollapse item={groupItem} name={"그룹 버킷리스트"} />
+      {popUp(<AddIcon />, "새로운 버킷리스트 만들기")}
+      {popUp(<LoginIcon />, "그룹 버킷리스트 참여하기")}
+      {appRoutes.map((route, index) => (
+        route.sidebarProps ? (
+          <SidebarItem item={route} key={index} />
+          ) : null
+          ))}
+      <SelectedItem />
+      <SidebarItemCollapse item={myItem} name={"나의 버킷리스트"} />
+      <SidebarItemCollapse item={groupItem} name={"그룹 버킷리스트"} />
 		</>
 	)
 }

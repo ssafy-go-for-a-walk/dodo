@@ -18,7 +18,7 @@ const Div = styled.div`
 const Header = styled.div`
     height: 64px;
     margin: 15px 24px 23px 24px;
-    display; flex;
+    display: flex;
     align-items: center;
 `;
 

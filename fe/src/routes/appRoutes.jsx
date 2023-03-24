@@ -2,6 +2,7 @@ import SearchPage from "../pages/SearchPage";
 import SocialPage from "../pages/social/SocialPage"
 import SearchIcon from '@mui/icons-material/Search';
 import LanguageIcon from '@mui/icons-material/Language';
+import ManagePage from "../pages/ManagePage";
 
 const appRoutes = [
   {
@@ -14,13 +15,18 @@ const appRoutes = [
     }
   },
   {
-    path: "/SocialPage",
+    path: "/socialPage",
     element: <SocialPage />,
-    state: "SocialPage",
+    state: "socialPage",
     sidebarProps: {
       displayText: "구경하러 가기",
       icon: <LanguageIcon />
     }
+  },
+  {
+    path: "/manage",
+    element: <ManagePage />,
+    state: "manage",
   }
 ];
 

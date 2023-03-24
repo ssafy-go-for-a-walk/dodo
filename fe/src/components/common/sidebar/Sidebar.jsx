@@ -3,7 +3,7 @@ import colorConfigs from "../../../configs/colorConfigs";
 import sizeConfigs from "../../../configs/sizeConfigs";
 import SidebarNav from "./SidebarNav";
 
-const Sidebar = () => {
+const Sidebar = (props) => {
   return (
     <Drawer
       PaperProps={{
@@ -15,7 +15,9 @@ const Sidebar = () => {
         width: sizeConfigs.sidebar.width,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: sizeConfigs.sidebar.width,
+          left: props.open ? "0px" : "-300px",
+          width: "300px",
+          transition: "all 1s ease-out",
           boxSizing: "border-box",
           borderRight: "0px",
           backgroundColor: colorConfigs.sidebar.bg,

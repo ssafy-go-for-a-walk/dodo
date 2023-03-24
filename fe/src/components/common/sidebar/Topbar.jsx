@@ -32,7 +32,7 @@ const UserImg = styled.img`
   border-radius: 100px;
 `
 
-export default function Topbar() {
+export default function Topbar(props) {
   const [isOpen, setIsOpen] = useState(false)
   const [isOpenProfile, setIsOpenProfile] = useState(false)
   // const { user } = useSelector((state) => state);
@@ -66,7 +66,9 @@ export default function Topbar() {
             "&: hover": {
               cursor: "pointer",
             },
-          }}/>
+          }}
+          onClick={() => {props.open()}}
+          />
           <Div onClick={openSetup}>
             <UserImg
               src={userImg}
