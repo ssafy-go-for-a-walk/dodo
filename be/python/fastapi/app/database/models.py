@@ -42,8 +42,6 @@ class Category(Base):
     is_delete = Column(TINYINT, nullable=False, default=0)
 
 
-
-
 class PublicBucket(Base):
     __tablename__ = "public_buckets"
 
