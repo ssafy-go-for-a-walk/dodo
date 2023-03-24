@@ -25,6 +25,18 @@ public class BucketServiceImpl implements BucketService {
     private final AddedBucketRepository addedBucketRepository;
 
     @Override
+    public void completeBucket(Long bucketSeq, UserDetails userDetails) {
+        User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        AddedBucket addedBucket = addedBucketRepository.findById(bucketSeq)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        addedBucket.completeBucket();
+
+    }
+
+    @Override
     public void updateBucketInfo(Long bucketSeq, BucketInfoDto bucketInfoDto, UserDetails userDetails) {
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

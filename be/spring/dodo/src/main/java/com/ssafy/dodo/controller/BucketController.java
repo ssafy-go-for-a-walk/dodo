@@ -18,7 +18,16 @@ public class BucketController {
 
     private final BucketService bucketService;
 
-    // 자동 완성
+    // TODO 자동 완성
+
+    @PostMapping("/{bucket-seq}/complete")
+    @ResponseStatus(HttpStatus.OK)
+    public void completeBucket(
+            @PathVariable("bucket-seq") Long bucketSeq,
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+        bucketService.completeBucket(bucketSeq, userDetails);
+    }
 
     // 담긴 버킷 상세 정보 수정
     @PatchMapping("/{bucket-seq}")
@@ -31,5 +40,5 @@ public class BucketController {
         bucketService.updateBucketInfo(bucketSeq, bucketInfoDto, userDetails);
     }
 
-    // 담긴 버킷 삭제
+    // TODO 담긴 버킷 삭제
 }
