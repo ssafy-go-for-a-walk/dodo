@@ -3,7 +3,7 @@ package com.ssafy.dodo.service.impl;
 import com.ssafy.dodo.dto.CustomBucketDto;
 import com.ssafy.dodo.entity.*;
 import com.ssafy.dodo.repository.*;
-import com.ssafy.dodo.service.PublicBucketSerice;
+import com.ssafy.dodo.service.PublicBucketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import javax.transaction.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PublicBucketServiceImpl implements PublicBucketSerice {
+public class PublicBucketServiceImpl implements PublicBucketService {
 
     private final PublicBucketRepository publicBucketRepository;
     private final AddedBucketRepository addedBucketRepository;

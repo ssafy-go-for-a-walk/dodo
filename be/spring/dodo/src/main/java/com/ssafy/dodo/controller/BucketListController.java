@@ -4,12 +4,11 @@ import com.ssafy.dodo.dto.BucketListInfoDto;
 import com.ssafy.dodo.dto.CustomBucketDto;
 import com.ssafy.dodo.dto.DataResponse;
 import com.ssafy.dodo.service.BucketListService;
-import com.ssafy.dodo.service.PublicBucketSerice;
+import com.ssafy.dodo.service.PublicBucketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class BucketListController {
 
     private final BucketListService bucketListService;
-    private final PublicBucketSerice publicBucketSerice;
+    private final PublicBucketService publicBucketService;
 
     @GetMapping("/{bucketlist-seq}")
     @ResponseStatus(HttpStatus.OK)
@@ -43,7 +42,7 @@ public class BucketListController {
             @AuthenticationPrincipal UserDetails userDetails
     ){
 
-        publicBucketSerice.addCustomBucket(bucketListSeq, customBucketDto, userDetails);
+        publicBucketService.addCustomBucket(bucketListSeq, customBucketDto, userDetails);
     }
 
     @PostMapping("/{bucketlist-seq}/buckets/{public-bucket-seq}")
