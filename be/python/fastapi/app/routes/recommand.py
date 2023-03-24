@@ -25,8 +25,11 @@ async def bucket_recommand(category: str,
 		    db: Session = Depends(engine.get_session), 
 	        Authorization: Optional[str] = Header("None")):
 	data = db.query(Preference).filter()
+	
 	logger.info(category)
 	# logger.info(Authorization)
 	token = decodeJWT(Authorization.split(' ')[1])
 	logger.info(f"LOGIN 정보: {token['userSeq']}")
-	return data
+	
+    
+	return data # 나중에 추천된 목록 리턴하기
