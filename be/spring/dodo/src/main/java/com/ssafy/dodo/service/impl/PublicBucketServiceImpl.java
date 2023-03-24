@@ -17,7 +17,7 @@ import javax.transaction.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PublicBucketSericeImpl implements PublicBucketSerice {
+public class PublicBucketServiceImpl implements PublicBucketSerice {
 
     private final PublicBucketRepository publicBucketRepository;
     private final AddedBucketRepository addedBucketRepository;
