@@ -1,21 +1,21 @@
 package com.ssafy.dodo.controller;
 
+import com.ssafy.dodo.dto.CreateBucketListDto;
 import com.ssafy.dodo.dto.DataResponse;
 import com.ssafy.dodo.dto.UserInfoDto;
 import com.ssafy.dodo.entity.User;
 import com.ssafy.dodo.exception.CustomException;
 import com.ssafy.dodo.exception.ErrorCode;
 import com.ssafy.dodo.repository.UserRepository;
+import com.ssafy.dodo.service.BucketListService;
 import com.ssafy.dodo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/users")
@@ -25,6 +25,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
+    private final BucketListService bucketListService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -34,5 +35,20 @@ public class UserController {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return new DataResponse<>(UserInfoDto.of(user));
+    }
+
+    @PostMapping("/bucketlist")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createBucketList(
+            @RequestPart("data") CreateBucketListDto dto,
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        // 요청한 사용자 조회
+        Long userSeq = Long.parseLong(userDetails.getUsername());
+        User user = userRepository.findById(userSeq)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 버킷리스트 생성
+        bucketListService.createBucketList(user, dto, image);
     }
 }

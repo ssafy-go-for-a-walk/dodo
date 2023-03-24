@@ -2,6 +2,10 @@ package com.ssafy.dodo.service;
 
 import com.ssafy.dodo.dto.AddedBucketDto;
 import com.ssafy.dodo.dto.BucketListInfoDto;
+import com.ssafy.dodo.dto.CreateBucketListDto;
+import com.ssafy.dodo.entity.BucketList;
+import com.ssafy.dodo.entity.BucketListType;
+import com.ssafy.dodo.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,4 +21,6 @@ public interface BucketListService {
 
     void updateBucketListInfo(Long bucketListSeq, BucketListInfoDto bucketListInfoDto, MultipartFile file, UserDetails userDetails);
 
+    BucketList createBucketList(User user, CreateBucketListDto dto, MultipartFile image);
+    BucketList createBucketList(User user, String title, BucketListType type, MultipartFile image);
 }
