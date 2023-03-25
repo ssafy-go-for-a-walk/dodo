@@ -108,6 +108,22 @@ public class BucketListServiceImpl implements BucketListService {
         if(file != null)
             bucketList.updateBucketListImage(s3FileService.uploadFile(file));
 
+        // 공개 여부를 바꾸면 자신이 만든 public_buckets의 공개 여부도 똑같이 바꾼다
+        if(bucketList.isPublic() != bucketListInfoDto.getIsPublic()){
+            List<AddedBucket> addedBuckets = addedBucketRepository.findAllByBucketList(bucketList, null).getContent();
+
+            List<Long> publicBuckets = addedBuckets.stream()
+                    .filter(addedBucket -> addedBucket.getPublicBucket().getCreatedBy() == user.getSeq())
+                    .map(addedBucket -> addedBucket.getPublicBucket().getSeq())
+                    .collect(Collectors.toList());
+
+            if(bucketListInfoDto.getIsPublic()){
+                publicBucketRepository.makePublicAllBySeqIn(publicBuckets);
+            }else{
+                publicBucketRepository.makePrivateAllBySeqIn(publicBuckets);
+            }
+        }
+
         bucketList.updateBucketListInfo(bucketListInfoDto.getTitle(), bucketListInfoDto.getIsPublic());
     }
 

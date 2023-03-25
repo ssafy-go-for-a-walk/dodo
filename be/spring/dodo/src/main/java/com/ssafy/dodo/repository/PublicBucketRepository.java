@@ -16,4 +16,12 @@ public interface PublicBucketRepository extends JpaRepository<PublicBucket, Long
     @Modifying(clearAutomatically = true)
     @Query("UPDATE PublicBucket pb SET pb.addedCount = pb.addedCount - 1 WHERE pb IN :publicBuckets")
     void minusAddedCount(List<PublicBucket> publicBuckets);
+
+    @Modifying()
+    @Query("UPDATE PublicBucket pb SET pb.isPublic = 1 WHERE pb.seq IN :publicBuckets")
+    void makePublicAllBySeqIn(List<Long> publicBuckets);
+
+    @Modifying()
+    @Query("UPDATE PublicBucket pb SET pb.isPublic = 0 WHERE pb.seq IN :publicBuckets")
+    void makePrivateAllBySeqIn(List<Long> publicBuckets);
 }
