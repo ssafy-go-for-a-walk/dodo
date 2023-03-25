@@ -14,4 +14,6 @@ public interface PreferenceRepository extends JpaRepository<Preference, Long> {
     @Modifying
     @Query("UPDATE Preference p SET p.isDelete = true WHERE p.user = :user AND p.publicBucket in :publicBuckets")
     void deleteAllByUserAndPublicBucketIn(User user, List<PublicBucket> publicBuckets);
+
+    void deleteAllByUserAndPublicBucket(User user, PublicBucket publicBucket);
 }

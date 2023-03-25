@@ -1,6 +1,9 @@
 package com.ssafy.dodo.repository;
 
+import com.ssafy.dodo.entity.Category;
 import com.ssafy.dodo.entity.PublicBucket;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +27,8 @@ public interface PublicBucketRepository extends JpaRepository<PublicBucket, Long
     @Modifying()
     @Query("UPDATE PublicBucket pb SET pb.isPublic = 0 WHERE pb.seq IN :publicBuckets")
     void makePrivateAllBySeqIn(List<Long> publicBuckets);
+
+    Page<PublicBucket> findAllByTitleContaining(String title, Pageable pageable);
+
+    Page<PublicBucket> findAllByTitleContainingAndCategory(String title, Category category, Pageable pageable);
 }
