@@ -13,4 +13,6 @@ public interface BucketService {
     void updateBucketInfo(Long bucketSeq, BucketInfoDto bucketInfoDto, UserDetails userDetails);
 
     Page<PublicBucketDto> searchBucket(String word, Long category, Pageable pageable, UserDetails userDetails);
+
+    void deleteBucket(Long bucketSeq, UserDetails userDetails);
 }

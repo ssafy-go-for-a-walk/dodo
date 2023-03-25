@@ -12,11 +12,11 @@ import java.util.List;
 
 public interface PublicBucketRepository extends JpaRepository<PublicBucket, Long> {
 
-    @Modifying(clearAutomatically = true)
+    @Modifying(flushAutomatically = true)
     @Query("UPDATE PublicBucket pb SET pb.addedCount = pb.addedCount + 1 WHERE pb IN :publicBuckets")
     void plusAddedCount(List<PublicBucket> publicBuckets);
 
-    @Modifying(clearAutomatically = true)
+    @Modifying(flushAutomatically = true)
     @Query("UPDATE PublicBucket pb SET pb.addedCount = pb.addedCount - 1 WHERE pb IN :publicBuckets")
     void minusAddedCount(List<PublicBucket> publicBuckets);
 

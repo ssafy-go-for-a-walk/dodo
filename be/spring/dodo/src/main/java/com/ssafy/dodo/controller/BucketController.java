@@ -52,5 +52,12 @@ public class BucketController {
         bucketService.updateBucketInfo(bucketSeq, bucketInfoDto, userDetails);
     }
 
-    // TODO 담긴 버킷 삭제
+    @DeleteMapping("/{bucket-seq}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteBucketList(
+            @PathVariable("bucket-seq") Long bucketSeq,
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+        bucketService.deleteBucket(bucketSeq, userDetails);
+    }
 }
