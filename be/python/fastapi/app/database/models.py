@@ -126,8 +126,11 @@ class Preference(Base):
 
     seq = Column(BIGINT, primary_key=True, autoincrement=True, nullable=False)
     user_seq = Column(BIGINT, ForeignKey("users.seq"))
-    bucket_seq = Column(BIGINT, ForeignKey("buckets.seq"))
+    bucket_seq = Column(BIGINT, ForeignKey("public_buckets.seq"))
     is_delete = Column(TINYINT, nullable=False, default=0)
+
+    publicBucket = relationship("PublicBucket", backref="preferences")
+    user = relationship("User", backref="users")
 
 
 # enum
