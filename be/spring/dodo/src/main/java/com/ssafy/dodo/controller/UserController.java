@@ -5,6 +5,7 @@ import com.ssafy.dodo.entity.BucketListType;
 import com.ssafy.dodo.entity.User;
 import com.ssafy.dodo.exception.CustomException;
 import com.ssafy.dodo.exception.ErrorCode;
+import com.ssafy.dodo.repository.BucketListRepository;
 import com.ssafy.dodo.repository.UserRepository;
 import com.ssafy.dodo.service.BucketListService;
 import com.ssafy.dodo.service.UserService;
@@ -16,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 @Slf4j
@@ -25,6 +28,7 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final BucketListService bucketListService;
+    private final BucketListRepository bucketListRepository;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -53,6 +57,15 @@ public class UserController {
         bucketListService.createBucketList(user, defaultTitle, BucketListType.SINGLE, null);
 
         return new CommonResponse(true);
+    }
+
+    @GetMapping("/bucketlists")
+    @ResponseStatus(HttpStatus.OK)
+    public DataResponse<List<SimpleBucketListDto>> getMyBucketLists(@AuthenticationPrincipal UserDetails userDetails) {
+        Long userSeq = Long.parseLong(userDetails.getUsername());
+        User user = userRepository.findById(userSeq)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return new DataResponse<>(bucketListRepository.getBucketListByUserWithCompleteRate(user));
     }
 
     @PostMapping("/bucketlists")
