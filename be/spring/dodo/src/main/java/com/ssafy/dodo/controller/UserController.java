@@ -1,9 +1,6 @@
 package com.ssafy.dodo.controller;
 
-import com.ssafy.dodo.dto.CommonResponse;
-import com.ssafy.dodo.dto.CreateBucketListDto;
-import com.ssafy.dodo.dto.DataResponse;
-import com.ssafy.dodo.dto.UserInfoDto;
+import com.ssafy.dodo.dto.*;
 import com.ssafy.dodo.entity.User;
 import com.ssafy.dodo.exception.CustomException;
 import com.ssafy.dodo.exception.ErrorCode;
@@ -36,6 +33,17 @@ public class UserController {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return new DataResponse<>(UserInfoDto.of(user));
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommonResponse setUserProfile(
+            @RequestPart("data") InitUserDto dto,
+            @RequestPart("profileImage") MultipartFile profileImage,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        long userSeq = Long.parseLong(userDetails.getUsername());
+        userService.initUserInfo(userSeq, dto, profileImage);
+        return new CommonResponse(true);
     }
 
     @PostMapping("/bucketlist")

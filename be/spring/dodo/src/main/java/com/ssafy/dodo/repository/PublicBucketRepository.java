@@ -28,6 +28,8 @@ public interface PublicBucketRepository extends JpaRepository<PublicBucket, Long
     @Query("UPDATE PublicBucket pb SET pb.isPublic = 0 WHERE pb.seq IN :publicBuckets")
     void makePrivateAllBySeqIn(List<Long> publicBuckets);
 
+    List<PublicBucket> findAllBySeqIn(List<Long> publicBuckets);
+
     Page<PublicBucket> findAllByTitleContaining(String title, Pageable pageable);
 
     Page<PublicBucket> findAllByTitleContainingAndCategory(String title, Category category, Pageable pageable);
