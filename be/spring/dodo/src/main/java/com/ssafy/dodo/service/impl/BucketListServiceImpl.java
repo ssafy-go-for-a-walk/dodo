@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class BucketListServiceImpl implements BucketListService {
 
-    private static final String DEFAULT_BUCKETLIST_IAMGE = "https://dodo-walk-bucket.s3.ap-northeast-2.amazonaws.com/default-bucklist-image.jpg";
+    private static final String DEFAULT_BUCKETLIST_IMAGE = "https://dodo-walk-bucket.s3.ap-northeast-2.amazonaws.com/default-bucklist-image.jpg";
 
     private final AddedBucketRepository addedBucketRepository;
     private final UserRepository userRepository;
@@ -86,12 +86,11 @@ public class BucketListServiceImpl implements BucketListService {
         );
 
         // preference
-        addedBucketRepository.save(AddedBucket.builder()
-                .emoji(publicBucket.getEmoji())
-                .isComplete(false)
-                .bucketList(bucketList)
+        preferenceRepository.save(Preference.builder()
+                .user(user)
                 .publicBucket(publicBucket)
-                .build());
+                .build()
+        );
 
         // public_bucket 담은 수 +1
         publicBucketRepository.plusAddedCount(Arrays.asList(publicBucket));
@@ -162,7 +161,7 @@ public class BucketListServiceImpl implements BucketListService {
     public BucketList createBucketList(User user, String title, BucketListType type, MultipartFile image) {
         // 업로드된 이미지가 없으면 디폴트 이미지로 저장
         // 업로드된 이미지가 있으면 S3에 업로드 후 이미지 경로 저장
-        String bucketListImage = image == null ? DEFAULT_BUCKETLIST_IAMGE : s3FileService.uploadFile(image);
+        String bucketListImage = image == null ? DEFAULT_BUCKETLIST_IMAGE : s3FileService.uploadFile(image);
 
         // 버킷리스트 생성
         BucketList bucketList = BucketList.builder()

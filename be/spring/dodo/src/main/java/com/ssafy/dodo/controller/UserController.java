@@ -1,6 +1,7 @@
 package com.ssafy.dodo.controller;
 
 import com.ssafy.dodo.dto.*;
+import com.ssafy.dodo.entity.BucketListType;
 import com.ssafy.dodo.entity.User;
 import com.ssafy.dodo.exception.CustomException;
 import com.ssafy.dodo.exception.ErrorCode;
@@ -41,12 +42,20 @@ public class UserController {
             @RequestPart("data") InitUserDto dto,
             @RequestPart("profileImage") MultipartFile profileImage,
             @AuthenticationPrincipal UserDetails userDetails) {
+        // user 정보 저장 및 설문결과 선호도에 추가
         long userSeq = Long.parseLong(userDetails.getUsername());
         userService.initUserInfo(userSeq, dto, profileImage);
+
+        // 기본 버킷리스트 생성
+        User user = userRepository.findById(userSeq)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        String defaultTitle = user.getNickname() + "님의 버킷리스트";
+        bucketListService.createBucketList(user, defaultTitle, BucketListType.SINGLE, null);
+
         return new CommonResponse(true);
     }
 
-    @PostMapping("/bucketlist")
+    @PostMapping("/bucketlists")
     @ResponseStatus(HttpStatus.CREATED)
     public CommonResponse createBucketList(
             @RequestPart("data") CreateBucketListDto dto,
