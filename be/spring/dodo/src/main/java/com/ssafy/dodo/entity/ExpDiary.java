@@ -27,7 +27,7 @@ public class ExpDiary extends BaseEntity {
     private AddedBucket addedBucket;
 
     @OneToMany(mappedBy = "expDiary", fetch = FetchType.LAZY)
-    private List<ExpDiaryImage> images = new ArrayList<>();
+    private List<DiaryImage> images = new ArrayList<>();
 
     private boolean isDelete;
 

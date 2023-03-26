@@ -1,12 +1,10 @@
 package com.ssafy.dodo.controller;
 
-import com.ssafy.dodo.dto.BucketInfoDto;
-import com.ssafy.dodo.dto.BucketListInfoDto;
-import com.ssafy.dodo.dto.CategoryInfoDto;
-import com.ssafy.dodo.dto.DataResponse;
+import com.ssafy.dodo.dto.*;
 import com.ssafy.dodo.entity.Category;
 import com.ssafy.dodo.repository.CategoryRepository;
 import com.ssafy.dodo.service.BucketService;
+import com.ssafy.dodo.service.ExpDiaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +25,7 @@ public class BucketController {
 
     private final BucketService bucketService;
     private final CategoryRepository categoryRepository;
+    private final ExpDiaryService expDiaryService;
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
@@ -76,5 +76,17 @@ public class BucketController {
                 .map(CategoryInfoDto::of)
                 .collect(Collectors.toList());
         return new DataResponse<>(categoryInfoDtoList);
+    }
+
+    @PostMapping("/{bucket-seq}/diaries")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommonResponse writeExpDiary(
+            @PathVariable("bucket-seq") Long bucketSeq,
+            @RequestPart("data") WriteExpDiaryDto dto,
+            @RequestPart("files") MultipartFile[] files,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        Long userSeq = Long.parseLong(userDetails.getUsername());
+        expDiaryService.write(userSeq, bucketSeq, dto, files);
+        return new CommonResponse(true);
     }
 }
