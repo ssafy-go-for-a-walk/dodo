@@ -76,6 +76,10 @@ public class BucketListServiceImpl implements BucketListService {
         PublicBucket publicBucket = publicBucketRepository.findById(publicBucketSeq)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
+        if(addedBucketRepository.existsByBucketListAndPublicBucket(bucketList, publicBucket)){
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
+
         // added_bucket
         addedBucketRepository.save(AddedBucket.builder()
                         .isComplete(false)
