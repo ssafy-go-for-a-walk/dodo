@@ -62,7 +62,7 @@ export default function SignUpPage() {
 				</PTag>
 			</Div>
 			<Div>
-				<DivKakao>
+				<DivKakao onClick={() => window.open("https://j8b104.p.ssafy.io/api/oauth2/authorization/kakao")}>
 					<img src={KakaoLogo} alt="#" style={{height : "60%", marginRight: "1vw"}}/>
 					<PTag style={{fontSize: "16px", fontWeight: "700"}}>
 						카카오로 시작하기
