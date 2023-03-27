@@ -1,12 +1,12 @@
 const ModalStyle = {
-  overLay: {
-    position: "relative",
+  overlay: {
+    position: "fixed",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(255,255,255,0)",
-    zIndex: 10,
+    backgroundColor: "rgba(255,255,255,0.75)",
+    zIndex: 9999,
   },
   content: {
     display: "flex",
@@ -21,7 +21,7 @@ const ModalStyle = {
     bottom: "auto",
     outline: "none",
     borderRadius: "16px",
-    zIndex: 10,
+    zIndex: 9999,
     padding: "8px 16px 8px 16px",
 		fontSize: "14px",
   }
