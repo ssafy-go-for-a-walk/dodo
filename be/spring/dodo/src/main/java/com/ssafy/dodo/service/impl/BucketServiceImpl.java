@@ -76,15 +76,24 @@ public class BucketServiceImpl implements BucketService {
     }
 
     @Override
-    public void completeBucket(Long bucketSeq, UserDetails userDetails) {
+    public double completeBucket(Long bucketSeq, UserDetails userDetails) {
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         AddedBucket addedBucket = addedBucketRepository.findById(bucketSeq)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        log.info(String.valueOf(addedBucketRepository.countByBucketListAndIsComplete(addedBucket.getBucketList(), true)));
+        log.info(String.valueOf(addedBucketRepository.countByBucketList(addedBucket.getBucketList())));
 
         addedBucket.completeBucket();
 
+        double part = addedBucketRepository.countByBucketListAndIsComplete(addedBucket.getBucketList(), true);
+        double total = addedBucketRepository.countByBucketList(addedBucket.getBucketList());
+        double completeRate = (double) Math.round(part / total * 100 * 10) / 10;
+
+//        log.info("{} / {} * 100 = {} -> {}", part, total, part/total*100, completeRate);
+
+        return completeRate;
     }
 
     @Override
