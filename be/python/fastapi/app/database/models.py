@@ -22,7 +22,6 @@ class User(Base):
     is_delete = Column(TINYINT, nullable=False, default=0)
     
 
-
 class BucketList(Base):
     __tablename__ = "bucketlists"
 
@@ -107,9 +106,6 @@ class Bookmark(Base):
     user_seq = Column(BIGINT, ForeignKey("users.seq"))
     bucketlist_seq = Column(BIGINT, ForeignKey("bucketlists.seq"))
     is_delete = Column(TINYINT, nullable=False, default=0)
-
-    # def __init__(self):
-    #     print(self.user_seq)
 
 
 class BucketListMember(Base):
