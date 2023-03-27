@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import SocialItemContent from "./SocialItemContent";
+import ButtonArrow from "./ButtonArrow";
 
 const TopDiv = styled.div`
 	display: inline-block;
@@ -48,7 +49,15 @@ const UserNickNAME = styled.p`
 `
 
 export default function SocialItem(props) {
+	const [buttonStatus, setButtonStatus] = useState(true)
 	const info = props.data
+	const length = 6
+	const [datas , setdatas] = useState(info.bucketlist.slice(0, length))
+	const resDatas = info.bucketlist.slice(length)
+	const clickEvent = () => {
+		setButtonStatus(pre => !pre)
+		setdatas(pre => [...pre, ...resDatas])
+	}
 
 	return (
 		<TopDiv>
@@ -67,9 +76,10 @@ export default function SocialItem(props) {
 				</SubDiv>
 			</TitleDiv>
 			<hr/>
-			{info.bucketlist.map((bucket) => (
-				<SocialItemContent data={bucket} />
+			{datas.map((bucket, index) => (
+				<SocialItemContent data={bucket} key={index}/>
 			))}
+			{buttonStatus ? <ButtonArrow clickEvent={clickEvent}/> : null}
 		</TopDiv>
 	)
 }
