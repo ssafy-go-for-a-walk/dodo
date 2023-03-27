@@ -17,4 +17,8 @@ public interface AddedBucketRepository extends JpaRepository<AddedBucket, Long> 
     void deleteByBucketList(BucketList bucketList);
 
     boolean existsByBucketListAndPublicBucket(BucketList bucketList, PublicBucket publicBucket);
+
+    int countByBucketListAndIsComplete(BucketList bucketList, boolean isComplete);
+
+    int countByBucketList(BucketList bucketList);
 }

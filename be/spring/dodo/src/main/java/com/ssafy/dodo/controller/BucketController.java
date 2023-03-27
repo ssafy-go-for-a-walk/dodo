@@ -44,11 +44,11 @@ public class BucketController {
 
     @PostMapping("/{bucket-seq}/complete")
     @ResponseStatus(HttpStatus.OK)
-    public void completeBucket(
+    public DataResponse<?> completeBucket(
             @PathVariable("bucket-seq") Long bucketSeq,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        bucketService.completeBucket(bucketSeq, userDetails);
+        return new DataResponse<>(bucketService.completeBucket(bucketSeq, userDetails));
     }
 
     // 담긴 버킷 상세 정보 수정
