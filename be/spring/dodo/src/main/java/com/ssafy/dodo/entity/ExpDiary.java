@@ -1,6 +1,9 @@
 package com.ssafy.dodo.entity;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -26,8 +29,8 @@ public class ExpDiary extends BaseEntity {
     @JoinColumn(name = "bucket_seq")
     private AddedBucket addedBucket;
 
-    @OneToMany(mappedBy = "expDiary", fetch = FetchType.LAZY)
-    private List<ExpDiaryImage> images = new ArrayList<>();
+    @OneToMany(mappedBy = "expDiary")
+    private List<DiaryImage> images = new ArrayList<>();
 
     private boolean isDelete;
 

@@ -19,7 +19,14 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
 
     // S3
-    FILE_UPLOAD_FAIL(HttpStatus.CONFLICT, "파일 업로드에 실패했습니다.");
+    FILE_UPLOAD_FAIL(HttpStatus.CONFLICT, "파일 업로드에 실패했습니다."),
+
+    // Bucket
+    BUCKET_NOT_FOUND(HttpStatus.NOT_FOUND, "버킷을 찾을 수 없습니다."),
+    NOT_BUCKET_OWNER(HttpStatus.FORBIDDEN, "버킷의 소유자가 아닙니다."),
+
+    // ExpDiary
+    ;
 
 
     private final HttpStatus status;
