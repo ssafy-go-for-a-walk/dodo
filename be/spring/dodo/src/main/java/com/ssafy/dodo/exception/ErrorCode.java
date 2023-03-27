@@ -28,6 +28,14 @@ public enum ErrorCode {
     // Bucket
     BUCKET_NOT_FOUND(HttpStatus.NOT_FOUND, "버킷을 찾을 수 없습니다."),
     NOT_BUCKET_OWNER(HttpStatus.FORBIDDEN, "버킷의 소유자가 아닙니다."),
+    DUPLICATED_BUCKET(HttpStatus.CONFLICT, "이미 담은 버킷입니다."),
+    
+    // Category
+    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."),
+
+    // AddedBucket
+    ADDED_BUCKET_NOT_FOUND(HttpStatus.NOT_FOUND, "담은 버킷을 찾을 수 없습니다."),
+
 
     // ExpDiary
     ;

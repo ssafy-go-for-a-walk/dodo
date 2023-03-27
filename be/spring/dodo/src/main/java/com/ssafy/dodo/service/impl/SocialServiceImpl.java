@@ -2,8 +2,11 @@ package com.ssafy.dodo.service.impl;
 
 import com.ssafy.dodo.dto.SocialBucketDto;
 import com.ssafy.dodo.dto.SocialBucketListsDto;
+import com.ssafy.dodo.entity.AddedBucket;
 import com.ssafy.dodo.entity.BucketList;
 import com.ssafy.dodo.entity.User;
+import com.ssafy.dodo.exception.CustomException;
+import com.ssafy.dodo.exception.ErrorCode;
 import com.ssafy.dodo.repository.AddedBucketRepository;
 import com.ssafy.dodo.repository.BucketListRepository;
 import com.ssafy.dodo.repository.PublicBucketRepository;
@@ -36,7 +39,7 @@ public class SocialServiceImpl implements SocialService {
     public Page<SocialBucketListsDto> getSocialBucketLists(Pageable pageable, UserDetails userDetails) {
 
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Page<BucketList> bucketLists = bucketListRepository.findAllByIsPublic(true, pageable);
 
