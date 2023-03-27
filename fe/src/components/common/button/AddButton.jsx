@@ -28,7 +28,7 @@ export default function AddButton(props) {
   };
 
   return (
-    <ButtonBox isAdd={isAdd} onClick={addBucket}>
+    <ButtonBox isAdd={isAdd} onClick={addBucket} disabled={isAdd && "disabled"}>
       {isAdd ? <MdCheck className="checkIcon" /> : "담기"}
     </ButtonBox>
   );

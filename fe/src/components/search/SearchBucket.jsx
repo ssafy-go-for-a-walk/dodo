@@ -5,7 +5,7 @@ import AddButton from "../common/button/AddButton";
 
 const BucketBox = styled.div`
   width: 768px;
-  height: 52px;
+  height: 80px;
   border-radius: 8px;
   box-shadow: 0px 4px 4px rgba(182, 86, 86, 0.25);
   display: flex;
@@ -49,7 +49,7 @@ export default function Bucket(props) {
     <BucketBox>
       <BucketInfo>
         <BucketHeader>
-          <Tag tagName={bucket.category} />
+          <Tag category={bucket.category} />
           <BucketImoge />
           <BucketTitle>{bucket.title}</BucketTitle>
         </BucketHeader>

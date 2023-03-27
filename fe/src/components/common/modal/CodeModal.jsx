@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import CloseButton from "../button/CloseButton";
-import { MdContentCopy } from "react-icons/md";
+import CloseIcon from "@mui/icons-material/Close";
+import { IconButton } from "@mui/material";
 
 const Modal = styled.div`
   position: fixed;
@@ -53,9 +53,14 @@ const Copy = styled.div`
 `;
 
 export default function GroupModal(props) {
+  const closeModal = () => {
+    props.closeModal();
+  };
   return (
     <Modal>
-      <CloseButton />
+      <IconButton sx={{ width: "40px", right: "10ox", left: "auto" }}>
+        <CloseIcon style={{ color: "#1C9BFF" }} onClick={closeModal} />
+      </IconButton>
       <Title>참여코드</Title>
       <Content>참여코드는 N분간 유효합니다.</Content>
       <Code>

@@ -23,8 +23,8 @@ const ModalStyle = {
     borderRadius: "16px",
     zIndex: 9999,
     padding: "8px 16px 8px 16px",
-		fontSize: "14px",
-  }
-}
+    fontSize: "14px",
+  },
+};
 
-export default ModalStyle
+export default ModalStyle;

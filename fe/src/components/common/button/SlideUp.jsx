@@ -7,6 +7,7 @@ const UpButton = styled.div`
   bottom: 16px;
   right: 72px;
   cursor: pointer;
+  z-index: 99;
 
   .upIcon {
     color: #1c9bff;

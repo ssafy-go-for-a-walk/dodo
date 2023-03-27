@@ -31,11 +31,16 @@ const ButtonBox = styled.button`
 `;
 
 export default function ColorButton(props) {
+  const content = props.children;
+  const clickBtn = event => {
+    event.preventDefault();
+    props.propFunction(content);
+  };
   return (
-    <ButtonBox onClick={props.onClick}>
-      {props.children}
-      {props.children === "Private / Public" && (props.public ? <BsToggleOn className="icon" /> : <BsToggleOff className="icon" />)}
-      {props.children === "참여코드 생성하기" && <MdContentCopy className="icon" />}
+    <ButtonBox onClick={clickBtn}>
+      {content}
+      {content === "Private / Public" && (props.public ? <BsToggleOn className="icon" /> : <BsToggleOff className="icon" />)}
+      {content === "참여코드 생성하기" && <MdContentCopy className="icon" />}
     </ButtonBox>
   );
 }

@@ -30,10 +30,11 @@ const ButtonBox = styled.button`
 `;
 
 export default function ColorButton(props) {
+  const content = props.children;
   return (
     <ButtonBox onClick={props.onClick}>
-      {props.children === "공유하기" ? <MdShare className="icon" /> : <TbShare2 className="icon" />}
-      {props.children}
+      {content === "공유하기" ? <MdShare className="icon" /> : <TbShare2 className="icon" />}
+      {content}
     </ButtonBox>
   );
 }

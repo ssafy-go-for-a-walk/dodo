@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Tag from "../common/bucket/Tag";
 import CompleteButton from "../common/button/CompleteButton";
+import Modal from "react-modal";
+import DetailModalStyle from "../common/modal/DetailModalStyle";
+import DetailModal from "../common/modal/detailBucket/DetailModal";
 
 const BucketBox = styled.div`
   width: 800px;
-  height: 68px;
+  height: 72px;
   border-radius: 8px;
   box-shadow: 0px 4px 4px rgba(182, 86, 86, 0.25);
   position: relative;
@@ -13,8 +16,8 @@ const BucketBox = styled.div`
 `;
 
 const BucketInfo = styled.div`
-  width: ${props => (props.activate ? "688px" : "752px")};
-  height: 52px;
+  width: ${props => (props.activate ? "720px" : "784px")};
+  height: 72px;
   border-radius: 8px;
   background: ${props => (props.isComplete ? "#E9F5FF" : "#ffffff")};
   position: absolute;
@@ -23,6 +26,7 @@ const BucketInfo = styled.div`
   align-items: center;
   padding: 8px 16px;
   z-index: 1;
+  cursor: pointer;
 `;
 
 const BucketHeader = styled.div`
@@ -54,7 +58,7 @@ const DeleteBox = styled.div`
   align-items: center;
 `;
 
-const DeleteBtn = styled.button`
+const DeleteBtn = styled.div`
   width: 48px;
   height: 32px;
   display: flex;
@@ -68,36 +72,45 @@ const DeleteBtn = styled.button`
 export default function Bucket(props) {
   const bucket = props.bucket;
   const [activateDelete, setActivateDelete] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const openDetailModal = () => {
     console.log("open");
+    setActivateDelete(false);
   };
 
-  const activateBtn = () => {
-    setActivateDelete(!activateDelete);
+  const openSetup = () => {
+    setIsOpen(bool => !bool);
   };
 
-  const deleteBucket = event => {
-    if (event.stopPropagation) {
-      event.stopPropagation();
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  const deleteBucket = () => {
+    if (activateDelete) {
+      console.log("delete");
+    } else {
+      setActivateDelete(true);
     }
-    event.cancelBubble = true;
-    console.log("delete");
   };
 
   return (
     <BucketBox>
-      <BucketInfo activate={activateDelete} isComplete={bucket.isComplete} onClick={openDetailModal}>
+      <BucketInfo activate={activateDelete} isComplete={bucket.isComplete} onClick={openSetup}>
         <BucketHeader>
-          <Tag tagName={bucket.category} />
+          <Tag category={bucket.category} />
           <BucketImoge />
           <BucketTitle>{bucket.title}</BucketTitle>
         </BucketHeader>
         <CompleteButton isComplete={bucket.isComplete} bucketId={bucket.id} />
       </BucketInfo>
-      <DeleteBox onClick={activateBtn}>
-        <DeleteBtn conClick={deleteBucket}>삭제</DeleteBtn>
+      <DeleteBox onClick={deleteBucket}>
+        <DeleteBtn>삭제</DeleteBtn>
       </DeleteBox>
+      <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)} style={DetailModalStyle} ariaHideApp={false}>
+        <DetailModal closeModal={closeModal} bucket={bucket} />
+      </Modal>
     </BucketBox>
   );
 }

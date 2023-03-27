@@ -42,18 +42,19 @@ const DiaryContent = styled.div`
 `;
 
 export default function DiaryCard(props) {
+  const { diaryTitle, diaryCategory, diaryCreated, diaryImg, diaryContent } = props;
   return (
     <Card>
       <CardHeader>
-        {props.title}
-        <Tag>{props.category}</Tag>
+        {diaryTitle}
+        <Tag>{diaryCategory}</Tag>
       </CardHeader>
       <CreateDate>
         {calender}
-        {props.date}
+        {diaryCreated}
       </CreateDate>
-      <DiaryImg src={props.image} />
-      <DiaryContent>{props.content}</DiaryContent>
+      <DiaryImg src={diaryImg} />
+      <DiaryContent>{diaryContent}</DiaryContent>
     </Card>
   );
 }

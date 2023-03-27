@@ -9,15 +9,14 @@ const SearchBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 55px;
-  background: #f1f3f5;
+  margin-top: 40px;
+  background: #ffffff;
 `;
 
 const SearchInput = styled.input`
   width: 384px;
   height: 24px;
   border: none;
-  background: #f1f3f5;
   margin-left: 16px;
 `;
 
