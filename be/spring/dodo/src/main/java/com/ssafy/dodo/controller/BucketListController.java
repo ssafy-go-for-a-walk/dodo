@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/bucketlist")
+@RequestMapping("/bucketlist")
 public class BucketListController {
 
     private final BucketListService bucketListService;

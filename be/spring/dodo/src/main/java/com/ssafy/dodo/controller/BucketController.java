@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/bucket")
+@RequestMapping("/buckets")
 public class BucketController {
 
     private final BucketService bucketService;
