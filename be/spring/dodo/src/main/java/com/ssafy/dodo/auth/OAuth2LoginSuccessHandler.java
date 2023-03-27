@@ -5,6 +5,7 @@ import com.ssafy.dodo.entity.User;
 import com.ssafy.dodo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -21,6 +22,10 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+
+    @Value("${app.auth.jwt.redirect-url}")
+    private String ACCESS_TOKEN_REDIRECT_URL;
+
     private final JwtProvider jwtProvider;
     private final UserRepository userRepository;
 
@@ -53,19 +58,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
             response.addHeader("Set-Cookie", cookie.toString());
 
-            String targetUrl;
+            String targetUrl = ACCESS_TOKEN_REDIRECT_URL + accessToken;
 
-            if(user.getNickname() == null){
-                // 추가정보 입력 페이지로
-                log.info("처음 가입한 회원");
-                targetUrl = UriComponentsBuilder.fromUriString("http://localhost:8080/guest").toUriString();
-            }else{
-                // 홈으로
-                log.info("이미 가입했던 회원");
-                targetUrl = UriComponentsBuilder.fromUriString("http://localhost:8080/home").toUriString();
-            }
-
-//            getRedirectStrategy().sendRedirect(request, response, targetUrl);
+            getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
         }catch(Exception e){
             throw e;
