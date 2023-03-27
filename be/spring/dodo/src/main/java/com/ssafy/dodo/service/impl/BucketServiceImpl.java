@@ -3,6 +3,8 @@ package com.ssafy.dodo.service.impl;
 import com.ssafy.dodo.dto.BucketInfoDto;
 import com.ssafy.dodo.dto.PublicBucketDto;
 import com.ssafy.dodo.entity.*;
+import com.ssafy.dodo.exception.CustomException;
+import com.ssafy.dodo.exception.ErrorCode;
 import com.ssafy.dodo.repository.*;
 import com.ssafy.dodo.service.BucketService;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +38,7 @@ public class BucketServiceImpl implements BucketService {
         if(category != null){
 
             Category findCategory = categoryRepository.findById(category)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 
             publicBuckets = publicBucketRepository.findAllByTitleContainingAndCategory(word, findCategory, pageable);
         }else{
@@ -57,10 +59,10 @@ public class BucketServiceImpl implements BucketService {
     @Override
     public void deleteBucket(Long bucketSeq, UserDetails userDetails) {
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         AddedBucket addedBucket = addedBucketRepository.findById(bucketSeq)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.ADDED_BUCKET_NOT_FOUND));
 
         PublicBucket publicBucket = addedBucket.getPublicBucket();
 
@@ -78,10 +80,11 @@ public class BucketServiceImpl implements BucketService {
     @Override
     public double completeBucket(Long bucketSeq, UserDetails userDetails) {
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         AddedBucket addedBucket = addedBucketRepository.findById(bucketSeq)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.ADDED_BUCKET_NOT_FOUND));
+
         log.info(String.valueOf(addedBucketRepository.countByBucketListAndIsComplete(addedBucket.getBucketList(), true)));
         log.info(String.valueOf(addedBucketRepository.countByBucketList(addedBucket.getBucketList())));
 
@@ -99,10 +102,10 @@ public class BucketServiceImpl implements BucketService {
     @Override
     public void updateBucketInfo(Long bucketSeq, BucketInfoDto bucketInfoDto, UserDetails userDetails) {
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         AddedBucket addedBucket = addedBucketRepository.findById(bucketSeq)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.ADDED_BUCKET_NOT_FOUND));
 
         addedBucket.updateBucketInfo(bucketInfoDto.getEmoji(), bucketInfoDto.getDDay(), bucketInfoDto.getLocation(), bucketInfoDto.getDesc());
     }

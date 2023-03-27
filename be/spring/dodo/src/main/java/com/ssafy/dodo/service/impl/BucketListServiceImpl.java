@@ -4,6 +4,8 @@ import com.ssafy.dodo.dto.AddedBucketDto;
 import com.ssafy.dodo.dto.BucketListInfoDto;
 import com.ssafy.dodo.dto.CreateBucketListDto;
 import com.ssafy.dodo.entity.*;
+import com.ssafy.dodo.exception.CustomException;
+import com.ssafy.dodo.exception.ErrorCode;
 import com.ssafy.dodo.repository.*;
 import com.ssafy.dodo.service.BucketListService;
 import com.ssafy.dodo.service.S3FileService;
@@ -42,10 +44,10 @@ public class BucketListServiceImpl implements BucketListService {
     public Page<AddedBucketDto> getBucketListBuckets(UserDetails userDetails, Long bucketListSeq, Pageable pageable) {
 
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         BucketList bucketList = bucketListRepository.findById(bucketListSeq)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
 
         Page<AddedBucket> allByBucketList = addedBucketRepository.findAllByBucketList(bucketList, pageable);
 
@@ -68,16 +70,16 @@ public class BucketListServiceImpl implements BucketListService {
     public void addSearchedBucket(Long bucketListSeq, Long publicBucketSeq, UserDetails userDetails) {
 
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         BucketList bucketList = bucketListRepository.findById(bucketListSeq)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
 
         PublicBucket publicBucket = publicBucketRepository.findById(publicBucketSeq)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_NOT_FOUND));
 
         if(addedBucketRepository.existsByBucketListAndPublicBucket(bucketList, publicBucket)){
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
+            throw new CustomException(ErrorCode.DUPLICATED_BUCKET);
         }
 
         // added_bucket
@@ -103,10 +105,10 @@ public class BucketListServiceImpl implements BucketListService {
     @Override
     public void updateBucketListInfo(Long bucketListSeq, BucketListInfoDto bucketListInfoDto, MultipartFile file, UserDetails userDetails) {
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         BucketList bucketList = bucketListRepository.findById(bucketListSeq)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
 
         if(file != null)
             bucketList.updateBucketListImage(s3FileService.uploadFile(file));
@@ -133,10 +135,10 @@ public class BucketListServiceImpl implements BucketListService {
     @Override
     public void deleteBucketList(Long bucketListSeq, UserDetails userDetails) {
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         BucketList bucketList = bucketListRepository.findById(bucketListSeq)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
 
         // added_buckets의 public_buckets의 선호도 삭제
         List<AddedBucket> addedBuckets = addedBucketRepository.findAllByBucketList(bucketList, null).getContent();

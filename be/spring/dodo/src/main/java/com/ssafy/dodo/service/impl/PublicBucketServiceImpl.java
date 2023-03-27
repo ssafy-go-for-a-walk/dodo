@@ -2,6 +2,8 @@ package com.ssafy.dodo.service.impl;
 
 import com.ssafy.dodo.dto.CustomBucketDto;
 import com.ssafy.dodo.entity.*;
+import com.ssafy.dodo.exception.CustomException;
+import com.ssafy.dodo.exception.ErrorCode;
 import com.ssafy.dodo.repository.*;
 import com.ssafy.dodo.service.PublicBucketService;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +31,10 @@ public class PublicBucketServiceImpl implements PublicBucketService {
     public void addCustomBucket(Long bucketListSeq, CustomBucketDto customBucketDto, UserDetails userDetails) {
 
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         BucketList bucketList = bucketListRepository.findById(bucketListSeq)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
 
         // public에 추가
         PublicBucket publicBucket = publicBucketRepository.save(PublicBucket.builder()

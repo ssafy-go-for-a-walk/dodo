@@ -3,6 +3,7 @@ package com.ssafy.dodo.service.impl;
 import com.ssafy.dodo.entity.User;
 import com.ssafy.dodo.auth.CustomOAuth2User;
 import com.ssafy.dodo.auth.jwt.JwtProvider;
+import com.ssafy.dodo.exception.CustomException;
 import com.ssafy.dodo.exception.ErrorCode;
 import com.ssafy.dodo.repository.UserRepository;
 import com.ssafy.dodo.service.AuthService;
@@ -24,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
     public String reissueAccessToken(String oldAccessToken, String refreshToken) {
 
         if(!jwtProvider.validateToken(refreshToken)){
-            throw new RuntimeException(String.valueOf(ErrorCode.REFRESH_NOT_VALID));
+            throw new CustomException(ErrorCode.REFRESH_NOT_VALID);
         }
 
         Authentication authentication = jwtProvider.getAuthentication(oldAccessToken);
@@ -32,10 +33,10 @@ public class AuthServiceImpl implements AuthService {
         Long userSeq = Long.parseLong(((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername());
 
         User findUser = userRepository.findById(userSeq)
-                .orElseThrow(() -> new RuntimeException(String.valueOf(ErrorCode.USER_NOT_FOUND)));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if(!refreshToken.equals(findUser.getRefreshToken())){
-            throw new RuntimeException(String.valueOf(ErrorCode.REFRESH_NOT_VALID));
+            throw new CustomException(ErrorCode.REFRESH_NOT_VALID);
         }
 
         return jwtProvider.createAccessToken(authentication);
