@@ -21,7 +21,7 @@ public class SimpleBucketListDto {
         this.seq = seq;
         this.title = title;
         // 소수점 첫번째짜리까지 반올림
-        this.completeRate = (double) Math.round(completeRate * 10) / 10;
+        this.completeRate = completeRate == null ? 0 : (double) Math.round(completeRate * 10) / 10;
         this.type = type;
     }
 }
