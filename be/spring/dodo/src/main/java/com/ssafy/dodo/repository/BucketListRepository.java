@@ -3,6 +3,8 @@ package com.ssafy.dodo.repository;
 import com.ssafy.dodo.dto.SimpleBucketListDto;
 import com.ssafy.dodo.entity.BucketList;
 import com.ssafy.dodo.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +20,6 @@ public interface BucketListRepository extends JpaRepository<BucketList, Long> {
             "where bm.user = :user " +
             "group by bl")
     List<SimpleBucketListDto> getBucketListByUserWithCompleteRate(@Param("user") User user);
+
+    Page<BucketList> findAllByIsPublic(boolean b, Pageable pageable);
 }
