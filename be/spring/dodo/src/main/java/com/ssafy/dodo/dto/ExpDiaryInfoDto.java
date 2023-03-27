@@ -4,15 +4,18 @@ import com.ssafy.dodo.entity.DiaryImage;
 import com.ssafy.dodo.entity.ExpDiary;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@ToString
 @NoArgsConstructor
 public class ExpDiaryInfoDto {
 
+    private String emoji;
     private String content;
     private Boolean isContainImage;
     private List<String> images;
@@ -29,6 +32,7 @@ public class ExpDiaryInfoDto {
                 .getCategory());
 
         ExpDiaryInfoDto dto = new ExpDiaryInfoDto();
+        dto.emoji = expDiary.getAddedBucket().getEmoji();
         dto.content = expDiary.getContent();
         dto.isContainImage = images.size() > 0;
         dto.images = images;
