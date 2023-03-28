@@ -1,9 +1,11 @@
 import React from "react";
 import styled from "styled-components"
-// import { useLocation } from "react-router";
+import { useLocation } from "react-router";
 import Logo from '../../imges/logo.jpg';
 // import Kakao from "../../imges/kakaologin.png"
 import KakaoLogo from "../../imges/kakaologo.png"
+import { useDispatch } from "react-redux";
+import { setSurvey } from "../../redux/user";
 
 const Div = styled.div`
 	display: flex;
@@ -44,8 +46,13 @@ const DivKakao = styled.div`
 `
 
 export default function SignUpPage() {
-	// const { state } = useLocation();
-	// const selected = state.selected
+	const { state } = useLocation();
+	const selected = state.selected
+	const dispatch = useDispatch();
+	const signUp = () => {
+		window.location.replace("https://j8b104.p.ssafy.io/api/oauth2/authorization/kakao")
+		dispatch(setSurvey(selected))
+	}
 	return (
 		<div>
 			<Div>
@@ -62,7 +69,7 @@ export default function SignUpPage() {
 				</PTag>
 			</Div>
 			<Div>
-				<DivKakao onClick={() => window.open("https://j8b104.p.ssafy.io/api/oauth2/authorization/kakao")}>
+				<DivKakao onClick={signUp}>
 					<img src={KakaoLogo} alt="#" style={{height : "60%", marginRight: "1vw"}}/>
 					<PTag style={{fontSize: "16px", fontWeight: "700"}}>
 						카카오로 시작하기
