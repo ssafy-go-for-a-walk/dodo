@@ -6,7 +6,10 @@ const initialStateValue = {
 	loginUserEmail: "",
 	loginUserImg: "",
   loginUserNickname: "",
-	loginBucketName: "",
+	selectedBucketlist: {
+    pk: "",
+    title: "",
+  },
 };
 
 export const userSlice = createSlice({
@@ -14,6 +17,7 @@ export const userSlice = createSlice({
   initialState: {
     value: initialStateValue,
     appState : "",
+    survey: [],
   },
   reducers: {
     login: (state, action) => {
@@ -25,11 +29,18 @@ export const userSlice = createSlice({
 		change: (state, action) => {
       state.value.loginBucketName = action.payload;
     },
+    profile: (state, action) => {
+      state.value.loginUserNickname = action.payload.loginUserNickname
+      state.value.loginUserImg = action.payload.loginUserImg
+    },
     setAppState: (state, action) => {
       state.appState = action.payload;
     },
+    setSurvey: (state, action) => {
+      state.survey =action.payload
+    }
   },
 });
 
-export const { login, logout, change, setAppState } = userSlice.actions;
+export const { setSurvey, profile, login, logout, change, setAppState } = userSlice.actions;
 export default userSlice.reducer;

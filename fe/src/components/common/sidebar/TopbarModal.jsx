@@ -1,5 +1,5 @@
 import React from "react";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Setting from "./modal/Setting";
 import Logout from "./modal/Logout";
@@ -46,13 +46,10 @@ export default function TopbarModal(props) {
 	const closeModal = () => {
 		props.closeModal()
 	}
-	// const { user } = useSelector((state) => state)
-	const userImg = "https://img.danawa.com/prod_img/500000/017/350/img/13350017_1.jpg?shrink=330:*&_v=20210224095944"
-	const userNickname = "짱구는 못말려"
-	const userEmail = "emailemail@ssafy.com"
-	// const userImg = user.value.loginUserImg
-	// const userNickname = user.value.loginUserNickname
-	// const userEmail = user.value.loginUserNickname
+	const { user } = useSelector((state) => state)
+	const userImg = user.value.loginUserImg
+	const userNickname = user.value.loginUserNickname
+	const userEmail = user.value.loginUserNickname
 	return (
 		<TopDiv>
 			<Div>

@@ -13,6 +13,6 @@ const LogInButton = styled.button`
 `
 
 export default function LogIn() {
-	return <LogInButton onClick={() => window.open("https://j8b104.p.ssafy.io/api/oauth2/authorization/kakao")}>로그인</LogInButton>
+	return <LogInButton onClick={() => window.location.replace("https://j8b104.p.ssafy.io/api/oauth2/authorization/kakao", "_blank")}>로그인</LogInButton>
 
 }
