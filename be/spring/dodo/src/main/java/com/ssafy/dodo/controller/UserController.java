@@ -47,7 +47,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public CommonResponse setUserProfile(
             @RequestPart("data") InitUserDto dto,
-            @RequestPart("profileImage") MultipartFile profileImage,
+            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage,
             @AuthenticationPrincipal UserDetails userDetails) {
         // user 정보 저장 및 설문결과 선호도에 추가
         long userSeq = Long.parseLong(userDetails.getUsername());

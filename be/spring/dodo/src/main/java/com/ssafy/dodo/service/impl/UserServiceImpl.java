@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         String imagePath = null;
 
         // profile image를 s3에 저장
-        if (profileImage != null) {
+        if (profileImage != null && !profileImage.isEmpty() && profileImage.getSize() > 0) {
             imagePath = s3FileService.uploadFile(profileImage);
         }
 

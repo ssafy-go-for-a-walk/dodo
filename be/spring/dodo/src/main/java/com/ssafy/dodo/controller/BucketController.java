@@ -109,7 +109,7 @@ public class BucketController {
     public CommonResponse writeExpDiary(
             @PathVariable("bucket-seq") Long bucketSeq,
             @RequestPart("data") WriteExpDiaryDto dto,
-            @RequestPart("files") MultipartFile[] files,
+            @RequestPart(value = "files", required = false) MultipartFile[] files,
             @AuthenticationPrincipal UserDetails userDetails) {
         Long userSeq = Long.parseLong(userDetails.getUsername());
         expDiaryService.write(userSeq, bucketSeq, dto, files);
