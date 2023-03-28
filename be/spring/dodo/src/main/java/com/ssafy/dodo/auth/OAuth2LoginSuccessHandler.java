@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Slf4j
@@ -85,6 +86,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         }else{ // 있으면 가져와서 리프레시 토큰만 업데이트
             user = optionalUser.get();
             user.updateRefreshToken(refreshToken);
+            user.updateLastLogin(LocalDateTime.now());
         }
 
         return userRepository.save(user);
