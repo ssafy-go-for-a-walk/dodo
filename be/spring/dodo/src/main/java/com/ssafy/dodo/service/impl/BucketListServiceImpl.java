@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 public class BucketListServiceImpl implements BucketListService {
 
     private static final String DEFAULT_BUCKETLIST_IMAGE = "https://dodo-walk-bucket.s3.ap-northeast-2.amazonaws.com/default-bucklist-image.jpg";
+    private static final String DEFAULT_BUCKETLIST_NAME = "새로운 버킷리스트";
 
     private final AddedBucketRepository addedBucketRepository;
     private final UserRepository userRepository;
@@ -165,6 +166,9 @@ public class BucketListServiceImpl implements BucketListService {
 
     @Override
     public BucketList createBucketList(User user, String title, BucketListType type, MultipartFile image) {
+        // title이 없는 경우 기본 버킷리스트 이름으로 생성
+        title = title == null ? DEFAULT_BUCKETLIST_NAME : title;
+
         // 업로드된 이미지가 없으면 디폴트 이미지로 저장
         // 업로드된 이미지가 있으면 S3에 업로드 후 이미지 경로 저장
         String bucketListImage = image == null ? DEFAULT_BUCKETLIST_IMAGE : s3FileService.uploadFile(image);

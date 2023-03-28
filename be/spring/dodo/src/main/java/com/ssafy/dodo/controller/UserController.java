@@ -1,7 +1,6 @@
 package com.ssafy.dodo.controller;
 
 import com.ssafy.dodo.dto.*;
-import com.ssafy.dodo.entity.BucketListType;
 import com.ssafy.dodo.entity.User;
 import com.ssafy.dodo.exception.CustomException;
 import com.ssafy.dodo.exception.ErrorCode;
@@ -11,6 +10,7 @@ import com.ssafy.dodo.service.BucketListService;
 import com.ssafy.dodo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,10 +34,13 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public DataResponse<UserInfoDto> getUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
         Long userSeq = Long.parseLong(userDetails.getUsername());
-        User user = userRepository.findById(userSeq)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        return new DataResponse<>(UserInfoDto.of(user));
+        List<UserInfoDto> result = userRepository.findUserInfoBySeq(userSeq, PageRequest.of(0, 1));
+        if (result.size() == 0) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        return new DataResponse<>(result.get(0));
     }
 
     @PostMapping
@@ -49,12 +52,6 @@ public class UserController {
         // user 정보 저장 및 설문결과 선호도에 추가
         long userSeq = Long.parseLong(userDetails.getUsername());
         userService.initUserInfo(userSeq, dto, profileImage);
-
-        // 기본 버킷리스트 생성
-        User user = userRepository.findById(userSeq)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        String defaultTitle = user.getNickname() + "님의 버킷리스트";
-        bucketListService.createBucketList(user, defaultTitle, BucketListType.SINGLE, null);
 
         return new CommonResponse(true);
     }
