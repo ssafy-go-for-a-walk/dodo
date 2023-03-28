@@ -2,7 +2,8 @@ import json
 import random
 import logging
 import pandas as pd
-from fastapi import Depends, APIRouter, Header
+from fastapi import Depends, APIRouter, Header, HTTPException
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
@@ -17,34 +18,49 @@ router = APIRouter()
 
 engine = conn()
 
+security = HTTPBearer()
+
 # logging
 logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
-# @router.get('/test')
-def session_test(db):
+@router.get('/test')
+def session_test(db: Session = Depends(engine.get_session)):
 	example = db.query(Category).all()
 	return example
 
 
 # Preference - title을 활용한 CBF - 코사인 유사도 활용
-@router.get("/buckets")
-def bucket_recommand(category: str, page: int = 0, size: int = 10,
+@router.get("/buckets", status_code=200)
+def bucket_recommand_cbf(category: str, page: int = 0, size: int = 100,
 		    db: Session = Depends(engine.get_session), 
-	      Authorization: Optional[str] = Header("None")):
+	      	credentials: HTTPAuthorizationCredentials= Depends(security)):
 	
 	skip = size*page
 	limit = size*page+size
 	logger.info(f"skp: {skip}, limit: {limit}")
 
-	logger.info(category)
-	# logger.info(Authorization)
-	token = decodeJWT(Authorization.split(' ')[1])
+	logger.info(f"카테고리 정보: {category}")
+	logger.info(credentials)
+	token = decodeJWT(credentials.credentials)
+	
+	if('message' in token):
+		raise HTTPException(status_code=401, detail="token is no valid")
+	
 	user_seq=token['userSeq']
 	logger.info(f"LOGIN 정보: {user_seq}")
 
+	category_seq = { "all" : 0, "대자연" : 1, "일상" : 2, "쇼핑" : 3, "여행" :4, "문화예술" : 5, "자기계발" : 6, "푸드" : 7, "아웃도어" : 8, "스포츠" : 9}
+	search_category_seq = category_seq[category]
+	logger.info(f"카테고리 seq: {search_category_seq}")
+
 	prefer_data = db.query(Preference).filter(Preference.user_seq == user_seq).filter(Preference.is_delete == 0).all()
 	pb_data = db.query(PublicBucket).filter(PublicBucket.is_public == 0).all()
+
+	print(pb_data[0])
+	print(pb_data[0].title)
+	print(len(pb_data))
+
 
 	# 유저가 몇명 이상이면 협업 필터링을 해야할까?
 	user_sum = db.query(User).count()
@@ -74,10 +90,9 @@ def bucket_recommand(category: str, page: int = 0, size: int = 10,
 	logger.info(f"코사인 유사도 연산 결과: {cosine_sim.shape}")
 
 	title_to_index = dict(zip(data['title'], data.index))
-	# data.index = data.index+1
 
-	# idx = (title_to_index['등산하면서 경치 구경하기'])
-	# print(idx)
+	idx = (title_to_index['등산하면서 경치 구경하기'])
+	print(idx)
 	
 	# 추천 함수
 	def get_recommendations(title, cosine_sim=cosine_sim):
@@ -128,6 +143,12 @@ def bucket_recommand(category: str, page: int = 0, size: int = 10,
 
 		# temp = result.drop_duplicates(subset=['등산하고 경치 구경하기'])
 		result = result.sort_index()
+		print(search_category_seq)
+		
+		# 카테고리 별 검색
+		if(search_category_seq != 0):
+			result = result[result.category_seq == search_category_seq]
+
 		result = result.to_dict('records')
 
 
@@ -152,7 +173,39 @@ def bucket_recommand(category: str, page: int = 0, size: int = 10,
 	
 		result = result.drop_duplicates()
 		result = result.sort_index()
+
+		# 카테고리 별 검색
+		if(search_category_seq != 0):
+			result = result[result.category_seq == search_category_seq]
+
 		result = result.to_dict('records')
 
-
+		# 페이징 어케하지???????????
 		return result
+
+
+# Preference - title을 활용한 CF - ?? 활용
+@router.get("/social/bucketlists", status_code=200)
+def user_recommand_cf(category: str, page: int = 0, size: int = 100,
+		    db: Session = Depends(engine.get_session), 
+	      	credentials: HTTPAuthorizationCredentials= Depends(security)):
+	
+	skip = size*page
+	limit = size*page+size
+	logger.info(f"skp: {skip}, limit: {limit}")
+
+	logger.info(credentials)
+	token = decodeJWT(credentials.credentials)
+	
+	if('message' in token):
+		raise HTTPException(status_code=401, detail="token is no valid")
+	
+	user_seq=token['userSeq']
+	logger.info(f"LOGIN 정보: {user_seq}")
+
+	prefer_data = db.query(Preference).filter(Preference.user_seq == user_seq).filter(Preference.is_delete == 0).all()
+	pb_data = db.query(PublicBucket).filter(PublicBucket.is_public == 0).all()
+
+	category_seq = { "all" : 0, "대자연" : 1, "일상" : 2, "쇼핑" : 3, "여행" :4, "문화예술" : 5, "자기계발" : 6, "푸드" : 7, "아웃도어" : 8, "스포츠" : 9}
+	search_category_seq = category_seq[category]
+	logger.info(f"카테고리 seq: {search_category_seq}")
