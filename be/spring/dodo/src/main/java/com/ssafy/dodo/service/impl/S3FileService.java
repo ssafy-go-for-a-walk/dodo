@@ -1,4 +1,4 @@
-package com.ssafy.dodo.service;
+package com.ssafy.dodo.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;

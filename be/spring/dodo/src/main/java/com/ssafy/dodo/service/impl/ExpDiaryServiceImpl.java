@@ -6,7 +6,6 @@ import com.ssafy.dodo.exception.CustomException;
 import com.ssafy.dodo.exception.ErrorCode;
 import com.ssafy.dodo.repository.*;
 import com.ssafy.dodo.service.ExpDiaryService;
-import com.ssafy.dodo.service.S3FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
