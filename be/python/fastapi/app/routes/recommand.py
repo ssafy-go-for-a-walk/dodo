@@ -209,3 +209,5 @@ def user_recommand_cf(category: str, page: int = 0, size: int = 100,
 	category_seq = { "all" : 0, "대자연" : 1, "일상" : 2, "쇼핑" : 3, "여행" :4, "문화예술" : 5, "자기계발" : 6, "푸드" : 7, "아웃도어" : 8, "스포츠" : 9}
 	search_category_seq = category_seq[category]
 	logger.info(f"카테고리 seq: {search_category_seq}")
+
+	
