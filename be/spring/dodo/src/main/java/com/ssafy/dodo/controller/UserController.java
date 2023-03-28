@@ -17,7 +17,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/users")
@@ -79,5 +82,21 @@ public class UserController {
         // 버킷리스트 생성
         bucketListService.createBucketList(user, dto, image);
         return new CommonResponse(true);
+    }
+
+    @GetMapping("/check/nickname")
+    @ResponseStatus(HttpStatus.OK)
+    public DataResponse<Map<String, Boolean>> checkNickname(@RequestParam("nn") String nickname) {
+        Pattern pattern = Pattern.compile("[!@#$%^&*(),.?\":{}|<>]");
+        log.info("nickname: {}", nickname);
+        boolean isAvailable = true;
+        if (nickname == null || nickname.isBlank() || pattern.matcher(nickname).find() || userRepository.existsByNickname(nickname)) {
+            // 빈 문자열이거나 특수문자가 있거나 이미 존재하는 닉네임이면 사용불가
+            isAvailable = false;
+        }
+
+        Map<String, Boolean> data = new HashMap<>();
+        data.put("isAvailable", isAvailable);
+        return new DataResponse<>(data);
     }
 }

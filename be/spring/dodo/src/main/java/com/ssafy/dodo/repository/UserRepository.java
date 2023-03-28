@@ -19,4 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where u.seq = :userSeq " +
             "order by bl.createdAt")
     List<UserInfoDto> findUserInfoBySeq(@Param("userSeq") Long userSeq, Pageable pageable);
+
+    boolean existsByNickname(String nickname);
 }
