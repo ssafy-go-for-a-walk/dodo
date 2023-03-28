@@ -1,10 +1,12 @@
 from datetime import datetime
 from pydantic import BaseModel
 
-from models import AuthProvider
-from models import BucketListType
+from database.models import AuthProvider
+from database.models import BucketListType
 
-class User(BaseModel):
+from typing import Dict
+
+class User_dto(BaseModel):
     seq: int
     email: str
     nickname: str
@@ -15,7 +17,7 @@ class User(BaseModel):
     is_delete: int
 
 
-class BucketList(BaseModel):
+class BucketList_dto(BaseModel):
     seq: int
     title: str
     image: str
@@ -24,13 +26,16 @@ class BucketList(BaseModel):
     is_delete: int
 
 
-class Category(BaseModel):
+class Category_dto(BaseModel):
     seq: int
     item: str
     is_delete: int
 
+    class Config:
+        orm_mode = True
 
-class PublicBucket(BaseModel):
+
+class PublicBucket_dto(BaseModel):
     seq: int
     emoji: str
     title: str
@@ -38,10 +43,10 @@ class PublicBucket(BaseModel):
     added_count: int
     is_delete: int
 
-    category_seq: int
+    category_seq: Category_dto
 
 
-class AddedBucket(BaseModel):
+class AddedBucket_dto(BaseModel):
     seq: int
     is_complete: bool
     emoji: str
@@ -50,37 +55,45 @@ class AddedBucket(BaseModel):
     desc: str
     is_delete: int
 
-    bucketlist_seq: int
-    bucket_seq: int
+    bucketlist_seq: BucketList_dto
+    bucket_seq: PublicBucket_dto
 
 
-class ExpDiary(BaseModel):
+class ExpDiary_dto(BaseModel):
     seq: int
     content: str
     is_delete: int
 
-    bucket_seq: int
+    bucket_seq: AddedBucket_dto
 
 
-class DiaryImage(BaseModel):
+class DiaryImage_dto(BaseModel):
     seq: int
     path: str
     original_name: str
     is_delete: int
 
-    exp_diary_seq: int
+    exp_diary_seq: ExpDiary_dto
 
 
-class Bookmark(BaseModel):
-    user_seq: int
-    bucketlist_seq: int
+class Bookmark_dto(BaseModel):
+    user_seq: User_dto
+    bucketlist_seq: BucketList_dto
     is_delete: int
 
 
-class BucketListMember(BaseModel):
+class BucketListMember_dto(BaseModel):
     seq: int
-    user_seq: int
+    user_seq: User_dto
+    bucketlist_seq: BucketList_dto
     is_delete: int
-    bucketlist_seq: int
 
 
+class Preference_dto(BaseModel):
+
+    seq: int
+    user_seq: User_dto
+    bucket_seq: PublicBucket_dto
+    is_delete: int
+
+    
