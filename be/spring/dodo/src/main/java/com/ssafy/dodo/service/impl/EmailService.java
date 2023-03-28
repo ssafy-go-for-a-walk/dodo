@@ -40,7 +40,7 @@ public class EmailService {
 
             log.info("마지막 로그인으로부터 지난 시간 : {}초", duration.getSeconds());
 
-            if(duration.getSeconds() > 3600){ // 1달 : 2,592,000, 1분 : 3600
+            if(duration.getSeconds() > 2592000){ // 1달 : 2592000, 1분 : 3600
 
                 SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 
