@@ -1,7 +1,9 @@
 package com.ssafy.dodo.auth;
 
+import com.ssafy.dodo.entity.BucketListType;
 import com.ssafy.dodo.entity.User;
 import com.ssafy.dodo.repository.UserRepository;
+import com.ssafy.dodo.service.BucketListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,6 +13,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -20,6 +23,7 @@ import java.util.Optional;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
+    private final BucketListService bucketListService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -48,7 +52,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Optional<User> loadUser = userRepository.findByEmail(user.getEmail());
 
         if (loadUser.isEmpty()){ // 가입된 이메일이 없다면 저장하고
-            return userRepository.save(user);
+            user.updateLastLogin(LocalDateTime.now());
+            user = userRepository.save(user);
+
+            // 기본 버킷리스트 생성
+            bucketListService.createBucketList(user, null, BucketListType.SINGLE, null);
+
+            return user;
         } else { // 있으면 가져온다.
             return loadUser.get();
         }

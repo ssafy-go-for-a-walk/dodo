@@ -12,13 +12,18 @@ public class UserInfoDto {
     private String email;
     private String nickname;
     private String profileImage;
+    private boolean isFirstLogin;
+    private DefaultBucketList defaultBucketList;
+
 
     @Builder
-    public UserInfoDto(Long seq, String email, String nickname, String profileImage) {
+    public UserInfoDto(Long seq, String email, String nickname, String profileImage, Long defaultBucketListSeq, String defaultBucketListTitle) {
         this.seq = seq;
         this.email = email;
         this.nickname = nickname;
         this.profileImage = profileImage;
+        this.isFirstLogin = nickname == null;
+        this.defaultBucketList = new DefaultBucketList(defaultBucketListSeq, defaultBucketListTitle);
     }
 
     public static UserInfoDto of(User user) {
@@ -28,5 +33,14 @@ public class UserInfoDto {
                 .nickname(user.getNickname())
                 .profileImage(user.getProfileImage())
                 .build();
+    }
+
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class DefaultBucketList {
+        Long seq;
+        String title;
     }
 }
