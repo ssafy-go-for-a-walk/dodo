@@ -1,7 +1,6 @@
 package com.ssafy.dodo.service.impl;
 
 import com.ssafy.dodo.dto.InitUserDto;
-import com.ssafy.dodo.dto.UserInfoDto;
 import com.ssafy.dodo.entity.Preference;
 import com.ssafy.dodo.entity.PublicBucket;
 import com.ssafy.dodo.entity.User;
@@ -10,7 +9,6 @@ import com.ssafy.dodo.exception.ErrorCode;
 import com.ssafy.dodo.repository.PreferenceRepository;
 import com.ssafy.dodo.repository.PublicBucketRepository;
 import com.ssafy.dodo.repository.UserRepository;
-import com.ssafy.dodo.service.S3FileService;
 import com.ssafy.dodo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service

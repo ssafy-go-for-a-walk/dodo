@@ -35,6 +35,9 @@ dependencies {
 
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.6.RELEASE'
 
+    // email
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.6.7'
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
