@@ -52,4 +52,8 @@ public class User extends BaseEntity {
             this.profileImage = profileImage;
         }
     }
+
+    public void updateLastLogin(LocalDateTime now) {
+        this.lastLoginAt = now;
+    }
 }
