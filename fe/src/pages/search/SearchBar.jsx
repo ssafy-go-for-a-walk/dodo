@@ -3,21 +3,21 @@ import styled from "styled-components";
 import { MdSearch } from "react-icons/md";
 
 const SearchBox = styled.div`
-  width: 456px;
+  width: 80%;
+  max-width: 456px;
   height: 32px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 55px;
-  background: #f1f3f5;
+  margin-top: 40px;
+  background: #ffffff;
 `;
 
 const SearchInput = styled.input`
-  width: 384px;
+  width: 85%;
   height: 24px;
   border: none;
-  background: #f1f3f5;
   margin-left: 16px;
 `;
 

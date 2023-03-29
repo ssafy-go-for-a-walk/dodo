@@ -4,7 +4,8 @@ import { MdShare } from "react-icons/md";
 import { TbShare2 } from "react-icons/tb";
 
 const ButtonBox = styled.button`
-  width: 260px;
+  width: 49%;
+  max-width: 260px;
   height: 67px;
   border-radius: 16px;
   border: 1px solid #1c9bff;
@@ -30,10 +31,11 @@ const ButtonBox = styled.button`
 `;
 
 export default function ColorButton(props) {
+  const content = props.children;
   return (
     <ButtonBox onClick={props.onClick}>
-      {props.children === "공유하기" ? <MdShare className="icon" /> : <TbShare2 className="icon" />}
-      {props.children}
+      {content === "공유하기" ? <MdShare className="icon" /> : <TbShare2 className="icon" />}
+      {content}
     </ButtonBox>
   );
 }

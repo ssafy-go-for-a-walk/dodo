@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 const ButtonBox = styled.button`
-  width: 530px;
+  width: 80%;
+  max-width: 530px;
   height: 67px;
   border-radius: 16px;
   border: 1px solid #ff6666;

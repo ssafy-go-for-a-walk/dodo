@@ -9,30 +9,29 @@ import { useState } from "react";
 
 const Div = styled.div`
   left: 0px;
-  width: ${props => props.open ? sizeConfigs.sidebar.width : "0"};
+  width: ${props => (props.open ? sizeConfigs.sidebar.width : "0")};
   flex-shrink: 0;
   transition: all 0.5s ease-out;
-`
+`;
 
 const MainLayout = () => {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(true);
   const controlSidevar = () => {
-    setOpen(bool => !bool)
-  }
+    setOpen(bool => !bool);
+  };
   return (
     <Box sx={{ display: "flex" }}>
-      <Topbar open={controlSidevar}/>
+      <Topbar open={controlSidevar} />
       <Div component="nav" open={open}>
-        <Sidebar open={open}/>
+        <Sidebar open={open} />
       </Div>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
           width: "100%",
           minHeight: "100vh",
-          backgroundColor: colorConfigs.mainBg
+          backgroundColor: colorConfigs.mainBg,
         }}
       >
         <Toolbar />

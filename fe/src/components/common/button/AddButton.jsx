@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { MdCheck } from "react-icons/md";
 
 const ButtonBox = styled.button`
-  width: 64px;
+  min-width: 64px;
   height: 32px;
   border-radius: 5px;
   border: none;
@@ -28,7 +28,7 @@ export default function AddButton(props) {
   };
 
   return (
-    <ButtonBox isAdd={isAdd} onClick={addBucket}>
+    <ButtonBox isAdd={isAdd} onClick={addBucket} disabled={isAdd && "disabled"}>
       {isAdd ? <MdCheck className="checkIcon" /> : "담기"}
     </ButtonBox>
   );

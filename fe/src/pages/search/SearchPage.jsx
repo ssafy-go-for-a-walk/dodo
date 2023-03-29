@@ -1,53 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import SlideUp from "../common/button/SlideUp";
+import SlideUp from "../../components/common/button/SlideUp";
 import SearchBar from "./SearchBar";
 import Banner from "./Banner";
 import SearchBucket from "./SearchBucket";
 import Category from "./Category";
-
-const categoryList = [
-  {
-    categoryName: "전체",
-    select: true,
-  },
-  {
-    categoryName: "대자연",
-    select: false,
-  },
-  {
-    categoryName: "일상",
-    select: false,
-  },
-  {
-    categoryName: "쇼핑",
-    select: false,
-  },
-  {
-    categoryName: "여행",
-    select: false,
-  },
-  {
-    categoryName: "문화예술",
-    select: false,
-  },
-  {
-    categoryName: "자기계발",
-    select: false,
-  },
-  {
-    categoryName: "푸드",
-    select: false,
-  },
-  {
-    categoryName: "아웃도어",
-    select: false,
-  },
-  {
-    categoryName: "스포츠",
-    select: false,
-  },
-];
+import cate from "../../configs/categoryConfig";
 
 const bucketList = [
   {
@@ -60,7 +18,7 @@ const bucketList = [
   },
   {
     id: 2,
-    title: "점심 먹기",
+    title: "점심 먹기sasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
     category: "푸드",
     challengers: 2,
     isAdd: false,
@@ -69,7 +27,7 @@ const bucketList = [
   {
     id: 3,
     title: "점심 먹기",
-    category: "푸드",
+    category: "일상",
     challengers: 100,
     isAdd: true,
     imoge: "",
@@ -77,7 +35,7 @@ const bucketList = [
   {
     id: 4,
     title: "점심 먹기",
-    category: "푸드",
+    category: "대자연",
     challengers: 10,
     isAdd: false,
     imoge: "",
@@ -85,7 +43,7 @@ const bucketList = [
   {
     id: 5,
     title: "점심 먹기",
-    category: "푸드",
+    category: "쇼핑",
     challengers: 10,
     isAdd: false,
     imoge: "",
@@ -93,7 +51,7 @@ const bucketList = [
   {
     id: 6,
     title: "점심 먹기",
-    category: "푸드",
+    category: "문화예술",
     challengers: 10,
     isAdd: false,
     imoge: "",
@@ -101,7 +59,7 @@ const bucketList = [
   {
     id: 7,
     title: "점심 먹기",
-    category: "푸드",
+    category: "자기계발",
     challengers: 10,
     isAdd: false,
     imoge: "",
@@ -109,7 +67,15 @@ const bucketList = [
   {
     id: 8,
     title: "점심 먹기",
-    category: "푸드",
+    category: "아웃도어",
+    challengers: 10,
+    isAdd: false,
+    imoge: "",
+  },
+  {
+    id: 9,
+    title: "점심 먹기",
+    category: "스포츠",
     challengers: 10,
     isAdd: false,
     imoge: "",
@@ -130,28 +96,33 @@ const Categorys = styled.div`
   margin-top: 40px;
 `;
 
-const Buckets = styled.div`
-  display: flex;
-  flex-direction: column;
-  jutify-content: center;
-  margin-top: 24px;
-`;
+export default function SearchPage() {
+  const [selectCate, setSelectCate] = useState("전체");
 
-export default function Search() {
+  const changeCate = categoryName => {
+    setSelectCate(categoryName);
+  };
+
   return (
     <Div>
       <SearchBar />
       <Categorys>
-        {categoryList.map(data => (
-          <Category select={data.select} categoryName={data.categoryName} key={data.categoryName} />
+        {cate.map(data => (
+          <Category
+            select={data.name === selectCate ? true : false}
+            categoryName={data.name}
+            categoryImg={data.image}
+            key={data.name}
+            propFunction={changeCate}
+          />
         ))}
       </Categorys>
       <Banner />
-      <Buckets>
-        {bucketList.map(bucket => (
-          <SearchBucket bucket={bucket} key={bucket.id} />
-        ))}
-      </Buckets>
+      {bucketList.map(bucket => {
+        if (selectCate === "전체" || selectCate === bucket.category) {
+          return <SearchBucket bucket={bucket} key={bucket.id} />;
+        }
+      })}
       <SlideUp />
     </Div>
   );
