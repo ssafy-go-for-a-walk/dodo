@@ -86,21 +86,20 @@ const addStyle = {
 
 export default function SetProfile() {
 	const { user } = useSelector((state) => state)
+	const [checkNickname, setCheckNickname] = useState(true)
 	const [form, setForm] = useState({
 		nickname: "",
-		checkNickname: true,
 		userImg: user.value.loginUserImg,
 		imageConfirm: null,
 	})
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const photoInput = useRef();
-	const check = () => {
-		// 닉넴 중복검사
-	}
 	const completeSignUp = () => {
-		if (!form.checkNickname || form.nickname.length === 0) {
-			alert("닉네임을 설정해주세요")
+		if (form.nickname.length === 0) {
+			alert("닉네임을 입력하세요")
+		} else if (!checkNickname) {
+			alert("이미 존재하는 닉네임입니다")
 		} else {
 			const formData = new FormData();
 			const data = JSON.stringify({
@@ -131,7 +130,22 @@ export default function SetProfile() {
 	}
 	const changeNickname = (eve) => {
 		setForm({...form, nickname: eve.target.value})
-		check()
+		if (eve.target.value.length === 0) {
+			setCheckNickname(true)
+			return
+		}
+		axios
+		.get("https://j8b104.p.ssafy.io/api/users/check/nickname", {
+			headers: {
+				Authorization: `Bearer ${user.value.token}`,
+			},
+			params: {
+				nn: eve.target.value,
+			}
+		})
+		.then(res => {
+			setCheckNickname(res.data.data.isAvailable)
+		})
 	}
 	const imgUpload = (eve) => {
 		setForm({...form, userImg: URL.createObjectURL(eve.target.files[0]), imageConfirm: eve.target.files[0]});
@@ -166,7 +180,7 @@ export default function SetProfile() {
 				/>
 				<CheckNickname>
 					<Guide style={{color: "#FF0000"}}>
-						{form.nickname.length === 0 ? "" : form.checkNickname ? "" : "이미 존재하는 닉네임입니다." }
+						{checkNickname ? "" : "이미 존재하는 닉네임입니다." }
 					</Guide>
 					<Guide style={{color: "#868E96"}}>
 					{form.nickname.length} / 8자
