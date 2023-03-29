@@ -9,10 +9,10 @@ public class PublicBucketDto {
     private String emoji;
     private String title;
     private Long addedCount;
-    private String category;
+    private CategoryInfoDto category;
 
     @Builder
-    public PublicBucketDto(Long publicBucketSeq, String emoji, String title, Long addedCount, String category) {
+    public PublicBucketDto(Long publicBucketSeq, String emoji, String title, Long addedCount, CategoryInfoDto category) {
         this.publicBucketSeq = publicBucketSeq;
         this.emoji = emoji;
         this.title = title;
