@@ -1,12 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import SearchPage from "./pages/search/SearchPage";
 import SurveyPage from "./pages/survey/SurveyPage";
 import SignUpPage from "./pages/survey/SignUpPage";
-import ManagePage from "./pages/manage/ManagePage";
-// import SocialPage from "./pages/SocialPage";
-// import SharePage from "./pages/SharePage";
-// import Page404 from "./pages/Page404";
-
+import LoginPage from "./pages/login/LoginPage";
+import SetProfile from "./pages/SetProfile";
 import MainLayout from "./components/layout/MainLayout";
 import { routes } from "./routes";
 
@@ -17,14 +13,10 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           {routes}
         </Route>
-        <Route path="/search" element={<SearchPage />} />
         <Route path="/survey" element={<SurveyPage />} />
         <Route path="/survey/signup" element={<SignUpPage />} />
-        <Route path="/manage" element={<ManagePage />} />
-        {/*
-        <Route path="/social" element={<SocialPage />} />
-        <Route path="/share" element={<SharePage />} />
-        <Route path="*" element={<Page404 />} /> */}
+        <Route path="/login/:token" element={<LoginPage />} />
+        <Route path="/setprofile" element={<SetProfile />} />
       </Routes>
     </div>
   );

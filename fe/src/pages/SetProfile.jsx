@@ -1,17 +1,17 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import CloseIcon from '@mui/icons-material/Close';
-import { IconButton } from "@mui/material";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import BrightnessHighIcon from '@mui/icons-material/BrightnessHigh';
 import axios from "axios";
 import FormData from 'form-data';
 import { useDispatch } from "react-redux";
-import { profile } from "../../../../redux/user";
+import { profile } from "../redux/user";
 
 const TopDiv = styled.div`
 	display: flex;
 	flex-direction: column;
+	margin-top: 10%;
 `
 
 const Div = styled.div`
@@ -52,7 +52,6 @@ const CheckNickname = styled.div`
 const Guide = styled.p`
 	margin: 0px;
 	font-size: 16px;
-	/* animation: {move} 2s 1s infinite; */
 `
 
 const SubmitButton = styled.div`
@@ -82,46 +81,28 @@ const addStyle = {
 	}
 }
 
-export default function SettingProfile(props) {
+export default function SetProfile() {
 	const { user } = useSelector((state) => state)
 	const [form, setForm] = useState({
-		nickname: user.value.loginUserNickname,
-		changeNickname: "",
+		nickname: "",
 		checkNickname: true,
 		userImg: user.value.loginUserImg,
 		imageConfirm: null,
 	})
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const photoInput = useRef();
-	const closeModal = () => {props.closeProfileModal()}
 	const check = () => {
 		// 닉넴 중복검사
 	}
-	const changeNickname = (eve) => {
-		setForm({...form, changeNickname: eve.target.value})
-		check()
-	}
-	const imgUpload = (eve) => {
-		setForm({...form, userImg: URL.createObjectURL(eve.target.files[0]), imageConfirm: eve.target.files[0]});
-	}
-	const getUser = () => {
-		const data = {
-			loginUserImg: form.userImg,
-			loginUserNickname: form.nickname,
-		}
-		if (form.changeNickname !== "") {
-			data.loginUserNickname = form.changeNickname
-		}
-		dispatch(profile(data))
-		props.closeProfileModal()
-	}
-	const changeProfile = () => {
-		if (!form.checkNickname) {
-			alert("닉네임이 잘못됬습니다.")
+	const completeSignUp = () => {
+		if (!form.checkNickname || form.nickname.length === 0) {
+			alert("닉네임을 설정해주세요")
 		} else {
 			const formData = new FormData();
 			const data = JSON.stringify({
-				"nickname": form.changeNickname,
+				"nickname": form.nickname,
+				"preferenceBuckets": user.survey,
 			})
 			if (form.imageConfirm !== null) {
 				formData.append("profileImage", form.imageConfirm)
@@ -134,20 +115,29 @@ export default function SettingProfile(props) {
 					'Content-Type': 'multipart/form-data',
         },
       })
-			.then(getUser())
+			.then(() => {
+				const data = {
+					loginUserImg: form.userImg,
+					loginUserNickname: form.nickname,
+				}
+				dispatch(profile(data))
+				navigate("/")
+			})
 			.catch(err => console.log(err))
 		}
 	}
+	const changeNickname = (eve) => {
+		setForm({...form, nickname: eve.target.value})
+		check()
+	}
+	const imgUpload = (eve) => {
+		setForm({...form, userImg: URL.createObjectURL(eve.target.files[0]), imageConfirm: eve.target.files[0]});
+	}
 	return (
 		<TopDiv>
-			<div style={{display: "flex", justifyContent: "end"}}>
-				<IconButton sx={{width: "40px", right: "10ox", left: "auto"}} onClick={closeModal}>
-					<CloseIcon style={{color: "#1C9BFF"}}/>
-				</IconButton>
-			</div>
 			<Div>
 				<div style={{fontWeight: "700", fontSize: "20px"}}>
-					프로필 수정
+					프로필 설정
 				</div>
 				<div>
 					<UserImg
@@ -166,21 +156,21 @@ export default function SettingProfile(props) {
 				</div>
 				<NicknameInputBox
 					onChange={changeNickname}
-					value={form.changeNickname}
+					value={form.nickname}
 					maxLength={8}
 					type="text"
-					placeholder={form.nickname}
+					placeholder="닉네임을 입력해주세요"
 				/>
 				<CheckNickname>
 					<Guide style={{color: "#FF0000"}}>
-					{form.nickname.length === 0 ? "" : form.checkNickname ? "" : "이미 존재하는 닉네임입니다." }
+						{form.nickname.length === 0 ? "" : form.checkNickname ? "" : "이미 존재하는 닉네임입니다." }
 					</Guide>
 					<Guide style={{color: "#868E96"}}>
-						{form.nickname.length} / 8자
+					{form.nickname.length} / 8자
 					</Guide>
 				</CheckNickname>
-				<SubmitButton onClick={changeProfile}>
-					저장하기
+				<SubmitButton onClick={completeSignUp}>
+					다음
 				</SubmitButton>
 			</Div>
 		</TopDiv>

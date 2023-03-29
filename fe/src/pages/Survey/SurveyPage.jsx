@@ -1,43 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import Survey from "./Survey";
 import LogIn from "./LogIn";
 import { useNavigate } from "react-router-dom";
-
-const list = [
-  {
-    id: 1,
-    content: "세계 여행하기",
-  },
-  {
-    id: 2,
-    content: "점심 먹기",
-  },
-  {
-    id: 3,
-    content: "점심 먹기",
-  },
-  {
-    id: 4,
-    content: "점심 먹기",
-  },
-  {
-    id: 5,
-    content: "점심 먹기",
-  },
-  {
-    id: 6,
-    content: "점심 먹기",
-  },
-  {
-    id: 7,
-    content: "점심 먹기",
-  },
-  {
-    id: 8,
-    content: "점심 먹기",
-  },
-];
+import DATA from "./datas.json"
+import { useInView } from 'react-intersection-observer';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 const DivTop = styled.div`
   min-width: 350px;
@@ -78,25 +46,63 @@ const NextButton = styled.button`
   margin-top: 20px;
 `;
 
+const ChoseMore = styled.button`
+  /* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  &:hover {
+    box-shadow: none;
+    cursor: pointer;
+  } */
+  background: #ADB5BD;
+  color: #ffffff;
+  border-radius: 16px;
+  border: none;
+  width: 40vw;
+  min-width: 350px;
+  height: 50px;
+  font-size: 16px;
+  margin-top: 20px;
+`;
+
 const brTag = <div style={{lineHeight: "500%"}}><br/></div>
 
 export default function SurveyPage() {
-    const [selected, setSelected] = useState([])
-    const navigate = useNavigate();
-    const changeData = (id) => {
-        if (selected.includes(id)) {
-            setSelected(selec => selec.filter(v => v !== id))
-        } else {
-            setSelected(selec => selec.concat(id))
-        }
+  const [items, setItems] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [selected, setSelected] = useState([])
+  const [ref, inView] = useInView();
+  const navigate = useNavigate();
+  const list = DATA.list
+  const changeData = (id) => {
+      if (selected.includes(id)) {
+          setSelected(selec => selec.filter(v => v !== id))
+      } else {
+          setSelected(selec => selec.concat(id))
+      }
+  }
+
+  const getItems = useCallback(async () => {
+    setLoading(true)
+		setItems(pre => [...pre, ...list])
+    setLoading(false)
+  }, [list])
+
+  useEffect(() => {
+    getItems()
+  }, [getItems])
+
+  useEffect(() => {
+    if (inView && !loading) {
+      getItems()
     }
-    const goToSignUp = () => {
-        navigate("/survey/signup", {
-            state: {
-                selected,
-            }
-        })
-    }
+  }, [inView, loading, getItems])
+
+  const goToSignUp = () => {
+    navigate("/survey/signup", {
+      state: {
+        selected,
+      }
+    })
+  }
     return (
         <DivTop>
             <LogIn/>
@@ -108,20 +114,25 @@ export default function SurveyPage() {
                 {selected.length !== 0 ? selected.length : null}
             </Title>
             <Div style={{ minHeight: "400px", height: "34vw", overflow: "auto"}}>
-                {list.map(data => (
-                    <Survey
-                    select={selected.includes(data.id)}
-                    content={data.content}
-                    id={data.id}
-                    key={data.id}
-                    propFunction={changeData}
-                    />
-                ))}
+              {items.map(data => (
+                <Survey
+                select={selected.includes(data.id)}
+                content={data.content}
+                id={data.id}
+                key={data.id}
+                propFunction={changeData}
+                />
+              ))}
+              <RefreshIcon sx={{marginTop: "8px"}} ref={ref}/>
             </Div>
             <Div>
-                <NextButton onClick={goToSignUp}>
-                    다 골랐어요!
-                </NextButton>
+              {selected.length < 3 
+              ? (<ChoseMore>
+                최소 {3 - selected.length}개 더 골라주세요!
+              </ChoseMore>)
+              :(<NextButton onClick={goToSignUp}>
+                다 골랐어요!
+              </NextButton>)}
             </Div>
         </DivTop>
     )
