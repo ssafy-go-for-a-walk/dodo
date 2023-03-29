@@ -30,6 +30,9 @@ const UserImg = styled.img`
 `
 
 const NicknameInputBox = styled.input`
+	&:focus {
+		outline: none;
+	}
 	&::placeholder {
 		color: #868E96;
 	}

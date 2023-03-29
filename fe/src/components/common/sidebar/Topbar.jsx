@@ -10,6 +10,7 @@ import ModalStyle from "./TopbarModalStyle";
 import TopbarModal from "./TopbarModal";
 import ProfileModalStyle from "./ProfileModalStyle";
 import SettingProfile from "./modal/SettingProfile";
+
 const TopDiv = styled.div`
   display: flex;
   width: 100%;

@@ -9,6 +9,7 @@ const initialStateValue = {
 	selectedBucketlist: {
     pk: "",
     title: "",
+    completeRate: "",
   },
 };
 
