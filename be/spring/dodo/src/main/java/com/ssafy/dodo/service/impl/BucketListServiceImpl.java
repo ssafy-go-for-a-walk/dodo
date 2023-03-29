@@ -18,8 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,6 +29,8 @@ public class BucketListServiceImpl implements BucketListService {
 
     private static final String DEFAULT_BUCKETLIST_IMAGE = "https://dodo-walk-bucket.s3.ap-northeast-2.amazonaws.com/default-bucklist-image.jpg";
     private static final String DEFAULT_BUCKETLIST_NAME = "새로운 버킷리스트";
+    public static final String INVITE_BUCKETLIST_CLAIM_KEY = "buckletlist";
+    public static final String INVITER_CLAIM_KEY = "inviter";
 
     private final AddedBucketRepository addedBucketRepository;
     private final UserRepository userRepository;
@@ -38,6 +39,7 @@ public class BucketListServiceImpl implements BucketListService {
     private final PreferenceRepository preferenceRepository;
     private final S3FileService s3FileService;
     private final BucketListMemberRepository bucketListMemberRepository;
+    private final InviteTokenRepository inviteTokenRepository;
 
     @Override
     public Page<AddedBucketDto> getBucketListBuckets(UserDetails userDetails, Long bucketListSeq, Pageable pageable) {
@@ -199,5 +201,29 @@ public class BucketListServiceImpl implements BucketListService {
 
         // 소수점 첫번째자리까지 리턴
         return completeRate == null ? 0.0 : Math.round(completeRate * 10) / 10.0;
+    }
+
+    @Override
+    public String createInviteToken(Long bucketListSeq, Long inviterSeq) {
+        String inviteTokenKey = createInviteTokenKey();
+        InviteToken inviteToken = new InviteToken(inviteTokenKey, bucketListSeq, inviterSeq);
+        inviteTokenRepository.save(inviteToken);
+
+        return inviteTokenKey;
+    }
+
+    private String createInviteTokenKey() {
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+
+        return generatedString;
     }
 }

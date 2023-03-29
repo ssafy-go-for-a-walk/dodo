@@ -19,7 +19,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -96,6 +98,19 @@ public class BucketListController {
                 .collect(Collectors.toList());
 
         Page<ExpDiaryInfoDto> data = new PageImpl<>(content, pageable, content.size());
+        return new DataResponse<>(data);
+    }
+
+    @PostMapping("/{bucketlist-seq}/invite")
+    public DataResponse<Map<String, String>> createInviteToken(
+            @PathVariable("bucketlist-seq") Long bucketListSeq,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        Long inviterSeq = Long.parseLong(userDetails.getUsername());
+        String inviteToken = bucketListService.createInviteToken(bucketListSeq, inviterSeq);
+
+        Map<String, String> data = new HashMap<>();
+        data.put("inviteToken", inviteToken);
+
         return new DataResponse<>(data);
     }
 }
