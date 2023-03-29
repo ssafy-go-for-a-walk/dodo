@@ -193,7 +193,9 @@ public class BucketListServiceImpl implements BucketListService {
         BucketList bucketList = bucketListRepository.findById(bucketListSeq)
                 .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
 
+        Double completeRate = bucketListRepository.getBucketListCompleteRate(bucketList);
+
         // 소수점 첫번째자리까지 리턴
-        return Math.round(bucketListRepository.getBucketListCompleteRate(bucketList) * 10) / 10.0;
+        return completeRate == null ? 0.0 : Math.round(completeRate * 10) / 10.0;
     }
 }
