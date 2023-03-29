@@ -24,6 +24,7 @@ export default function LoginPage() {
 					selectedBucketlist: {
 						pk: res.data.data.defaultBucketList.seq,
 						title: res.data.data.defaultBucketList.title,
+						completeRate: res.data.data.defaultBucketList.completeRate,
 					},
 				}
 				dispatch(login(data))

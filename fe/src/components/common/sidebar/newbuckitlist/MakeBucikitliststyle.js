@@ -1,4 +1,4 @@
-const ProfileModalStyle = {
+const MakeBucikitliststyle = {
   overlay: {
     position: "fixed",
     top: 0,
@@ -27,4 +27,4 @@ const ProfileModalStyle = {
   }
 }
 
-export default ProfileModalStyle
+export default MakeBucikitliststyle

@@ -1,4 +1,4 @@
-const ProfileModalStyle = {
+const EnterBucikitliststyle = {
   overlay: {
     position: "fixed",
     top: 0,
@@ -14,7 +14,7 @@ const ProfileModalStyle = {
     backgroundColor: "white",
     overflow: "auto",
     width: "560px",
-    height: "560px",
+    height: "400px",
     top: "17%",
     left: "32%",
     right: "68%",
@@ -27,4 +27,4 @@ const ProfileModalStyle = {
   }
 }
 
-export default ProfileModalStyle
+export default EnterBucikitliststyle

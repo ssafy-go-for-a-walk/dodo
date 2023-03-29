@@ -2,32 +2,9 @@ import React from "react";
 import appRoutes from "../../../routes/appRoutes";
 import SidebarItem from "./SidebarItem";
 import SidebarItemCollapse from "./SidebarItemCollapse";
-import colorConfigs from "../../../configs/colorConfigs";
-import { ListItemButton, ListItemIcon } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import LoginIcon from '@mui/icons-material/Login';
 import SelectedItem from "./SelectedItem";
-
-function popUp(icon, text) {
-	return (<ListItemButton
-	sx={{
-		"&: hover": {
-			backgroundColor: colorConfigs.sidebar.hoverBg
-		},
-		fontWeight: "700",
-		paddingY: "8px",
-		paddingX: "24px"
-	}}
-	>
-	<ListItemIcon sx={{
-		color: colorConfigs.sidebar.color
-	}}>
-		{icon}
-	</ListItemIcon>
-	{text}
-	</ListItemButton>
-	)
-}
+import EnterNewBuckitlist from "./newbuckitlist/EnterNewBuckitlist";
+import MakeNewBuckitlist from "./newbuckitlist/MakeNewBuckitlist";
 
 // 리덕스에 저장된거 빼올거임
 const myItem = {
@@ -78,8 +55,8 @@ const groupItem = {
 export default function SidebarNav() {
 	return (
 		<>
-      {popUp(<AddIcon />, "새로운 버킷리스트 만들기")}
-      {popUp(<LoginIcon />, "그룹 버킷리스트 참여하기")}
+      <MakeNewBuckitlist />
+      <EnterNewBuckitlist />
       {appRoutes.map((route, index) => (
         route.sidebarProps ? (
           <SidebarItem item={route} key={index} />
