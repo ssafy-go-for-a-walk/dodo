@@ -1,6 +1,7 @@
 package com.ssafy.dodo.service.impl;
 
 import com.ssafy.dodo.dto.BucketInfoDto;
+import com.ssafy.dodo.dto.CategoryInfoDto;
 import com.ssafy.dodo.dto.PublicBucketDto;
 import com.ssafy.dodo.entity.*;
 import com.ssafy.dodo.exception.CustomException;
@@ -49,7 +50,7 @@ public class BucketServiceImpl implements BucketService {
                                                                                 .publicBucketSeq(pb.getSeq())
                                                                                 .emoji(pb.getEmoji())
                                                                                 .title(pb.getTitle())
-                                                                                .category(pb.getCategory().getItem())
+                                                                                .category(CategoryInfoDto.of(pb.getCategory()))
                                                                                 .addedCount(pb.getAddedCount())
                                                                                 .build());
 
