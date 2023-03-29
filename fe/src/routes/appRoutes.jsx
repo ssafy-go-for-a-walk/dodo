@@ -1,8 +1,8 @@
 import SearchPage from "../pages/search/SearchPage";
 import SocialPage from "../pages/social/SocialPage";
+import ManagePage from "../pages/manage/ManagePage";
 import SearchIcon from "@mui/icons-material/Search";
 import LanguageIcon from "@mui/icons-material/Language";
-import ManagePage from "../pages/manage/ManagePage";
 
 const appRoutes = [
   {

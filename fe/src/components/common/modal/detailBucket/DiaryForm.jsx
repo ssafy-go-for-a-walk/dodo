@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+// import React, { useState } from "react";
 import styled from "styled-components";
 
 const Form = styled.div`
@@ -22,14 +23,14 @@ const ImgUpload = styled.div`
   cursor: pointer;
 `;
 
-const uploadImg = styled.img`
-  width: 64px;
-  height: 64px;
-`;
+// const uploadImg = styled.img`
+//   width: 64px;
+//   height: 64px;
+// `;
 
 const DiaryContent = styled.textarea`
   width: 420px;
-  heigt: 32px;
+  height: 32px;
   font-size: 16px;
   border: none;
   border-bottom: 1px solid #acabab;
@@ -43,14 +44,15 @@ const CreateBtn = styled.button`
   font-size: 24px;
   font-weight: bold;
   cursor: pointer;
-  &: hover {
+  &:hover {
     color: #acabab;
   }
 `;
 
-export default function DiaryForm(props) {
-  const [diaryImg, setDiaryImg] = useState("");
-  const [diaryContent, setDiaryContent] = useState("");
+export default function DiaryForm() {
+  // export default function DiaryForm(props) {
+  //   const [diaryImg, setDiaryImg] = useState("");
+  //   const [diaryContent, setDiaryContent] = useState("");
   const createDiary = event => {
     event.preventDefault();
   };

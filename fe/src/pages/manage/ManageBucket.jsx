@@ -85,12 +85,8 @@ export default function Bucket(props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const openDetailModal = () => {
-    console.log("open");
+    setIsOpen(true);
     setActivateDelete(false);
-  };
-
-  const openSetup = () => {
-    setIsOpen(bool => !bool);
   };
 
   const closeModal = () => {
@@ -107,12 +103,10 @@ export default function Bucket(props) {
 
   return (
     <BucketBox>
-      <BucketInfo activate={activateDelete} isComplete={bucket.isComplete} onClick={openSetup}>
+      <BucketInfo activate={activateDelete} isComplete={bucket.isComplete} onClick={openDetailModal}>
         <BucketHeader>
           <Tag category={bucket.category} />
-          <BucketEmoji role="img" aria-label="writing hand">
-            {bucket.emoji}
-          </BucketEmoji>
+          <BucketEmoji role="img">{bucket.emoji}</BucketEmoji>
           <BucketTitle activate={activateDelete}>{bucket.title}</BucketTitle>
         </BucketHeader>
         <CompleteButton isComplete={bucket.isComplete} bucketId={bucket.id} />

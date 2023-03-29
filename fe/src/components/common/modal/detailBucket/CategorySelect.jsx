@@ -47,7 +47,7 @@ const OptionList = styled.div`
 const OptionItem = styled.div`
   text-align: center;
   border-bottom: 1px solid rgba(182, 86, 86, 0.25);
-  &: hover {
+  &:hover {
     background: ${props => color[`${props.category}`]};
     color: #ffffff;
   }

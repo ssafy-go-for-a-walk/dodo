@@ -4,17 +4,14 @@ import Tag from "../../components/common/bucket/Tag";
 import AddButton from "../../components/common/button/AddButton";
 
 const BucketBox = styled.div`
-  width: 80%;
-  max-width: 800px;
-  height: 80px;
+  width: 100%;
+  height: 64px;
   border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0px 4px 4px rgba(182, 86, 86, 0.25);
+  border-bottom: 1px solid #bcbcbc;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 16px;
-  margin-bottom: 24px;
+  padding: 0 16px;
 `;
 
 const BucketInfo = styled.div`
@@ -29,7 +26,6 @@ const BucketHeader = styled.div`
   height: 32px;
   display: flex;
   align-items: center;
-  font-size: 16px;
   margin-bottom: 4px;
 `;
 
@@ -52,7 +48,7 @@ const BucketChallenger = styled.div`
   color: #797979;
 `;
 
-export default function Bucket(props) {
+export default function SearchBucket(props) {
   const bucket = props.bucket;
 
   return (
@@ -60,14 +56,12 @@ export default function Bucket(props) {
       <BucketInfo>
         <BucketHeader>
           <Tag category={bucket.category} />
-          <BucketEmoji role="img" aria-label="writing hand">
-            {bucket.emoji}
-          </BucketEmoji>
+          <BucketEmoji role="img">{bucket.emoji}</BucketEmoji>
           <BucketTitle>{bucket.title}</BucketTitle>
         </BucketHeader>
-        <BucketChallenger>현재 {bucket.challengers}명이 도전중</BucketChallenger>
+        <BucketChallenger>현재 {bucket.added_count}명이 도전중</BucketChallenger>
       </BucketInfo>
-      <AddButton isAdd={bucket.isAdd} bucketId={bucket.id} />
+      <AddButton bucketId={bucket.seq} />
     </BucketBox>
   );
 }
