@@ -136,6 +136,7 @@ export default function MakeBuckitlist(props) {
 			.then(() => {
 				// 버킷리스트 만든거 store에 추가하기
 				props.closeModal()
+				props.uploadBuckitlist()
 			})
 			.catch(err => console.log(err))
 		}

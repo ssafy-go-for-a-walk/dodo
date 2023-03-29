@@ -7,10 +7,13 @@ import Modal from "react-modal";
 import { useState } from "react";
 import MakeBucikitliststyle from "./MakeBucikitliststyle";
 
-export default function MakeNewBuckitlist() {
+export default function MakeNewBuckitlist(props) {
 	const [isOpen, setIsOpen] = useState(false);
 	const closeModal = () => {
 		setIsOpen(false);
+	}
+	const uploadBuckitlist = () => {
+		props.uploadBuckitlist()
 	}
 	return (
 	<div>
@@ -38,7 +41,7 @@ export default function MakeNewBuckitlist() {
 			style={MakeBucikitliststyle}
 			ariaHideApp={false}
 		>
-			<MakeBuckitlist closeModal={closeModal}/>
+			<MakeBuckitlist closeModal={closeModal} uploadBuckitlist={uploadBuckitlist}/>
 		</Modal>
 	</div>
 		

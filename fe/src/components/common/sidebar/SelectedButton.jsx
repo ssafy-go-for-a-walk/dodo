@@ -24,7 +24,9 @@ export default function SelectedButton(props) {
 		<Div
 			color={innerText === "선택됨" ? "#D9D9D9" : "#1C9BFF"}
 			onClick={() => {
-				navigate("/manage")
+				if (innerText === "수정") {
+					navigate("/manage")
+				}
 			}}
 		>
 			{innerText}

@@ -28,7 +28,7 @@ export const userSlice = createSlice({
       state.value = initialStateValue;
     },
 		change: (state, action) => {
-      state.value.loginBucketName = action.payload;
+      state.value.selectedBucketlist = action.payload;
     },
     profile: (state, action) => {
       state.value.loginUserNickname = action.payload.loginUserNickname

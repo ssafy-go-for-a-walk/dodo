@@ -44,11 +44,8 @@ const BuckitlistName = styled.div`
 
 export default function SelectedItem() {
 	const { user } = useSelector((state) => state);
-	const selectedBucketlist = user.value.loginBucketName
-	// 요청을 보내서 전체 버킷리스트 개수와 완료한 버킷리스트 개수를 받아옴
-	const allBuckitlistNumber = 10
-	const completedBucketlistNumber = 5
-	const completedPercent = `${Math.ceil((completedBucketlistNumber / allBuckitlistNumber) * 100)}%`
+	const selectedBucketlist = user.value.selectedBucketlist.title
+	const completedPercent = `${user.value.selectedBucketlist.completeRate}%`
 	return (
 		<Div>
 			<Title>
