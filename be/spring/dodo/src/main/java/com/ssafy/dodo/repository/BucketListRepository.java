@@ -13,7 +13,8 @@ import java.util.List;
 
 public interface BucketListRepository extends JpaRepository<BucketList, Long> {
 
-    @Query("select new com.ssafy.dodo.dto.SimpleBucketListDto(bl.seq, bl.title, sum(ab.isComplete)/count(ab.seq)*100.0, bl.type) " +
+    @Query("select new com.ssafy.dodo.dto.SimpleBucketListDto(" +
+            "bl.seq, bl.title, sum(case when ab.isComplete = true then 1 else 0 end) / count(ab.seq) * 100.0, bl.type) " +
             "from BucketList bl " +
             "left outer join AddedBucket ab on ab.bucketList = bl " +
             "join BucketListMember bm on bm.bucketList = bl " +
@@ -22,4 +23,9 @@ public interface BucketListRepository extends JpaRepository<BucketList, Long> {
     List<SimpleBucketListDto> getBucketListByUserWithCompleteRate(@Param("user") User user);
 
     Page<BucketList> findAllByIsPublic(boolean b, Pageable pageable);
+
+    @Query("select sum(case when ab.isComplete = true then 1 else 0 end) / count(ab.seq) * 100.0 from BucketList bl " +
+            "join AddedBucket ab on ab.bucketList = bl " +
+            "where bl = :bucketList")
+    Double getBucketListCompleteRate(@Param("bucketList") BucketList bucketList);
 }

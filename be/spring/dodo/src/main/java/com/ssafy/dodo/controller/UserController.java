@@ -43,7 +43,13 @@ public class UserController {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
-        return new DataResponse<>(result.get(0));
+        UserInfoDto userInfoDto = result.get(0);
+
+        // 기본 버킷리스트의 달성률 조회
+        Double completeRate = bucketListService.getBucketListCompleteRate(userInfoDto.getDefaultBucketList().getSeq());
+        userInfoDto.getDefaultBucketList().setCompleteRate(completeRate);
+
+        return new DataResponse<>(userInfoDto);
     }
 
     @PostMapping
