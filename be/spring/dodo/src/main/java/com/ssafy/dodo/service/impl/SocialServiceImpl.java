@@ -1,5 +1,6 @@
 package com.ssafy.dodo.service.impl;
 
+import com.ssafy.dodo.dto.CategoryInfoDto;
 import com.ssafy.dodo.dto.SocialBucketDto;
 import com.ssafy.dodo.dto.SocialBucketListsDto;
 import com.ssafy.dodo.entity.AddedBucket;
@@ -52,7 +53,7 @@ public class SocialServiceImpl implements SocialService {
                                 .map(addedBucket -> SocialBucketDto.builder()
                                         .title(addedBucket.getPublicBucket().getTitle())
                                         .emoji(addedBucket.getEmoji())
-                                        .category(addedBucket.getPublicBucket().getCategory().getSeq())
+                                        .category(CategoryInfoDto.of(addedBucket.getPublicBucket().getCategory()))
                                         .build())
                                 .collect(Collectors.toList())
                 )

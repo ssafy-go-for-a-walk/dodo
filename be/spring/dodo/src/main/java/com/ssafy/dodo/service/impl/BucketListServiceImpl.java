@@ -2,6 +2,7 @@ package com.ssafy.dodo.service.impl;
 
 import com.ssafy.dodo.dto.AddedBucketDto;
 import com.ssafy.dodo.dto.BucketListInfoDto;
+import com.ssafy.dodo.dto.CategoryInfoDto;
 import com.ssafy.dodo.dto.CreateBucketListDto;
 import com.ssafy.dodo.entity.*;
 import com.ssafy.dodo.exception.CustomException;
@@ -54,6 +55,7 @@ public class BucketListServiceImpl implements BucketListService {
                         .addedBucketSeq(a.getSeq())
                         .bucketListSeq(a.getBucketList().getSeq())
                         .bucketSeq(a.getPublicBucket().getSeq())
+                        .category(CategoryInfoDto.of(a.getPublicBucket().getCategory()))
                         .isComplete(a.isComplete())
                         .emoji(a.getEmoji())
                         .dDay(a.getDDay())
