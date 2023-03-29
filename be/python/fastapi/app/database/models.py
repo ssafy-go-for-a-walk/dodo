@@ -52,7 +52,7 @@ class PublicBucket(Base):
     is_delete = Column(TINYINT, nullable=False, default=0)
 
     category_seq = Column(BIGINT, ForeignKey("categories.seq"))
-
+    category = relationship("Category", backref="categories")
 
 class AddedBucket(Base):
     __tablename__ = "added_buckets"
@@ -68,8 +68,6 @@ class AddedBucket(Base):
     bucketlist_seq = Column(BIGINT, ForeignKey('bucketlists.seq'))
     bucket_seq = Column(BIGINT, ForeignKey("public_buckets.seq"))
 
-    # 이렇게 해야하는지는 고민중
-    bucketLists = relationship("BucketList")
 
 class ExpDiary(Base):
     __tablename__ = "exp_diaries"
@@ -115,6 +113,9 @@ class BucketListMember(Base):
     user_seq = Column(BIGINT, ForeignKey("users.seq"))
     bucketlist_seq = Column(BIGINT, ForeignKey("bucketlists.seq"))
     is_delete = Column(TINYINT, nullable=False, default=0)
+    
+    user = relationship("User", backref="list_user")
+    bucketlist = relationship("BucketList", backref="bucketlists")
 
 
 class Preference(Base):
