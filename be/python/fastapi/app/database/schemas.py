@@ -29,7 +29,7 @@ class BucketList_dto(BaseModel):
 class Category_dto(BaseModel):
     seq: int
     item: str
-    is_delete: int
+    isDelete: int
 
     class Config:
         orm_mode = True
