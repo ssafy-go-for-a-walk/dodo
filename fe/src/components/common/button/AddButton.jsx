@@ -10,7 +10,7 @@ const ButtonBox = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${props => (props.isAdd ? "#F1F3F5" : "#E9F5FF")};
+  background: s => (props.isAdd ? "#F1F3F5" : "#E9F5FF")};
   font-size: 14px;
   cursor: pointer;
 

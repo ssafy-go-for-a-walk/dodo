@@ -10,7 +10,8 @@ const Div = styled.div`
 
 const Completed = styled.div`
 	background-color: #1C9BFF;
-	border-radius: 16px 0px 0px 16px;
+	width: ${props => props.percent};
+	border-radius: ${props => props.percent === "100%" ? "16px" : "16px 0px 0px 16px"};
 	height: 16px;
 `
 
@@ -19,7 +20,7 @@ export default function PercentCompo(props) {
 	const percent = props.percent
 	return (
 		<Div>
-			<Completed style={{width: `${percent}`}}></Completed>
+			<Completed percent={percent}></Completed>
 		</Div>
 	)
 }
