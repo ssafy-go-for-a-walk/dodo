@@ -36,11 +36,17 @@ public class UserInfoDto {
     }
 
     @Getter
+    @Setter
     @ToString
     @NoArgsConstructor
-    @AllArgsConstructor
-    private static class DefaultBucketList {
+    public static class DefaultBucketList {
         Long seq;
         String title;
+        Double completeRate;
+
+        public DefaultBucketList(Long seq, String title) {
+            this.seq = seq;
+            this.title = title;
+        }
     }
 }
