@@ -8,7 +8,7 @@ const Cate = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 8px;
-  width: 64px;
+  min-width: 64px;
   height: 32px;
   font-size: 14px;
 `;
@@ -16,6 +16,5 @@ const Cate = styled.div`
 export default function Category(props) {
   const category = props.category;
   const bgColor = color[`${category}`];
-  console.log(bgColor);
   return <Cate style={{ backgroundColor: `${bgColor}` }}>{category !== null ? category : "기타"}</Cate>;
 }

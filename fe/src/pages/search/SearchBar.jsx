@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { MdSearch } from "react-icons/md";
 
 const SearchBox = styled.div`
-  width: 456px;
+  width: 80%;
+  max-width: 456px;
   height: 32px;
   border-radius: 8px;
   display: flex;
@@ -14,7 +15,7 @@ const SearchBox = styled.div`
 `;
 
 const SearchInput = styled.input`
-  width: 384px;
+  width: 85%;
   height: 24px;
   border: none;
   margin-left: 16px;

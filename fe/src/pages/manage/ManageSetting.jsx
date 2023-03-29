@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import FullButton from "../common/button/FullButton";
-import HalfButton from "../common/button/HalfButton";
-import DeleteButton from "../common/button/DeleteButton";
+import FullButton from "../../components/common/button/FullButton";
+import HalfButton from "../../components/common/button/HalfButton";
+import DeleteButton from "../../components/common/button/DeleteButton";
 
 const Settings = styled.div`
   display: flex;
@@ -19,7 +19,8 @@ const BucketImg = styled.img`
 `;
 
 const BucketTitle = styled.div`
-  width: 528px;
+  width: 80%;
+  max-width: 528px;
   height: 32px;
   margin: 40px 0;
   display: flex;
@@ -45,7 +46,8 @@ const TitleInput = styled.input`
 const HalfButtons = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 528px;
+  width: 80%;
+  max-width: 528px;
 `;
 
 export default function ManageSetting(props) {

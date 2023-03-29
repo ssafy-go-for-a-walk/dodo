@@ -5,6 +5,7 @@ const BannerImg = styled.div`
   width: 800px;
   height: 114px;
   margin-top: 32px;
+  margin-bottom: 24px;
   background: #a2d7ff;
 `;
 

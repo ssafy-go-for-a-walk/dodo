@@ -3,9 +3,9 @@ import ManageHeader from "./ManageHeader";
 import ManageBucketList from "./ManageBucketList";
 import ManageDiary from "./ManageDiary";
 import ManageSetting from "./ManageSetting";
-import SlideUp from "../common/button/SlideUp";
+import SlideUp from "../../components/common/button/SlideUp";
 
-export default function Manage(props) {
+export default function ManagePage(props) {
   const [pageFilter, setpageFilter] = useState("bucketList");
   const changePageFilter = fil => {
     setpageFilter(fil);

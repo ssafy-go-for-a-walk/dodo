@@ -11,6 +11,7 @@ import { ko } from "date-fns/esm/locale";
 import CategorySelect from "./CategorySelect";
 import Diary from "./Diary";
 import DiaryForm from "./DiaryForm";
+import Picker from "emoji-picker-react";
 
 const Modal = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ const Header = styled.div`
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid #acabab;
+  position: relative;
 `;
 
 const Head = styled.div`
@@ -42,10 +44,31 @@ const Head = styled.div`
   align-items: center;
 `;
 
+const EmojiBtn = styled.img`
+  width: 32px;
+  cursor: pointer;
+`;
+
+const Emoji = styled.span`
+  font-size: 24px;
+  cursor: pointer;
+`;
+
+const EmojiPicker = styled.div`
+  width: 60%;
+  position: absolute;
+  top: 50px;
+  z-index: 1;
+`;
+
 const Title = styled.div`
   font-size: 24px;
   font-weight: bold;
-  width: 436px;
+  width: 80%;
+  text-align: start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Detail = styled.div`
@@ -65,7 +88,6 @@ const SDatePicker = styled(DatePicker)`
   padding-top: 8px;
   cursor: pointer;
   border: none;
-  margin-right: 16px;
 `;
 
 const Map = styled.div`
@@ -102,7 +124,16 @@ export default function GroupModal(props) {
   const [endDate, setEndDate] = useState(new Date());
   const [location, setLocation] = useState(bucket.location);
   const [content, setContent] = useState(bucket.desc);
-  const categoryChange = tag => {
+  const [emoji, setEmoji] = useState(bucket.emoji);
+  const [showPicker, setShowPicker] = useState(false);
+  const [category, setCate] = useState(bucket.category);
+
+  const onEmojiClick = emojiObject => {
+    setEmoji(emojiObject.emoji);
+    setShowPicker(false);
+  };
+  const categoryChange = cate => {
+    setCate(cate);
     return;
   };
   const locationChange = event => {
@@ -124,9 +155,21 @@ export default function GroupModal(props) {
       <Div>
         <Header>
           <Head>
+            {emoji === "" ? (
+              <EmojiBtn src="https://icons.getbootstrap.com/assets/icons/emoji-smile.svg" onClick={() => setShowPicker(val => !val)} />
+            ) : (
+              <Emoji role="img" aria-label="writing hand" onClick={() => setShowPicker(val => !val)}>
+                {emoji}
+              </Emoji>
+            )}
             <Title>{bucket.title}</Title>
-            {bucket.category !== null ? <Tag category={bucket.category} /> : <CategorySelect category={bucket.category} propFunction={categoryChange} />}
+            {category !== null ? <Tag category={category} /> : <CategorySelect category={category} propFunction={categoryChange} />}
           </Head>
+          {showPicker && (
+            <EmojiPicker>
+              <Picker pickerStyle={{ width: "100%" }} onEmojiClick={onEmojiClick} />
+            </EmojiPicker>
+          )}
           <Detail>
             <Calendar>
               <FcCalendar />

@@ -5,7 +5,8 @@ import { BsToggleOff } from "react-icons/bs";
 import { BsToggleOn } from "react-icons/bs";
 
 const ButtonBox = styled.button`
-  width: 530px;
+  width: 80%;
+  max-width: 530px;
   height: 67px;
   border-radius: 16px;
   border: 1px solid #1c9bff;

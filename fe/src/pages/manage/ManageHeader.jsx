@@ -10,7 +10,7 @@ const Div = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 2;
+  z-index: 3;
   background: #ffffff;
   margin-bottom: 24px;
 `;

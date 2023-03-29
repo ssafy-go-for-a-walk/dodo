@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Tag from "../common/bucket/Tag";
-import CompleteButton from "../common/button/CompleteButton";
+import Tag from "../../components/common/bucket/Tag";
+import CompleteButton from "../../components/common/button/CompleteButton";
 import Modal from "react-modal";
-import DetailModalStyle from "../common/modal/DetailModalStyle";
-import DetailModal from "../common/modal/detailBucket/DetailModal";
+import DetailModalStyle from "../../components/common/modal/DetailModalStyle";
+import DetailModal from "../../components/common/modal/detailBucket/DetailModal";
 
 const BucketBox = styled.div`
-  width: 800px;
+  width: 80%;
+  max-width: 800px;
   height: 72px;
   border-radius: 8px;
   box-shadow: 0px 4px 4px rgba(182, 86, 86, 0.25);
@@ -16,8 +17,8 @@ const BucketBox = styled.div`
 `;
 
 const BucketInfo = styled.div`
-  width: ${props => (props.activate ? "720px" : "784px")};
-  height: 72px;
+  width: ${props => (props.activate ? "89%" : "98%")};
+  height: 100%;
   border-radius: 8px;
   background: ${props => (props.isComplete ? "#E9F5FF" : "#ffffff")};
   position: absolute;
@@ -30,21 +31,31 @@ const BucketInfo = styled.div`
 `;
 
 const BucketHeader = styled.div`
-  max-width: 688px;
-  height: 32px;
+  width: 90%;
   display: flex;
   align-items: center;
-  font-size: 16px;
+
+  @media screen and (max-width: 940px) {
+    width: 85%;
+  }
+
+  @media screen and (max-width: 662px) {
+    width: 80%;
+  }
 `;
 
-const BucketImoge = styled.div`
-  width: 32px;
+const BucketEmoji = styled.div`
+  font-size: 24px;
   margin: 0 8px;
 `;
 
 const BucketTitle = styled.div`
+  max-width: 80%;
   font-size: 16px;
   padding: 8px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const DeleteBox = styled.div`
@@ -59,14 +70,13 @@ const DeleteBox = styled.div`
 `;
 
 const DeleteBtn = styled.div`
-  width: 48px;
-  height: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 16px;
+  margin-right: 3%;
   color: #ffffff;
   font-size: 16px;
+
+  @media screen and (max-width: 576px) {
+    width: 16px;
+  }
 `;
 
 export default function Bucket(props) {
@@ -100,8 +110,10 @@ export default function Bucket(props) {
       <BucketInfo activate={activateDelete} isComplete={bucket.isComplete} onClick={openSetup}>
         <BucketHeader>
           <Tag category={bucket.category} />
-          <BucketImoge />
-          <BucketTitle>{bucket.title}</BucketTitle>
+          <BucketEmoji role="img" aria-label="writing hand">
+            {bucket.emoji}
+          </BucketEmoji>
+          <BucketTitle activate={activateDelete}>{bucket.title}</BucketTitle>
         </BucketHeader>
         <CompleteButton isComplete={bucket.isComplete} bucketId={bucket.id} />
       </BucketInfo>

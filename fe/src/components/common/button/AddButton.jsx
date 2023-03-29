@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { MdCheck } from "react-icons/md";
 
 const ButtonBox = styled.button`
-  width: 64px;
+  min-width: 64px;
   height: 32px;
   border-radius: 5px;
   border: none;

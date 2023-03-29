@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import SlideUp from "../common/button/SlideUp";
+import SlideUp from "../../components/common/button/SlideUp";
 import SearchBar from "./SearchBar";
 import Banner from "./Banner";
 import SearchBucket from "./SearchBucket";
@@ -18,7 +18,7 @@ const bucketList = [
   },
   {
     id: 2,
-    title: "점심 먹기",
+    title: "점심 먹기sasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
     category: "푸드",
     challengers: 2,
     isAdd: false,
@@ -96,14 +96,7 @@ const Categorys = styled.div`
   margin-top: 40px;
 `;
 
-const Buckets = styled.div`
-  display: flex;
-  flex-direction: column;
-  jutify-content: center;
-  margin-top: 24px;
-`;
-
-export default function Search() {
+export default function SearchPage() {
   const [selectCate, setSelectCate] = useState("전체");
 
   const changeCate = categoryName => {
@@ -125,13 +118,11 @@ export default function Search() {
         ))}
       </Categorys>
       <Banner />
-      <Buckets>
-        {bucketList.map(bucket => {
-          if (selectCate === "전체" || selectCate === bucket.category) {
-            return <SearchBucket bucket={bucket} key={bucket.id} />;
-          }
-        })}
-      </Buckets>
+      {bucketList.map(bucket => {
+        if (selectCate === "전체" || selectCate === bucket.category) {
+          return <SearchBucket bucket={bucket} key={bucket.id} />;
+        }
+      })}
       <SlideUp />
     </Div>
   );

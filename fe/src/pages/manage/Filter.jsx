@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
 const Div = styled.div`
-  width: 800px;
+  width: 80%;
+  max-width: 800px;
   margin-bottom: 24px;
-  z-index: 10;
+  z-index: 2;
 `;
 
 const Selectbox = styled.div`
