@@ -1,6 +1,7 @@
 package com.ssafy.dodo.controller;
 
 import com.ssafy.dodo.dto.*;
+import com.ssafy.dodo.entity.BucketListType;
 import com.ssafy.dodo.entity.User;
 import com.ssafy.dodo.exception.CustomException;
 import com.ssafy.dodo.exception.ErrorCode;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,11 +69,20 @@ public class UserController {
 
     @GetMapping("/bucketlists")
     @ResponseStatus(HttpStatus.OK)
-    public DataResponse<List<SimpleBucketListDto>> getMyBucketLists(@AuthenticationPrincipal UserDetails userDetails) {
+    public DataResponse<Map<String, List<SimpleBucketListDto>>> getMyBucketLists(@AuthenticationPrincipal UserDetails userDetails) {
         Long userSeq = Long.parseLong(userDetails.getUsername());
         User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return new DataResponse<>(bucketListRepository.getBucketListByUserWithCompleteRate(user));
+        List<SimpleBucketListDto> list = bucketListRepository.getBucketListByUserWithCompleteRate(user);
+        Map<String, List<SimpleBucketListDto>> data = new HashMap<>();
+        data.put(BucketListType.SINGLE.name(), new ArrayList<>());
+        data.put(BucketListType.GROUP.name(), new ArrayList<>());
+
+        for (SimpleBucketListDto simpleBucketListDto : list) {
+            data.get(simpleBucketListDto.getType().name()).add(simpleBucketListDto);
+        }
+
+        return new DataResponse<>(data);
     }
 
     @PostMapping("/bucketlists")
