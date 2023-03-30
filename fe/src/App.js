@@ -5,18 +5,22 @@ import LoginPage from "./pages/login/LoginPage";
 import SetProfile from "./pages/SetProfile";
 import MainLayout from "./components/layout/MainLayout";
 import { routes } from "./routes";
+import CheckLogin from "./checklogin/CheckLogin";
 import "./App.css"
+
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<MainLayout />}>
-          {routes}
+        <Route path="/" element={<CheckLogin/>}>
+          <Route path="/" element={<MainLayout />}>
+            {routes}
+          </Route>
+          <Route path="/setprofile" element={<SetProfile />} />
         </Route>
         <Route path="/survey" element={<SurveyPage />} />
         <Route path="/survey/signup" element={<SignUpPage />} />
         <Route path="/login/:token" element={<LoginPage />} />
-        <Route path="/setprofile" element={<SetProfile />} />
       </Routes>
     </div>
   );

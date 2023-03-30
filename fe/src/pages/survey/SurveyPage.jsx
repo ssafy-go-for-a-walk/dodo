@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import DATA from "./datas.json"
 import { useInView } from 'react-intersection-observer';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { useDispatch } from "react-redux";
+import { setSurvey } from "../../redux/user";
 
 const DivTop = styled.div`
   min-width: 350px;
@@ -71,6 +73,7 @@ export default function SurveyPage() {
   const [selected, setSelected] = useState([])
   const [pages, setPages] = useState(1)
   const [ref, inView] = useInView();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const list = DATA.list
   const changeData = (id) => {
@@ -99,11 +102,8 @@ export default function SurveyPage() {
   }, [inView, loading, getItems])
 
   const goToSignUp = () => {
-    navigate("/survey/signup", {
-      state: {
-        selected,
-      }
-    })
+    dispatch(setSurvey(selected))
+    navigate("/survey/signup")
   }
     return (
         <DivTop>
