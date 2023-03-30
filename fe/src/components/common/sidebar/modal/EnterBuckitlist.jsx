@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from "@mui/material";
-// import axios from "axios";
-// import { useSelector } from "react-redux";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const TopDiv = styled.div`
 	display: flex;
@@ -54,15 +54,23 @@ const SubmitButton = styled.div`
 
 export default function EnterBuckitlist(props) {
 	const [code, setCode] = useState("")
-	// const { user } = useSelector((state) => state)
+	const { user } = useSelector((state) => state)
 	const closeModal = () => {props.closeModal()}
 	const changeName = (eve) => {
 		setCode(eve.target.value)
 	}
 	const enterBuckitlist = () => {
-		// 참여하기 axios 요청 쏘기
-		// 성공시 버킷리스트 업데이트
-		// 실패시 경고창
+		axios
+		.post(`https://j8b104.p.ssafy.io/api/bucketlists/join/${code}`, {}, {
+			headers: {
+				Authorization: `Bearer ${user.value.token}`,
+			},
+		})
+		.then(() => {
+			props.closeModal()
+			props.uploadBuckitlist()
+		})
+		.catch((err) => alert(err.response.data.message))
 	}
 	return (
 		<TopDiv>
