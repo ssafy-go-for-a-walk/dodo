@@ -11,7 +11,7 @@ const Card = styled.div`
   box-shadow: 0px 4px 4px rgba(182, 86, 86, 0.25);
   border-radius: 8px;
   margin: 0 16px 16px 16px;
-  background: ${props => (props.image !== "" ? "#ffffff" : "#E9F5FF")}};
+  background: ${props => (props.image !== "" ? "#ffffff" : "#E9F5FF")};
 `;
 
 const CardHeader = styled.div`

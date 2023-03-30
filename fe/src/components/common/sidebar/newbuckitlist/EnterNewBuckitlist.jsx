@@ -7,10 +7,13 @@ import EnterBucikitliststyle from "./EnterBucikitliststyle";
 import EnterBuckitlist from "../modal/EnterBuckitlist";
 import { useState } from "react";
 
-export default function EnterNewBuckitlist() {
+export default function EnterNewBuckitlist(props) {
 	const [isOpen, setIsOpen] = useState(false);
 	const closeModal = () => {
 		setIsOpen(false);
+	}
+	const uploadBuckitlist = () => {
+		props.uploadBuckitlist()
 	}
 	return (
 		<div>
@@ -38,7 +41,7 @@ export default function EnterNewBuckitlist() {
 				style={EnterBucikitliststyle}
 				ariaHideApp={false}
 			>
-				<EnterBuckitlist closeModal={closeModal}/>
+				<EnterBuckitlist closeModal={closeModal} uploadBuckitlist={uploadBuckitlist}/>
 			</Modal>
 		</div>
 		)
