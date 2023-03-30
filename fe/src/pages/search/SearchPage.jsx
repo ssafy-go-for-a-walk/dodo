@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 // import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import SlideUp from "../../components/common/button/SlideUp";
@@ -33,22 +33,26 @@ export default function SearchPage() {
   const [ref] = useInView();
   // const [ref, inView] = useInView();
   const { user } = useSelector(state => state);
+  const userToken = user.value.token;
 
-  const changeCate = categoryName => {
-    const params = { category: categoryName };
-    setLoading(true);
-    axios
-      .get("https://j8b104.p.ssafy.io/api/recomm/buckets", {
-        params: params,
-        headers: {
-          Authorization: `Bearer ${user.value.token}`,
-        },
-      })
-      .then(res => setBuckets(res.data))
-      .catch(err => console.log(err));
-    setSelectCate(categoryName);
-    setLoading(false);
-  };
+  const changeCate = useCallback(
+    async categoryName => {
+      const params = { category: categoryName };
+      setLoading(true);
+      axios
+        .get("https://j8b104.p.ssafy.io/api/recomm/buckets", {
+          params: params,
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        })
+        .then(res => setBuckets(res.data))
+        .catch(err => console.log(err));
+      setSelectCate(categoryName);
+      setLoading(false);
+    },
+    [userToken],
+  );
 
   const search = buckets => {
     setLoading(true);
@@ -71,7 +75,7 @@ export default function SearchPage() {
     //   .then(res => setBuckets(res.data))
     //   .catch(err => console.log(err));
     // setLoading(false);
-  }, []);
+  }, [changeCate, selectCate]);
 
   // const addBuckets = useCallback(async () => {
   //

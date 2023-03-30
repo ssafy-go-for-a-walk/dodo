@@ -95,7 +95,7 @@ export default function Bucket(props) {
 
   const deleteBucket = () => {
     if (activateDelete) {
-      console.log("delete");
+      console.log(bucket);
     } else {
       setActivateDelete(true);
     }

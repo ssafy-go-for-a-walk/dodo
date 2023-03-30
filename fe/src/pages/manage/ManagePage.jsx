@@ -12,6 +12,7 @@ export default function ManagePage() {
   const [pageFilter, setpageFilter] = useState("bucketList");
   const { user } = useSelector(state => state);
   const listId = user.value.selectedBucketlist.pk;
+  const userToken = user.value.token;
   const dispatch = useDispatch();
   const changePageFilter = fil => {
     setpageFilter(fil);
@@ -21,7 +22,7 @@ export default function ManagePage() {
     axios
       .get(`https://j8b104.p.ssafy.io/api/bucketlists/${listId}`, {
         headers: {
-          Authorization: `Bearer ${user.value.token}`,
+          Authorization: `Bearer ${userToken}`,
         },
       })
       .then(res => {
@@ -32,7 +33,7 @@ export default function ManagePage() {
         dispatch(setBucketList(data));
       })
       .catch(err => console.log(err));
-  }, []);
+  }, [dispatch, listId, userToken]);
   return (
     <>
       <ManageHeader pageFilter={pageFilter} propFunction={changePageFilter} />
