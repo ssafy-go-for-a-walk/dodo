@@ -1,9 +1,9 @@
 import { AppBar, Toolbar } from "@mui/material";
 import colorConfigs from "../../../configs/colorConfigs";
-import ReorderIcon from '@mui/icons-material/Reorder';
+import ReorderIcon from "@mui/icons-material/Reorder";
 import { useSelector } from "react-redux";
-import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
-import styled from "styled-components"
+import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
+import styled from "styled-components";
 import { useState } from "react";
 import Modal from "react-modal";
 import ModalStyle from "./TopbarModalStyle";
@@ -34,11 +34,12 @@ const UserImg = styled.img`
 `;
 
 export default function Topbar(props) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isOpenProfile, setIsOpenProfile] = useState(false)
-  const { user } = useSelector((state) => state);
-  const userImg = user.value.loginUserImg
-  const userNickname = user.value.loginUserNickname
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenProfile, setIsOpenProfile] = useState(false);
+  const { user } = useSelector(state => state);
+  const userImg = user.value.loginUserImg;
+  const userNickname = user.value.loginUserNickname;
+  console.log(user);
   const openSetup = () => {
     setIsOpen(bool => !bool);
   };
@@ -86,7 +87,7 @@ export default function Topbar(props) {
           style={ProfileModalStyle}
           ariaHideApp={false}
         >
-          <SettingProfile closeProfileModal={closeProfileModal} signUp={false}/>
+          <SettingProfile closeProfileModal={closeProfileModal} signUp={false} />
         </Modal>
       </Toolbar>
     </AppBar>

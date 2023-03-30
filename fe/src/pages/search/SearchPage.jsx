@@ -1,86 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+// import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import SlideUp from "../../components/common/button/SlideUp";
 import SearchBar from "./SearchBar";
 import Banner from "./Banner";
-import SearchBucket from "./SearchBucket";
+import RecommBucket from "./RecommBucket";
 import Category from "./Category";
 import cate from "../../configs/categoryConfig";
-
-const bucketList = [
-  {
-    id: 1,
-    title: "세계 여행하기",
-    category: "여행",
-    challengers: 10,
-    isAdd: false,
-    imoge: "",
-  },
-  {
-    id: 2,
-    title: "점심 먹기sasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
-    category: "푸드",
-    challengers: 2,
-    isAdd: false,
-    imoge: "",
-  },
-  {
-    id: 3,
-    title: "점심 먹기",
-    category: "일상",
-    challengers: 100,
-    isAdd: true,
-    imoge: "",
-  },
-  {
-    id: 4,
-    title: "점심 먹기",
-    category: "대자연",
-    challengers: 10,
-    isAdd: false,
-    imoge: "",
-  },
-  {
-    id: 5,
-    title: "점심 먹기",
-    category: "쇼핑",
-    challengers: 10,
-    isAdd: false,
-    imoge: "",
-  },
-  {
-    id: 6,
-    title: "점심 먹기",
-    category: "문화예술",
-    challengers: 10,
-    isAdd: false,
-    imoge: "",
-  },
-  {
-    id: 7,
-    title: "점심 먹기",
-    category: "자기계발",
-    challengers: 10,
-    isAdd: false,
-    imoge: "",
-  },
-  {
-    id: 8,
-    title: "점심 먹기",
-    category: "아웃도어",
-    challengers: 10,
-    isAdd: false,
-    imoge: "",
-  },
-  {
-    id: 9,
-    title: "점심 먹기",
-    category: "스포츠",
-    challengers: 10,
-    isAdd: false,
-    imoge: "",
-  },
-];
+import { useInView } from "react-intersection-observer";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Div = styled.div`
   display: flex;
@@ -98,10 +28,49 @@ const Categorys = styled.div`
 
 export default function SearchPage() {
   const [selectCate, setSelectCate] = useState("전체");
+  const [buckets, setBuckets] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [ref, inView] = useInView();
+  const { user } = useSelector(state => state);
 
   const changeCate = categoryName => {
+    const params = { category: categoryName };
+    setLoading(true);
+    axios
+      .get("https://j8b104.p.ssafy.io/api/recomm/buckets", {
+        params: params,
+        headers: {
+          Authorization: `Bearer ${user.value.token}`,
+        },
+      })
+      .then(res => setBuckets(res.data))
+      .catch(err => console.log(err));
     setSelectCate(categoryName);
+    setLoading(false);
   };
+
+  useEffect(() => {
+    const params = { category: selectCate };
+    axios
+      .get("https://j8b104.p.ssafy.io/api/recomm/buckets", {
+        params: params,
+        headers: {
+          Authorization: `Bearer ${user.value.token}`,
+        },
+      })
+      .then(res => setBuckets(res.data))
+      .catch(err => console.log(err));
+  }, []);
+
+  // const addBuckets = useCallback(async () => {
+  //
+  // }, [datas]);
+
+  // useEffect(() => {
+  //   if (inView && !loading) {
+  //     addBuckets();
+  //   }
+  // }, [inView, loading, getBuckets]);
 
   return (
     <Div>
@@ -118,11 +87,8 @@ export default function SearchPage() {
         ))}
       </Categorys>
       <Banner />
-      {bucketList.map(bucket => {
-        if (selectCate === "전체" || selectCate === bucket.category) {
-          return <SearchBucket bucket={bucket} key={bucket.id} />;
-        }
-      })}
+      {buckets.length !== 0 ? buckets.map(bucket => <RecommBucket bucket={bucket} key={bucket.seq} />) : null}
+      {loading && <RefreshIcon ref={ref} />}
       <SlideUp />
     </Div>
   );

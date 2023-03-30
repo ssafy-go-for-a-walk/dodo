@@ -18,8 +18,9 @@ const ButtonBox = styled.button`
 export default function CompleteButton(props) {
   const { isComplete, bucketId } = props;
   const completeBucket = event => {
+    event.stopPropagation();
     event.preventDefault();
-    props.propFunction(bucketId);
+    console.log("complete");
   };
 
   return (

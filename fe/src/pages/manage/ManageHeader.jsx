@@ -49,7 +49,7 @@ const FilterDiv = styled.div`
   border-bottom: ${props => (props.select ? "3px solid #424242" : "none")};
   margin: 0 48px;
   cursor: pointer;
-  &: hover {
+  &:hover {
     font-weight: bold;
     color: #424242;
     border-bottom: 3px solid #424242;

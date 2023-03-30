@@ -158,7 +158,7 @@ export default function GroupModal(props) {
             {emoji === "" ? (
               <EmojiBtn src="https://icons.getbootstrap.com/assets/icons/emoji-smile.svg" onClick={() => setShowPicker(val => !val)} />
             ) : (
-              <Emoji role="img" aria-label="writing hand" onClick={() => setShowPicker(val => !val)}>
+              <Emoji role="img" onClick={() => setShowPicker(val => !val)}>
                 {emoji}
               </Emoji>
             )}

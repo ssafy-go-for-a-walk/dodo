@@ -20,7 +20,7 @@ const CategoryName = styled.div`
   font-weight: ${props => props.select && "bold"};
   color: ${props => props.select && "#1C9BFF"};
 
-  &: hover {
+  &:hover {
     font-weight: bold;
     color: #1c9bff;
   }

@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { MdCheck } from "react-icons/md";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const ButtonBox = styled.button`
   min-width: 64px;
@@ -10,9 +12,9 @@ const ButtonBox = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: s => (props.isAdd ? "#F1F3F5" : "#E9F5FF")};
+  background: ${props => (props.selected ? "#F1F3F5" : "#E9F5FF")};
   font-size: 14px;
-  cursor: pointer;
+  cursor: ${props => (props.selected ? "" : "pointer")};
 
   .checkIcon {
     color: #1c9bff;
@@ -21,15 +23,28 @@ const ButtonBox = styled.button`
 `;
 
 export default function AddButton(props) {
-  const { isAdd, bucketId } = props;
+  const { bucketId } = props;
+  const [selected, setSelected] = useState(false);
+  const { user } = useSelector(state => state);
   const addBucket = event => {
     event.preventDefault();
-    props.propFunction(bucketId);
+    axios
+      .post(
+        `https://j8b104.p.ssafy.io/api/bucketlists/${user.value.selectedBucketlist.pk}/buckets/${bucketId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${user.value.token}`,
+          },
+        },
+      )
+      .then(() => setSelected(true))
+      .catch(err => console.log(err));
   };
 
   return (
-    <ButtonBox isAdd={isAdd} onClick={addBucket} disabled={isAdd && "disabled"}>
-      {isAdd ? <MdCheck className="checkIcon" /> : "담기"}
+    <ButtonBox onClick={addBucket} selected={selected} disabled={selected && "disabled"}>
+      {selected ? <MdCheck className="checkIcon" /> : "담기"}
     </ButtonBox>
   );
 }
