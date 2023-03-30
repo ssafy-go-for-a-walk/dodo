@@ -1,5 +1,6 @@
 package com.ssafy.dodo.service.impl;
 
+import com.ssafy.dodo.dto.AddedBucketDto;
 import com.ssafy.dodo.dto.BucketInfoDto;
 import com.ssafy.dodo.dto.CategoryInfoDto;
 import com.ssafy.dodo.dto.PublicBucketDto;
@@ -19,6 +20,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -58,7 +61,7 @@ public class BucketServiceImpl implements BucketService {
     }
 
     @Override
-    public void deleteBucket(Long bucketSeq, UserDetails userDetails) {
+    public List<AddedBucketDto> deleteBucket(Long bucketSeq, UserDetails userDetails) {
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -76,6 +79,24 @@ public class BucketServiceImpl implements BucketService {
         // public_buckets의 담은 수 -1
         publicBucketRepository.minusAddedCount(Arrays.asList(publicBucket));
 
+        BucketList bucketList = addedBucket.getBucketList();
+
+        List<AddedBucket> allByBucketList = addedBucketRepository.findAllByBucketList(bucketList);
+
+        List<AddedBucketDto> addedBucketDtos = allByBucketList.stream()
+                .map(a -> AddedBucketDto.builder()
+                        .seq(a.getSeq())
+                        .title(a.getPublicBucket().getTitle())
+                        .category(CategoryInfoDto.of(a.getPublicBucket().getCategory()))
+                        .isComplete(a.isComplete())
+                        .emoji(a.getEmoji())
+                        .dDay(a.getDDay())
+                        .location(a.getLocation())
+                        .desc(a.getDesc())
+                        .build())
+                .collect(Collectors.toList());
+
+        return addedBucketDtos;
     }
 
     @Override
@@ -101,7 +122,7 @@ public class BucketServiceImpl implements BucketService {
     }
 
     @Override
-    public void updateBucketInfo(Long bucketSeq, BucketInfoDto bucketInfoDto, UserDetails userDetails) {
+    public List<AddedBucketDto> updateBucketInfo(Long bucketSeq, BucketInfoDto bucketInfoDto, UserDetails userDetails) {
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -109,5 +130,24 @@ public class BucketServiceImpl implements BucketService {
                 .orElseThrow(() -> new CustomException(ErrorCode.ADDED_BUCKET_NOT_FOUND));
 
         addedBucket.updateBucketInfo(bucketInfoDto.getEmoji(), bucketInfoDto.getDDay(), bucketInfoDto.getLocation(), bucketInfoDto.getDesc());
+
+        BucketList bucketList = addedBucket.getBucketList();
+
+        List<AddedBucket> allByBucketList = addedBucketRepository.findAllByBucketList(bucketList);
+
+        List<AddedBucketDto> addedBucketDtos = allByBucketList.stream()
+                .map(a -> AddedBucketDto.builder()
+                        .seq(a.getSeq())
+                        .title(a.getPublicBucket().getTitle())
+                        .category(CategoryInfoDto.of(a.getPublicBucket().getCategory()))
+                        .isComplete(a.isComplete())
+                        .emoji(a.getEmoji())
+                        .dDay(a.getDDay())
+                        .location(a.getLocation())
+                        .desc(a.getDesc())
+                        .build())
+                .collect(Collectors.toList());
+
+        return addedBucketDtos;
     }
 }
