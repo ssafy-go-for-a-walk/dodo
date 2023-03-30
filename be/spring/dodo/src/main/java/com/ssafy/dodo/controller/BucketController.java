@@ -54,21 +54,21 @@ public class BucketController {
     // 담긴 버킷 상세 정보 수정
     @PatchMapping("/{bucket-seq}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateBucketListInfo(
+    public DataResponse<?> updateBucketInfo(
             @PathVariable("bucket-seq") Long bucketSeq,
             @RequestBody BucketInfoDto bucketInfoDto,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        bucketService.updateBucketInfo(bucketSeq, bucketInfoDto, userDetails);
+        return new DataResponse<>(bucketService.updateBucketInfo(bucketSeq, bucketInfoDto, userDetails));
     }
 
     @DeleteMapping("/{bucket-seq}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteBucketList(
+    public DataResponse<?> deleteBucketList(
             @PathVariable("bucket-seq") Long bucketSeq,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        bucketService.deleteBucket(bucketSeq, userDetails);
+        return new DataResponse<>(bucketService.deleteBucket(bucketSeq, userDetails));
     }
 
     @GetMapping("/categories")
