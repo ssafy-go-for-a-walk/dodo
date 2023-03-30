@@ -35,10 +35,11 @@ public class BucketController {
     public DataResponse<?> searchBucket(
             @RequestParam("q") String word,
             @RequestParam(value = "category", required = false) Long category,
+            @RequestParam(value = "bucketlist", required = true) Long bucketListSeq,
             Pageable pageable,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        return new DataResponse<>(bucketService.searchBucket(word, category, pageable, userDetails));
+        return new DataResponse<>(bucketService.searchBucket(word, category, bucketListSeq, pageable, userDetails));
     }
 
 
