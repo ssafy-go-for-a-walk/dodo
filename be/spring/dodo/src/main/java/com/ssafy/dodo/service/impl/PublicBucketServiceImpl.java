@@ -45,6 +45,7 @@ public class PublicBucketServiceImpl implements PublicBucketService {
                 .title(customBucketDto.getTitle())
                 .emoji("\uD83D\uDE00") // 😀
                 .addedCount(1l)
+                .isPublic(bucketList.isPublic())
                 .build());
 
         // 내 버킷리스트에 추가
@@ -67,7 +68,7 @@ public class PublicBucketServiceImpl implements PublicBucketService {
                 .map(a -> AddedBucketDto.builder()
                         .seq(a.getSeq())
                         .title(a.getPublicBucket().getTitle())
-                        .category(CategoryInfoDto.of(a.getPublicBucket().getCategory()))
+                        .category(a.getPublicBucket().getCategory() != null ? CategoryInfoDto.of(a.getPublicBucket().getCategory()) : null)
                         .isComplete(a.isComplete())
                         .emoji(a.getEmoji())
                         .dDay(a.getDDay())
