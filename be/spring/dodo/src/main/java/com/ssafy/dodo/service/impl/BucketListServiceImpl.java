@@ -51,7 +51,7 @@ public class BucketListServiceImpl implements BucketListService {
                 .map(a -> AddedBucketDto.builder()
                         .seq(a.getSeq())
                         .title(a.getPublicBucket().getTitle())
-                        .category(CategoryInfoDto.of(a.getPublicBucket().getCategory()))
+                        .category(a.getPublicBucket().getCategory() != null ? CategoryInfoDto.of(a.getPublicBucket().getCategory()) : null)
                         .isComplete(a.isComplete())
                         .emoji(a.getEmoji())
                         .dDay(a.getDDay())

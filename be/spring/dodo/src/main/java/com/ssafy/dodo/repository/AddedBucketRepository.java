@@ -15,7 +15,8 @@ public interface AddedBucketRepository extends JpaRepository<AddedBucket, Long> 
 
     @Query("select ab from AddedBucket ab " +
             "join fetch ab.publicBucket pb " +
-            "join fetch pb.category")
+            "left outer join fetch pb.category " +
+            "where ab.bucketList = :bucketList")
     List<AddedBucket> findAllByBucketList(BucketList bucketList);
 
     @Modifying
