@@ -19,7 +19,7 @@ public interface BucketListService {
 
     List<AddedBucketDto> getBucketListBuckets(UserDetails userDetails, Long bucketListSeq);
 
-    void addSearchedBucket(Long bucketListSeq, Long publicBucketSeq, UserDetails userDetails);
+    List<AddedBucketDto> addSearchedBucket(Long bucketListSeq, Long publicBucketSeq, UserDetails userDetails);
 
     Map<String, List<SimpleBucketListDto>> deleteBucketList(Long bucketListSeq, UserDetails userDetails);
 

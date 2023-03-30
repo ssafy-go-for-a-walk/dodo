@@ -61,9 +61,19 @@ public class BucketListController {
         return new DataResponse<>(publicBucketService.addCustomBucket(bucketListSeq, customBucketDto, userDetails));
     }
 
+    @PostMapping("/{bucketlist-seq}/buckets/{public-bucket-seq}/search")
+    @ResponseStatus(HttpStatus.CREATED)
+    public DataResponse<?> addSearchedBucket(
+            @PathVariable("bucketlist-seq") Long bucketListSeq,
+            @PathVariable("public-bucket-seq") Long publicBucketSeq,
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+        return new DataResponse<>(bucketListService.addSearchedBucket(bucketListSeq, publicBucketSeq, userDetails));
+    }
+
     @PostMapping("/{bucketlist-seq}/buckets/{public-bucket-seq}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addSearchedBucket(
+    public void addBucket(
             @PathVariable("bucketlist-seq") Long bucketListSeq,
             @PathVariable("public-bucket-seq") Long publicBucketSeq,
             @AuthenticationPrincipal UserDetails userDetails

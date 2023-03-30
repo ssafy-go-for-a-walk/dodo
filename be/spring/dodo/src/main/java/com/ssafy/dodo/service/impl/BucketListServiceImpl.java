@@ -99,7 +99,7 @@ public class BucketListServiceImpl implements BucketListService {
     }
 
     @Override
-    public void addSearchedBucket(Long bucketListSeq, Long publicBucketSeq, UserDetails userDetails) {
+    public List<AddedBucketDto> addSearchedBucket(Long bucketListSeq, Long publicBucketSeq, UserDetails userDetails) {
 
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -132,6 +132,23 @@ public class BucketListServiceImpl implements BucketListService {
 
         // public_bucket 담은 수 +1
         publicBucketRepository.plusAddedCount(Arrays.asList(publicBucket));
+
+        List<AddedBucket> allByBucketList = addedBucketRepository.findAllByBucketList(bucketList);
+
+        List<AddedBucketDto> addedBucketDtos = allByBucketList.stream()
+                .map(a -> AddedBucketDto.builder()
+                        .seq(a.getSeq())
+                        .title(a.getPublicBucket().getTitle())
+                        .category(CategoryInfoDto.of(a.getPublicBucket().getCategory()))
+                        .isComplete(a.isComplete())
+                        .emoji(a.getEmoji())
+                        .dDay(a.getDDay())
+                        .location(a.getLocation())
+                        .desc(a.getDesc())
+                        .build())
+                .collect(Collectors.toList());
+
+        return addedBucketDtos;
     }
 
     @Override
