@@ -5,10 +5,10 @@ import LoginPage from "./pages/login/LoginPage";
 import SetProfile from "./pages/SetProfile";
 import MainLayout from "./components/layout/MainLayout";
 import { routes } from "./routes";
-
+import "./App.css"
 function App() {
   return (
-    <div>
+    <div className="App">
       <Routes>
         <Route path="/" element={<MainLayout />}>
           {routes}
