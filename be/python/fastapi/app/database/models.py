@@ -67,6 +67,9 @@ class AddedBucket(Base):
 
     bucketlist_seq = Column(BIGINT, ForeignKey('bucketlists.seq'))
     bucket_seq = Column(BIGINT, ForeignKey("public_buckets.seq"))
+    
+    bucketlist = relationship("BucketList", backref="ab_bucketlists")
+    bucket = relationship("PublicBucket", backref="pb_buckets")
 
 
 class ExpDiary(Base):

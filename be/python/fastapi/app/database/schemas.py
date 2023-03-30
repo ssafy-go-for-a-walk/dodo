@@ -1,99 +1,73 @@
-from datetime import datetime
-from pydantic import BaseModel
 
-from database.models import AuthProvider
-from database.models import BucketListType
-
-from typing import Dict
-
-class User_dto(BaseModel):
-    seq: int
-    email: str
-    nickname: str
-    profile_image: str
-    auth_provider: AuthProvider
-    last_login_at: datetime
-    refresh_token: str
-    is_delete: int
-
-
-class BucketList_dto(BaseModel):
-    seq: int
-    title: str
-    image: str
-    is_public: bool
-    type: BucketListType
-    is_delete: int
-
-
-class Category_dto(BaseModel):
+class Test_dto:
     seq: int
     item: str
-    isDelete: int
 
-    class Config:
-        orm_mode = True
+    def __init__(self, seq, item):
+        self.seq = seq
+        self.item = item
+        
+class User_dto:
+    nickname: str
+    image: str
+
+    def __init__(self, nickname, image):
+        self.nickname = nickname
+        self.image = image
 
 
-class PublicBucket_dto(BaseModel):
-    seq: int
-    emoji: str
+class Bucketlist_dto:
     title: str
-    is_public: bool
-    added_count: int
-    is_delete: int
+    image: str
 
-    category_seq: Category_dto
+    def __init__(self, title, image):
+        self.title = title
+        self.image = image
 
 
-class AddedBucket_dto(BaseModel):
-    seq: int
-    is_complete: bool
+class Bucket_dto:
+    title: str
     emoji: str
-    d_day: str
-    location: str
-    desc: str
-    is_delete: int
+    category: str
 
-    bucketlist_seq: BucketList_dto
-    bucket_seq: PublicBucket_dto
+    def __init__(self, title, emoji, category) -> None:
+        self.title = title 
+        self.emoji = emoji
+        self.category = category
 
 
-class ExpDiary_dto(BaseModel):
+class User_recoomm_dto:
+    user: User_dto
+    bucketlist: Bucketlist_dto
+    buckets: list
+
+    def __init__(self, user, bucketlist, buckets):
+        self.user = user
+        self.bucketlist = bucketlist
+        self.buckets = buckets
+
+
+class Category_dto:
     seq: int
-    content: str
-    is_delete: int
+    item: str
 
-    bucket_seq: AddedBucket_dto
-
-
-class DiaryImage_dto(BaseModel):
-    seq: int
-    path: str
-    original_name: str
-    is_delete: int
-
-    exp_diary_seq: ExpDiary_dto
+    def __init__(self, seq, item):
+        self.seq = seq
+        self.item = item
 
 
-class Bookmark_dto(BaseModel):
-    user_seq: User_dto
-    bucketlist_seq: BucketList_dto
-    is_delete: int
+class Bucket_recoomm_dto:
+    title: str
+    emoji: str
+    addedCount: int
+    publicBucketSeq: int
+    isAdded: bool
+    category: Category_dto
 
-
-class BucketListMember_dto(BaseModel):
-    seq: int
-    user_seq: User_dto
-    bucketlist_seq: BucketList_dto
-    is_delete: int
-
-
-class Preference_dto(BaseModel):
-
-    seq: int
-    user_seq: User_dto
-    bucket_seq: PublicBucket_dto
-    is_delete: int
-
-    
+    def __init__(self, title, emnoji, addedCount, publicBucketSeq, isAdded, category):
+        self.title = title
+        self.emoji = emnoji
+        self.addedCount = addedCount
+        self.publicBucketSeq = publicBucketSeq
+        self.isAdded = isAdded
+        self.category = category
