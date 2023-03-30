@@ -34,7 +34,7 @@ def session_test(db: Session = Depends(engine.get_session)):
 
 # Preference - title을 활용한 CBF - 코사인 유사도 활용
 @router.get("/buckets", status_code=200)
-def bucket_recommand_cbf(category: str, page: int = 0, size: int = 10,
+def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10,
 		    db: Session = Depends(engine.get_session), 
 	      	credentials: HTTPAuthorizationCredentials= Depends(security)):
 	
@@ -52,7 +52,7 @@ def bucket_recommand_cbf(category: str, page: int = 0, size: int = 10,
 	user_seq=token['userSeq']
 	logger.info(f"LOGIN 정보: {user_seq}")
 
-	category_seq = { "전체" : 0, "대자연" : 1, "일상" : 2, "쇼핑" : 3, "여행" :4, "문화예술" : 5, "자기계발" : 6, "푸드" : 7, "아웃도어" : 8, "스포츠" : 9}
+	category_seq = {"전체" : 0, "대자연" : 1, "일상" : 2, "쇼핑" : 3, "여행" :4, "문화예술" : 5, "자기계발" : 6, "푸드" : 7, "아웃도어" : 8, "스포츠" : 9}
 	search_category_seq = category_seq[category]
 	logger.info(f"카테고리 seq: {search_category_seq}")
 
