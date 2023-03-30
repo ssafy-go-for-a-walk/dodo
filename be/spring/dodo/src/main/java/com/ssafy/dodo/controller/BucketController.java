@@ -106,13 +106,23 @@ public class BucketController {
 
     @PostMapping("/{bucket-seq}/diaries")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommonResponse writeExpDiary(
+    public DataResponse<Page<ExpDiaryInfoDto>> writeExpDiary(
             @PathVariable("bucket-seq") Long bucketSeq,
             @RequestPart("data") WriteExpDiaryDto dto,
             @RequestPart(value = "files", required = false) MultipartFile[] files,
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @AuthenticationPrincipal UserDetails userDetails,
+            Pageable pageable) {
         Long userSeq = Long.parseLong(userDetails.getUsername());
         expDiaryService.write(userSeq, bucketSeq, dto, files);
-        return new CommonResponse(true);
+
+        // 생성된 경험일기를 포함한 해당 버킷에 대한 경험일기 응답(요청사항)
+        List<ExpDiary> expDiaries = expDiaryService.getExpDiaryByAddedBucket(userSeq, bucketSeq, pageable);
+
+        List<ExpDiaryInfoDto> content = expDiaries.stream()
+                .map(ExpDiaryInfoDto::of)
+                .collect(Collectors.toList());
+
+        Page<ExpDiaryInfoDto> data = new PageImpl<>(content, pageable, content.size());
+        return new DataResponse<>(data);
     }
 }
