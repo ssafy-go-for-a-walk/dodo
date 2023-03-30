@@ -53,13 +53,12 @@ public class BucketListController {
 
     @PostMapping("/{bucketlist-seq}/buckets")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addCustomBucket(
+    public DataResponse<?> addCustomBucket(
             @PathVariable("bucketlist-seq") Long bucketListSeq,
             @RequestBody CustomBucketDto customBucketDto,
             @AuthenticationPrincipal UserDetails userDetails
     ){
-
-        publicBucketService.addCustomBucket(bucketListSeq, customBucketDto, userDetails);
+        return new DataResponse<>(publicBucketService.addCustomBucket(bucketListSeq, customBucketDto, userDetails));
     }
 
     @PostMapping("/{bucketlist-seq}/buckets/{public-bucket-seq}")
