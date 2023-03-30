@@ -26,6 +26,8 @@ export const userSlice = createSlice({
     },
     logout: state => {
       state.value = initialStateValue;
+      state.appState = "";
+      state.survey = [];
     },
 		change: (state, action) => {
       state.value.selectedBucketlist = action.payload;
@@ -38,7 +40,7 @@ export const userSlice = createSlice({
       state.appState = action.payload;
     },
     setSurvey: (state, action) => {
-      state.survey =action.payload
+      state.survey = action.payload
     }
   },
 });

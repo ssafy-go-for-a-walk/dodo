@@ -46,6 +46,7 @@ const UserImg = styled.img`
 
 const UserNickNAME = styled.p`
 	margin: 0px;
+	margin-left: 8px;
 `
 
 export default function SocialItem(props) {
@@ -79,7 +80,7 @@ export default function SocialItem(props) {
 			{datas.map((bucket, index) => (
 				<SocialItemContent data={bucket} key={index}/>
 			))}
-			{buttonStatus ? <ButtonArrow clickEvent={clickEvent}/> : null}
+			{resDatas.length !== 0 && buttonStatus ? <ButtonArrow clickEvent={clickEvent}/> : null}
 		</TopDiv>
 	)
 }
