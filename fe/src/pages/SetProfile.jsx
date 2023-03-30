@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -95,6 +95,17 @@ export default function SetProfile() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const photoInput = useRef();
+	const sendSurvey = useCallback(async () => {
+    await axios
+      .post("https://j8b104.p.ssafy.io/api/survey", {"preferences": user.survey}, {
+				headers: {
+					Authorization: `Bearer ${user.value.token}`,
+				},
+			})
+	}, [user])
+	useEffect(() => {
+		sendSurvey();
+	}, [sendSurvey])
 	const completeSignUp = () => {
 		if (form.nickname.length === 0) {
 			alert("닉네임을 입력하세요")
@@ -104,7 +115,6 @@ export default function SetProfile() {
 			const formData = new FormData();
 			const data = JSON.stringify({
 				"nickname": form.nickname,
-				"preferenceBuckets": user.survey,
 			})
 			if (form.imageConfirm !== null) {
 				formData.append("profileImage", form.imageConfirm)
