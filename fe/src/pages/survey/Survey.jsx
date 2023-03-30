@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const Button = styled.button`
+  display: flex;
   background: ${props => props.background && "rgba(28, 155, 255, 0.2)"};
   box-shadow: 0px 4px 4px rgba(182, 86, 86, 0.25);
   border-radius: 16px;
@@ -21,7 +22,12 @@ const Div = styled.div`
   margin-top: 20px;
 `;
 
+const Emoji = styled.div`
+  margin-right: 8px;
+`
+
 export default function Survey(props) {
+  const emoji = props.emoji
   const content = props.content;
   const id = props.id;
   const background = props.select;
@@ -32,6 +38,9 @@ export default function Survey(props) {
   return (
     <Div>
       <Button background={background} onClick={clickItem}>
+        <Emoji role="img" aria-label="writing hand">
+          {emoji}
+        </Emoji>
         {content}
       </Button>
     </Div>

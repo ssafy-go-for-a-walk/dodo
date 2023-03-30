@@ -17,14 +17,19 @@ const PTag = styled.p`
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	margin-left: 8px;
 `
 
 export default function SocialItemContent(props) {
 	const category = props.data.category
 	const content = props.data.content
+	const emoji = props.data.emoji
 	return (
 		<Div>
 			<Category category={category}/>
+			<div role="img" aria-label="writing hand">
+				{emoji}
+			</div>
 			<PTag>
 				{content}
 			</PTag>

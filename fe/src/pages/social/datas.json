@@ -8,39 +8,13 @@
       "bucketlist": [
         {
           "category": "여행",
+          "emoji": "🎁",
           "content": "지금 당장 여행 떠나기긱ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ"
         },
         {
           "category": "대자연",
+          "emoji": "🎁",
           "content": "염유리 바보"
-        },
-        {
-          "category": "일상",
-          "content": "자유시간 먹기"
-        },
-        {
-          "category": "쇼핑",
-          "content": "고등어 먹기"
-        },
-        {
-          "category": "문화예술",
-          "content": "집에 가서 놀기"
-        },
-        {
-          "category": "자기계발",
-          "content": "집에 가서 놀기"
-        },
-        {
-          "category": "푸드",
-          "content": "집에 가서 놀기"
-        },
-        {
-          "category": "아웃도어",
-          "content": "집에 가서 놀기"
-        },
-        {
-          "category": "스포츠",
-          "content": "집에 가서 놀기"
         }
       ]
     },
@@ -52,39 +26,8 @@
       "bucketlist": [
         {
           "category": "여행",
+          "emoji": "🎁",
           "content": "지금 당장 여행 떠나기긱ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ"
-        },
-        {
-          "category": "대자연",
-          "content": "염유리 바보"
-        },
-        {
-          "category": "일상",
-          "content": "자유시간 먹기"
-        },
-        {
-          "category": "쇼핑",
-          "content": "고등어 먹기"
-        },
-        {
-          "category": "문화예술",
-          "content": "집에 가서 놀기"
-        },
-        {
-          "category": "자기계발",
-          "content": "집에 가서 놀기"
-        },
-        {
-          "category": "푸드",
-          "content": "집에 가서 놀기"
-        },
-        {
-          "category": "아웃도어",
-          "content": "집에 가서 놀기"
-        },
-        {
-          "category": "스포츠",
-          "content": "집에 가서 놀기"
         }
       ]
     },
@@ -96,38 +39,47 @@
       "bucketlist": [
         {
           "category": "여행",
+          "emoji": "🎁",
           "content": "지금 당장 여행 떠나기긱ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ"
         },
         {
           "category": "대자연",
+          "emoji": "🎁",
           "content": "염유리 바보"
         },
         {
           "category": "일상",
+          "emoji": "🎁",
           "content": "자유시간 먹기"
         },
         {
           "category": "쇼핑",
+          "emoji": "🎁",
           "content": "고등어 먹기"
         },
         {
           "category": "문화예술",
+          "emoji": "🎁",
           "content": "집에 가서 놀기"
         },
         {
           "category": "자기계발",
+          "emoji": "🎁",
           "content": "집에 가서 놀기"
         },
         {
           "category": "푸드",
+          "emoji": "🎁",
           "content": "집에 가서 놀기"
         },
         {
           "category": "아웃도어",
+          "emoji": "🎁",
           "content": "집에 가서 놀기"
         },
         {
           "category": "스포츠",
+          "emoji": "🎁",
           "content": "집에 가서 놀기"
         }
       ]
