@@ -29,4 +29,5 @@ public interface BucketListService {
     BucketList createBucketList(User user, String title, BucketListType type, MultipartFile image);
     Double getBucketListCompleteRate(Long bucketListSeq);
     String createInviteToken(Long bucketListSeq, Long inviterSeq);
+    void joinBucketList(Long participantSeq, String inviteToken);
 }
