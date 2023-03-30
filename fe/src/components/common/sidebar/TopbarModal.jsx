@@ -49,7 +49,7 @@ export default function TopbarModal(props) {
 	const { user } = useSelector((state) => state)
 	const userImg = user.value.loginUserImg
 	const userNickname = user.value.loginUserNickname
-	const userEmail = user.value.loginUserNickname
+	const userEmail = user.value.loginUserEmail
 	return (
 		<TopDiv>
 			<Div>

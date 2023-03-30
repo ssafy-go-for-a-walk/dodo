@@ -69,6 +69,7 @@ export default function SurveyPage() {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
   const [selected, setSelected] = useState([])
+  const [pages, setPages] = useState(1)
   const [ref, inView] = useInView();
   const navigate = useNavigate();
   const list = DATA.list
@@ -82,6 +83,7 @@ export default function SurveyPage() {
 
   const getItems = useCallback(async () => {
     setLoading(true)
+    setPages(pre => pre + 1)
 		setItems(pre => [...pre, ...list])
     setLoading(false)
   }, [list])
@@ -105,6 +107,7 @@ export default function SurveyPage() {
   }
     return (
         <DivTop>
+          {console.log(pages)}
             <LogIn/>
             {brTag}
             <Title>
@@ -118,6 +121,7 @@ export default function SurveyPage() {
                 <Survey
                 select={selected.includes(data.id)}
                 content={data.content}
+                emoji={data.emoji}
                 id={data.id}
                 key={data.id}
                 propFunction={changeData}
