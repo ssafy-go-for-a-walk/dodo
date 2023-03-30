@@ -2,13 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
-const Div = styled.div`
-  width: 80%;
-  max-width: 800px;
-  margin-bottom: 24px;
-  z-index: 2;
-`;
-
 const Selectbox = styled.div`
   width: 100px;
   height: 25px;
@@ -67,28 +60,26 @@ export default function Filter(props) {
   };
 
   return (
-    <Div>
-      <Selectbox>
-        <SelectedLabel value={bucketFilter} onClick={() => setActive(!active)}>
-          {bucketFilter}
-          {active ? <IoIosArrowUp className="icon" /> : <IoIosArrowDown className="icon" />}
-        </SelectedLabel>
-        {active && (
-          <OptionList>
-            {list.map(element => (
-              <OptionItem
-                key={element}
-                onClick={() => {
-                  setActive(false);
-                  changeBucketFilter(element);
-                }}
-              >
-                {element}
-              </OptionItem>
-            ))}
-          </OptionList>
-        )}
-      </Selectbox>
-    </Div>
+    <Selectbox>
+      <SelectedLabel value={bucketFilter} onClick={() => setActive(!active)}>
+        {bucketFilter}
+        {active ? <IoIosArrowUp className="icon" /> : <IoIosArrowDown className="icon" />}
+      </SelectedLabel>
+      {active && (
+        <OptionList>
+          {list.map(element => (
+            <OptionItem
+              key={element}
+              onClick={() => {
+                setActive(false);
+                changeBucketFilter(element);
+              }}
+            >
+              {element}
+            </OptionItem>
+          ))}
+        </OptionList>
+      )}
+    </Selectbox>
   );
 }

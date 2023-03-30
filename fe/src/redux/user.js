@@ -1,12 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialStateValue = {
   token: "",
   loginUserPk: "",
-	loginUserEmail: "",
-	loginUserImg: "",
+  loginUserEmail: "",
+  loginUserImg: "",
   loginUserNickname: "",
-	selectedBucketlist: {
+  selectedBucketlist: {
     pk: "",
     title: "",
     completeRate: "",
@@ -14,11 +14,12 @@ const initialStateValue = {
 };
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: {
     value: initialStateValue,
-    appState : "",
+    appState: "",
     survey: [],
+    bucketList: { info: {}, buckets: [] },
   },
   reducers: {
     login: (state, action) => {
@@ -28,22 +29,29 @@ export const userSlice = createSlice({
       state.value = initialStateValue;
       state.appState = "";
       state.survey = [];
+      state.bucketList = { info: {}, buckets: [] };
     },
-		change: (state, action) => {
+    change: (state, action) => {
       state.value.selectedBucketlist = action.payload;
     },
     profile: (state, action) => {
-      state.value.loginUserNickname = action.payload.loginUserNickname
-      state.value.loginUserImg = action.payload.loginUserImg
+      state.value.loginUserNickname = action.payload.loginUserNickname;
+      state.value.loginUserImg = action.payload.loginUserImg;
     },
     setAppState: (state, action) => {
       state.appState = action.payload;
     },
     setSurvey: (state, action) => {
-      state.survey = action.payload
-    }
+      state.survey = action.payload;
+    },
+    setBucketList: (state, action) => {
+      state.bucketList = action.payload;
+    },
+    reBucketList: (state, action) => {
+      state.bucketList.buckets = action.payload;
+    },
   },
 });
 
-export const { setSurvey, profile, login, logout, change, setAppState } = userSlice.actions;
+export const { setSurvey, profile, login, logout, change, setAppState, setBucketList, reBucketList } = userSlice.actions;
 export default userSlice.reducer;

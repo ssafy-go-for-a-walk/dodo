@@ -20,7 +20,7 @@ const BucketInfo = styled.div`
   width: ${props => (props.activate ? "89%" : "98%")};
   height: 100%;
   border-radius: 8px;
-  background: ${props => (props.isComplete ? "#E9F5FF" : "#ffffff")};
+  background: ${props => (props.complete ? "#E9F5FF" : "#ffffff")};
   position: absolute;
   display: flex;
   justify-content: space-between;
@@ -103,13 +103,13 @@ export default function Bucket(props) {
 
   return (
     <BucketBox>
-      <BucketInfo activate={activateDelete} isComplete={bucket.isComplete} onClick={openDetailModal}>
+      <BucketInfo activate={activateDelete} complete={bucket.complete} onClick={openDetailModal}>
         <BucketHeader>
-          <Tag category={bucket.category} />
+          <Tag category={bucket.category !== null ? bucket.category.item : null} />
           <BucketEmoji role="img">{bucket.emoji}</BucketEmoji>
           <BucketTitle activate={activateDelete}>{bucket.title}</BucketTitle>
         </BucketHeader>
-        <CompleteButton isComplete={bucket.isComplete} bucketId={bucket.id} />
+        <CompleteButton complete={bucket.complete} bucketId={bucket.seq} />
       </BucketInfo>
       <DeleteBox onClick={deleteBucket}>
         <DeleteBtn>삭제</DeleteBtn>

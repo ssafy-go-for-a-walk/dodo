@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Tag from "../../components/common/bucket/Tag";
+import SearchAddButton from "../../components/common/button/SearchAddButton";
 
 const BucketBox = styled.div`
   width: 100%;
@@ -8,12 +9,23 @@ const BucketBox = styled.div`
   border-radius: 8px;
   border-bottom: 1px solid #bcbcbc;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 0 16px;
 `;
 
+const BucketInfo = styled.div`
+  width: 85%;
+  display: flex;
+  align-items: center;
+
+  @media screen and (max-width: 856px) {
+    width: 85%;
+  }
+`;
+
 const BucketEmoji = styled.div`
-  font-size: 24px;
+  font-size: 20px;
   margin: 0 8px;
 `;
 
@@ -31,9 +43,12 @@ export default function SearchBucket(props) {
 
   return (
     <BucketBox>
-      <Tag category={bucket.category.item} />
-      <BucketEmoji role="img">{bucket.emoji}</BucketEmoji>
-      <BucketTitle>{bucket.title}</BucketTitle>
+      <BucketInfo>
+        <Tag category={bucket.category.item} />
+        <BucketEmoji role="img">{bucket.emoji}</BucketEmoji>
+        <BucketTitle>{bucket.title}</BucketTitle>
+      </BucketInfo>
+      <SearchAddButton bucket={bucket} />
     </BucketBox>
   );
 }

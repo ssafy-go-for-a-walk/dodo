@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { MdSearch } from "react-icons/md";
-import SearchBucket from "./SearchBucket";
+import ManageSearchBucket from "./ManageSearchBucket";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { reBucketList } from "../../redux/user";
 
 const SearchBox = styled.div`
   width: 80%;
@@ -11,7 +12,6 @@ const SearchBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 40px;
   position: relative;
 `;
 
@@ -66,6 +66,8 @@ export default function SearchBar(props) {
   const [value, setValue] = useState("");
   const { user } = useSelector(state => state);
   const bucketListId = user.value.selectedBucketlist.pk;
+  const userToken = user.value.token;
+  const dispatch = useDispatch();
 
   const searchBucket = event => {
     setValue(event.target.value);
@@ -75,7 +77,7 @@ export default function SearchBar(props) {
         .get("https://j8b104.p.ssafy.io/api/buckets/search", {
           params: params,
           headers: {
-            Authorization: `Bearer ${user.value.token}`,
+            Authorization: `Bearer ${userToken}`,
           },
           params: params,
         })
@@ -86,16 +88,28 @@ export default function SearchBar(props) {
 
   const onKeyPress = event => {
     if (event.key === "Enter") {
-      search();
+      addBucket();
     }
   };
 
-  const search = () => {
-    props.search(buckets);
-    resetValue();
+  const resetValue = () => {
+    setValue("");
+    setBuckets([]);
   };
 
-  const resetValue = () => {
+  const addBucket = () => {
+    axios
+      .post(
+        `https://j8b104.p.ssafy.io/api/bucketlists/${bucketListId}/buckets`,
+        { title: value },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        },
+      )
+      .then(res => dispatch(reBucketList(res.data.data)))
+      .catch(err => console.log(err));
     setValue("");
     setBuckets([]);
   };
@@ -104,11 +118,11 @@ export default function SearchBar(props) {
     <SearchBox>
       <InputBox>
         <SearchInput onChange={searchBucket} value={value} onKeyPress={onKeyPress} onBlur={resetValue} />
-        <SearchIcon onClick={search}>
+        <SearchIcon onClick={addBucket}>
           <MdSearch className="searchIcon" />
         </SearchIcon>
       </InputBox>
-      <SearchResult>{buckets.legnth !== 0 && buckets.map(bucket => <SearchBucket bucket={bucket} key={bucket.publicBucketSeq} />)}</SearchResult>
+      <SearchResult>{buckets.legnth !== 0 && buckets.map(bucket => <ManageSearchBucket bucket={bucket} key={bucket.publicBucketSeq} />)}</SearchResult>
     </SearchBox>
   );
 }
