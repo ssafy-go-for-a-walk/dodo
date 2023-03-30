@@ -4,7 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { IconButton } from "@mui/material";
 import Tag from "../../bucket/Tag";
 import { FcCalendar } from "react-icons/fc";
-import { FaMapPin } from "react-icons/fa";
+import { BsFlag } from "react-icons/bs";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/esm/locale";
@@ -12,6 +12,8 @@ import CategorySelect from "./CategorySelect";
 import Diary from "./Diary";
 import DiaryForm from "./DiaryForm";
 import Picker from "emoji-picker-react";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Modal = styled.div`
   display: flex;
@@ -74,6 +76,7 @@ const Title = styled.div`
 const Detail = styled.div`
   display: flex;
   height: 32px;
+  width: 100%;
 `;
 
 const Calendar = styled.div`
@@ -82,7 +85,6 @@ const Calendar = styled.div`
 `;
 
 const SDatePicker = styled(DatePicker)`
-  width: 100px;
   height: 32px;
   font-size: 16px;
   padding-top: 8px;
@@ -91,15 +93,23 @@ const SDatePicker = styled(DatePicker)`
 `;
 
 const Map = styled.div`
-  font-size: 32px;
+  font-size: 24px;
   margin-right: 8px;
   color: #1c9bff;
+  display: flex;
+  align-items: center;
 `;
 
 const Place = styled.input`
   height: 32px;
-  width: 300px;
+  min-width: 300px;
+  font-size: 16px;
   border: none;
+
+  &:focus {
+    outline: none;
+    border-bottom: 1px solid #acabab;
+  }
 `;
 
 const Content = styled.textarea`
@@ -121,30 +131,36 @@ const Diaries = styled.div`
 
 export default function GroupModal(props) {
   const bucket = props.bucket;
-  const [endDate, setEndDate] = useState(new Date());
-  const [location, setLocation] = useState(bucket.location);
-  const [content, setContent] = useState(bucket.desc);
+  const [endDate, setEndDate] = useState(bucket.dday !== null ? bucket.dday : new Date());
+  const [location, setLocation] = useState(bucket.location !== null ? bucket.location : "");
+  const [content, setContent] = useState(bucket.desc !== null ? bucket.desc : "");
   const [emoji, setEmoji] = useState(bucket.emoji);
   const [showPicker, setShowPicker] = useState(false);
-  const [category, setCate] = useState(bucket.category);
+  const [category, setCate] = useState(bucket.category !== null ? bucket.category.item : null);
+  const { user } = useSelector(state => state);
 
   const onEmojiClick = emojiObject => {
     setEmoji(emojiObject.emoji);
     setShowPicker(false);
   };
+
   const categoryChange = cate => {
     setCate(cate);
     return;
   };
+
   const locationChange = event => {
     setLocation(event.target.value);
   };
+
   const contentChange = event => {
     setContent(event.target.value);
   };
+
   const closeDetailModal = () => {
     props.closeModal();
   };
+
   return (
     <Modal>
       <div style={{ display: "flex", justifyContent: "end" }}>
@@ -155,7 +171,7 @@ export default function GroupModal(props) {
       <Div>
         <Header>
           <Head>
-            {emoji === "" ? (
+            {emoji === null ? (
               <EmojiBtn src="https://icons.getbootstrap.com/assets/icons/emoji-smile.svg" onClick={() => setShowPicker(val => !val)} />
             ) : (
               <Emoji role="img" onClick={() => setShowPicker(val => !val)}>
@@ -184,7 +200,7 @@ export default function GroupModal(props) {
               minDate={new Date()}
             />
             <Map>
-              <FaMapPin />
+              <BsFlag />
             </Map>
             <Place value={location} onChange={locationChange} />
           </Detail>

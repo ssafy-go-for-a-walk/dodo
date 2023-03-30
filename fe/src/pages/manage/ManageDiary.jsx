@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import DiaryCard from "./DiaryCard";
 import Masonry from "@mui/lab/Masonry";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { useInView } from "react-intersection-observer";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 const Div = styled.div`
   display: flex;
@@ -9,133 +13,65 @@ const Div = styled.div`
   padding: 0 16px;
 `;
 
-const diaries = [
-  {
-    id: 1,
-    imoge: "",
-    title: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    category: "여행",
-    created: "2023.03.28",
-    image: "https://cc-prod.scene7.com/is/image/CCProdAuthor/smartphone-photography_P1_900x420?$pjpeg$&jpegSize=200&wid=900",
-    content:
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  },
-  {
-    id: 2,
-    imoge: "",
-    title: "aaa",
-    category: "여행",
-    created: "2023.03.28",
-    image: "",
-    content: "aaa",
-  },
-  {
-    id: 3,
-    imoge: "",
-    title: "aaa",
-    category: "여행",
-    created: "2023.03.28",
-    image: "https://cc-prod.scene7.com/is/image/CCProdAuthor/smartphone-photography_P1_900x420?$pjpeg$&jpegSize=200&wid=900",
-    content:
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  },
-  {
-    id: 4,
-    imoge: "",
-    title: "aaa",
-    category: "여행",
-    created: "2023.03.28",
-    image: "",
-    content: "asfafa",
-  },
-  {
-    id: 5,
-    imoge: "",
-    title: "aaa",
-    category: "여행",
-    created: "2023.03.28",
-    image: "https://cc-prod.scene7.com/is/image/CCProdAuthor/smartphone-photography_P1_900x420?$pjpeg$&jpegSize=200&wid=900",
-    content:
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafsfdsfdafsfafaadvavfdfdasfffffffffffdddddddfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-  },
-  {
-    id: 6,
-    imoge: "",
-    title: "aaa",
-    category: "여행",
-    created: "2023.03.28",
-    image: "https://cc-prod.scene7.com/is/image/CCProdAuthor/smartphone-photography_P1_900x420?$pjpeg$&jpegSize=200&wid=900",
-    content: "faafafa",
-  },
-  {
-    id: 7,
-    imoge: "",
-    title: "aaa",
-    category: "여행",
-    created: "2023.03.28",
-    image: "",
-    content:
-      "aaaaaaaasdaddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  },
-  {
-    id: 8,
-    imoge: "",
-    title: "aaa",
-    category: "여행",
-    created: "2023.03.28",
-    image: "https://cc-prod.scene7.com/is/image/CCProdAuthor/smartphone-photography_P1_900x420?$pjpeg$&jpegSize=200&wid=900",
-    content: "asdadffavavasvaavav",
-  },
-  {
-    id: 9,
-    imoge: "",
-    title: "aaa",
-    category: "여행",
-    created: "2023.03.28",
-    image: "",
-    content:
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  },
-  {
-    id: 10,
-    imoge: "",
-    title: "aaa",
-    category: "여행",
-    created: "2023.03.28",
-    image: "https://cc-prod.scene7.com/is/image/CCProdAuthor/smartphone-photography_P1_900x420?$pjpeg$&jpegSize=200&wid=900",
-    content:
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  },
-  {
-    id: 11,
-    imoge: "",
-    title: "aaa",
-    category: "여행",
-    created: "2023.03.28",
-    image: "",
-    content:
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  },
-  {
-    id: 12,
-    imoge: "",
-    title: "aaa",
-    category: "여행",
-    created: "2023.03.28",
-    image: "https://cc-prod.scene7.com/is/image/CCProdAuthor/smartphone-photography_P1_900x420?$pjpeg$&jpegSize=200&wid=900",
-    content:
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  },
-];
-
 export default function ManageDiary() {
+  const [diaries, setDiaries] = useState([]);
+  const [paging, setPaging] = useState({ page: 0, last: false });
+  const [loading, setLoading] = useState(false);
+  const [ref, inView] = useInView();
+  const { user } = useSelector(state => state);
+  const listId = user.value.selectedBucketlist.pk;
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`https://j8b104.p.ssafy.io/api/bucketlists/${listId}/diaries`, {
+  //       headers: {
+  //         Authorization: `Bearer ${user.value.token}`,
+  //       },
+  //     })
+  //     .then(res => {
+  //       const resData = res.data.data;
+  //       setDiaries(resData.content);
+  //       setLast(resData.last);
+  //     })
+  //     .catch(err => console.log(err));
+  // }, []);
+
+  const getDiaries = useCallback(async () => {
+    const params = { params: paging.page };
+    setLoading(true);
+    axios
+      .get(`https://j8b104.p.ssafy.io/api/bucketlists/${listId}/diaries`, {
+        params: params,
+        headers: {
+          Authorization: `Bearer ${user.value.token}`,
+        },
+      })
+      .then(res => {
+        console.log("ok");
+        const resData = res.data.data;
+        setDiaries(pre => [...pre, ...resData.content]);
+        setPaging({ page: resData.number, last: resData.last });
+      })
+      .catch(err => console.log(err));
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    if (inView && !paging.last) {
+      getDiaries();
+    }
+  }, [inView, paging, getDiaries]);
+
   return (
-    <Div>
-      <Masonry columns={{ xs: 1, md: 2, lg: 3, xl: 4 }} spacing={2}>
-        {diaries.map(item => (
-          <DiaryCard diary={item} key={item.id} loading="lazy" />
-        ))}
-      </Masonry>
-    </Div>
+    diaries.length !== 0 && (
+      <Div>
+        <Masonry columns={{ xs: 1, md: 2, lg: 3, xl: 4 }} spacing={2}>
+          {diaries.map(diary => (
+            <DiaryCard diary={diary} key={diary.createdAt} loading="lazy" />
+          ))}
+        </Masonry>
+        <RefreshIcon sx={{ marginTop: "8px" }} ref={ref} />
+      </Div>
+    )
   );
 }

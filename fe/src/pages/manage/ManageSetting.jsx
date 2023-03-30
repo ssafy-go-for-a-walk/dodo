@@ -41,6 +41,9 @@ const TitleInput = styled.input`
   border: none;
   border-bottom: 1px solid #ced4da;
   text-align: center;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const HalfButtons = styled.div`
@@ -51,10 +54,11 @@ const HalfButtons = styled.div`
 `;
 
 export default function ManageSetting(props) {
-  const { bucketListTitle, isPublic, bucketListImg } = props;
-  const [value, setValue] = useState("죽기전에 해야 할 100가지 버킷리스트");
+  const { info } = props;
+  const [bucketListTitle, setBucketListTitle] = useState(info.title);
+  const [bucketListImage, setBucketListImage] = useState(info.image);
   const handleInputChange = event => {
-    setValue(event.target.value);
+    setBucketListTitle(event.target.value);
   };
   const saveSetting = () => {
     return;
@@ -67,14 +71,13 @@ export default function ManageSetting(props) {
   };
   return (
     <Settings>
-      <BucketImg src="https://images.pexels.com/photos/177809/pexels-photo-177809.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" />
-      {/* <BucketImg src={bucketListImg} /> */}
+      <BucketImg src={bucketListImage} />
       <BucketTitle>
         <TitleLadel>제목</TitleLadel>
-        <TitleInput value={value} onChange={handleInputChange} />
+        <TitleInput value={bucketListTitle} onChange={handleInputChange} />
       </BucketTitle>
       <FullButton propFunction={saveSetting}>저장하기</FullButton>
-      <FullButton public={isPublic} propFunction={changePublic}>
+      <FullButton public={info.isPublic} propFunction={changePublic}>
         Private / Public
       </FullButton>
       <FullButton propFunction={createCode}>참여코드 생성하기</FullButton>

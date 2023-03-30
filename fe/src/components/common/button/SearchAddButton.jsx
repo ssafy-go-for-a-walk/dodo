@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { MdCheck } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { reBucketList } from "../../../redux/user";
 
 const ButtonBox = styled.button`
   min-width: 64px;
@@ -22,24 +23,29 @@ const ButtonBox = styled.button`
   }
 `;
 
-export default function AddButton(props) {
+export default function SearchAddButton(props) {
   const { bucket } = props;
   const [selected, setSelected] = useState(bucket.isAdded);
   const { user } = useSelector(state => state);
   const bucketListId = user.value.selectedBucketlist.pk;
+  const userToken = user.value.token;
+  const dispatch = useDispatch();
   const addBucket = event => {
     event.preventDefault();
     axios
       .post(
-        `https://j8b104.p.ssafy.io/api/bucketlists/${bucketListId}/buckets/${bucket.publicBucketSeq}`,
+        `https://j8b104.p.ssafy.io/api/bucketlists/${bucketListId}/buckets/${bucket.publicBucketSeq}/search`,
         {},
         {
           headers: {
-            Authorization: `Bearer ${user.value.token}`,
+            Authorization: `Bearer ${userToken}`,
           },
         },
       )
-      .then(() => setSelected(true))
+      .then(res => {
+        dispatch(reBucketList(res.data.data));
+        setSelected(true);
+      })
       .catch(err => console.log(err));
   };
 
