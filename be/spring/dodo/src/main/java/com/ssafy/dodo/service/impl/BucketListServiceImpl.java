@@ -292,4 +292,28 @@ public class BucketListServiceImpl implements BucketListService {
 
         return generatedString;
     }
+
+    @Override
+    public void joinBucketList(Long participantSeq, String inviteToken) {
+        // 참여하려는 유저 조회
+        User participant = userRepository.findById(participantSeq)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 초대 토큰 조회
+        InviteToken token = inviteTokenRepository.findById(inviteToken)
+                .orElseThrow(() -> new CustomException(ErrorCode.EXPIRE_OR_NOT_EXIST_TOKEN));
+
+        // 참여하려는 버킷리스트 조회
+        BucketList bucketList = bucketListRepository.findById(token.getBucketListSeq())
+                .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
+
+        // 해당 버킷리스트에 새로운 멤버 생성
+        BucketListMember newMember = BucketListMember.builder()
+                .user(participant)
+                .bucketList(bucketList)
+                .build();
+
+        // 새로운 멤버 추가
+        bucketListMemberRepository.save(newMember);
+    }
 }

@@ -38,7 +38,10 @@ public enum ErrorCode {
     ADDED_BUCKET_NOT_FOUND(HttpStatus.NOT_FOUND, "담은 버킷을 찾을 수 없습니다."),
 
 
-    // ExpDiary
+    // BucketList 참여
+    EXPIRE_OR_NOT_EXIST_TOKEN(HttpStatus.BAD_REQUEST, "만료되거나 존재하지 않는 토큰입니다."),
+
+
     ;
 
 

@@ -1,9 +1,6 @@
 package com.ssafy.dodo.controller;
 
-import com.ssafy.dodo.dto.BucketListInfoDto;
-import com.ssafy.dodo.dto.CustomBucketDto;
-import com.ssafy.dodo.dto.DataResponse;
-import com.ssafy.dodo.dto.ExpDiaryInfoDto;
+import com.ssafy.dodo.dto.*;
 import com.ssafy.dodo.entity.ExpDiary;
 import com.ssafy.dodo.service.BucketListService;
 import com.ssafy.dodo.service.ExpDiaryService;
@@ -127,5 +124,14 @@ public class BucketListController {
         data.put("inviteToken", inviteToken);
 
         return new DataResponse<>(data);
+    }
+
+    @PostMapping("/join/{invite-token}")
+    public CommonResponse joinBucketList(
+            @PathVariable("invite-token") String inviteToken,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        Long participantSeq = Long.parseLong(userDetails.getUsername());
+        bucketListService.joinBucketList(participantSeq, inviteToken);
+        return new CommonResponse(true);
     }
 }
