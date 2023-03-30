@@ -49,7 +49,7 @@ public class SocialServiceImpl implements SocialService {
                 .title(bucketList.getTitle())
                 .bucketListImage(bucketList.getImage())
                 .buckets(
-                        addedBucketRepository.findAllByBucketList(bucketList,null).stream()
+                        addedBucketRepository.findAllByBucketList(bucketList).stream()
                                 .map(addedBucket -> SocialBucketDto.builder()
                                         .title(addedBucket.getPublicBucket().getTitle())
                                         .emoji(addedBucket.getEmoji())
