@@ -67,7 +67,7 @@ export default function SearchBar(props) {
   const { user } = useSelector(state => state);
   const bucketListId = user.value.selectedBucketlist.pk;
 
-  const searchBucket = event => {
+  const bucketSearch = event => {
     setValue(event.target.value);
     if (event.target.value.length > 0) {
       const params = { q: event.target.value, bucketlist: bucketListId };
@@ -77,7 +77,6 @@ export default function SearchBar(props) {
           headers: {
             Authorization: `Bearer ${user.value.token}`,
           },
-          params: params,
         })
         .then(res => setBuckets(res.data.data.content))
         .catch(err => console.log(err));
@@ -103,7 +102,7 @@ export default function SearchBar(props) {
   return (
     <SearchBox>
       <InputBox>
-        <SearchInput onChange={searchBucket} value={value} onKeyPress={onKeyPress} onBlur={resetValue} />
+        <SearchInput onChange={bucketSearch} value={value} onKeyPress={onKeyPress} onBlur={resetValue} />
         <SearchIcon onClick={search}>
           <MdSearch className="searchIcon" />
         </SearchIcon>

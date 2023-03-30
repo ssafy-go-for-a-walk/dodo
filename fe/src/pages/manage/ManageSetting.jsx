@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import FullButton from "../../components/common/button/FullButton";
 import HalfButton from "../../components/common/button/HalfButton";
 import DeleteButton from "../../components/common/button/DeleteButton";
+import { useSelector } from "react-redux";
+import BrightnessHighIcon from "@mui/icons-material/BrightnessHigh";
 
 const Settings = styled.div`
   display: flex;
@@ -53,12 +55,29 @@ const HalfButtons = styled.div`
   max-width: 528px;
 `;
 
-export default function ManageSetting(props) {
-  const { info } = props;
-  const [bucketListTitle, setBucketListTitle] = useState(info.title);
-  const [bucketListImage, setBucketListImage] = useState(info.image);
-  const handleInputChange = event => {
-    setBucketListTitle(event.target.value);
+const addStyle = {
+  fontSize: "32px",
+  color: "#9A9A9A",
+  "&:hover": {
+    cursor: "pointer",
+  },
+};
+
+export default function ManageSetting() {
+  const { user } = useSelector(state => state);
+  const info = user.bucketList.info;
+  const [bucketListInfo, setBucketListInfo] = useState({
+    title: info.title,
+    image: info.image,
+    imageConfirm: null,
+    isPublic: false,
+  });
+  const photoInput = useRef();
+  const changeImage = event => {
+    setBucketListInfo({ ...bucketListInfo, image: URL.createObjectURL(event.target.files[0]), imageConfirm: event.target.files[0] });
+  };
+  const changeTitle = event => {
+    setBucketListInfo({ ...bucketListInfo, title: event.target.value });
   };
   const saveSetting = () => {
     return;
@@ -71,10 +90,19 @@ export default function ManageSetting(props) {
   };
   return (
     <Settings>
-      <BucketImg src={bucketListImage} />
+      <div>
+        <BucketImg src={bucketListInfo.image} />
+        <input type="file" accept="image/jpg, image/jpeg, image/png" multiple ref={photoInput} style={{ display: "none" }} onChange={changeImage} />
+        <BrightnessHighIcon
+          sx={addStyle}
+          onClick={() => {
+            photoInput.current.click();
+          }}
+        />
+      </div>
       <BucketTitle>
         <TitleLadel>제목</TitleLadel>
-        <TitleInput value={bucketListTitle} onChange={handleInputChange} />
+        <TitleInput value={bucketListInfo.title} onChange={changeTitle} />
       </BucketTitle>
       <FullButton propFunction={saveSetting}>저장하기</FullButton>
       <FullButton public={info.isPublic} propFunction={changePublic}>

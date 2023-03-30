@@ -61,7 +61,7 @@ const SearchResult = styled.div`
   background: #ffffff;
 `;
 
-export default function SearchBar(props) {
+export default function ManageSearchBar() {
   const [buckets, setBuckets] = useState([]);
   const [value, setValue] = useState("");
   const { user } = useSelector(state => state);
@@ -79,7 +79,6 @@ export default function SearchBar(props) {
           headers: {
             Authorization: `Bearer ${userToken}`,
           },
-          params: params,
         })
         .then(res => setBuckets(res.data.data.content))
         .catch(err => console.log(err));

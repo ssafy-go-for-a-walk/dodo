@@ -12,8 +12,8 @@ import CategorySelect from "./CategorySelect";
 import Diary from "./Diary";
 import DiaryForm from "./DiaryForm";
 import Picker from "emoji-picker-react";
-import axios from "axios";
-import { useSelector } from "react-redux";
+// import axios from "axios";
+// import { useSelector } from "react-redux";
 
 const Modal = styled.div`
   display: flex;
@@ -137,7 +137,8 @@ export default function GroupModal(props) {
   const [emoji, setEmoji] = useState(bucket.emoji);
   const [showPicker, setShowPicker] = useState(false);
   const [category, setCate] = useState(bucket.category !== null ? bucket.category.item : null);
-  const { user } = useSelector(state => state);
+  // const { user } = useSelector(state => state);
+  // const userToken = user.value.token
 
   const onEmojiClick = emojiObject => {
     setEmoji(emojiObject.emoji);
