@@ -7,7 +7,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from config import conn
-from database.models import Category, Preference, PublicBucket, User, BucketListMember, BucketList
+from database.models import Category, Preference, PublicBucket, User, BucketListMember, BucketList, AddedBucket
 from auth.auth_handler import decodeJWT
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -146,7 +146,7 @@ def bucket_recommand_cbf(category: str, page: int = 0, size: int = 100,
 
 		# temp = result.drop_duplicates(subset=['등산하고 경치 구경하기'])
 		result = result.sort_index()
-		print(search_category_seq)
+		# print(search_category_seq)
 		
 		# 카테고리 별 검색
 		if(search_category_seq != 0):
@@ -276,19 +276,30 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 	
 	logger.info(f"start: {start}, end: {end}")
 	
+	result = []
 
 	for i in range(start, end):
 		now_user_seq = user_list.index[i+1] 
 		logger.info(f"now_user_seq: {now_user_seq}")
 
-		user_data = db.query(BucketListMember).join(BucketList)\
-			.filter(BucketListMember.bucketlist_seq == BucketList.seq)\
-			.filter(BucketList.type == 'SINGLE')\
+		user_data = db.query(BucketList).join(BucketListMember).join(AddedBucket).join(PublicBucket)\
+			.filter(BucketList.seq == BucketListMember.bucketlist_seq)\
+			.filter(BucketList.seq  == AddedBucket.bucketlist_seq)\
+			.filter(AddedBucket.bucket_seq == PublicBucket.seq)\
 			.all()
 
+
+			# .filter(BucketList.type == 'SINGLE')\
+			# .filter(BucketListMember.user_seq == now_user_seq)\
+			# .filter(AddedBucket.bucketlist_seq == BucketList.seq)\
+
+		
+		print(user_data)
+		print(len(user_data))
+
 	
-	for i in range(len(user_data)):
-		print(user_data[i].bucketlist.title)
+	# for i in range(len(user_data)):
+	# 	print(user_data[i].bucketlist.title)
 
 
 
