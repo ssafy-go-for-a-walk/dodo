@@ -1,9 +1,6 @@
 package com.ssafy.dodo.service.impl;
 
-import com.ssafy.dodo.dto.AddedBucketDto;
-import com.ssafy.dodo.dto.BucketListInfoDto;
-import com.ssafy.dodo.dto.CategoryInfoDto;
-import com.ssafy.dodo.dto.CreateBucketListDto;
+import com.ssafy.dodo.dto.*;
 import com.ssafy.dodo.entity.*;
 import com.ssafy.dodo.exception.CustomException;
 import com.ssafy.dodo.exception.ErrorCode;
@@ -11,8 +8,6 @@ import com.ssafy.dodo.repository.*;
 import com.ssafy.dodo.service.BucketListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -140,7 +135,7 @@ public class BucketListServiceImpl implements BucketListService {
     }
 
     @Override
-    public void updateBucketListInfo(Long bucketListSeq, BucketListInfoDto bucketListInfoDto, MultipartFile file, UserDetails userDetails) {
+    public BucketListInfoDto updateBucketListInfo(Long bucketListSeq, BucketListInfoDto bucketListInfoDto, MultipartFile file, UserDetails userDetails) {
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -167,12 +162,19 @@ public class BucketListServiceImpl implements BucketListService {
         }
 
         bucketList.updateBucketListInfo(bucketListInfoDto.getTitle(), bucketListInfoDto.getIsPublic());
+
+        return bucketListInfoDto;
     }
 
     @Override
-    public void deleteBucketList(Long bucketListSeq, UserDetails userDetails) {
+    public Map<String, List<SimpleBucketListDto>> deleteBucketList(Long bucketListSeq, UserDetails userDetails) {
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        int bucketListCnt = bucketListRepository.countByUser(user);
+        if(bucketListCnt == 1){
+            throw new CustomException(ErrorCode.LAST_BUCKET_LIST);
+        }
 
         BucketList bucketList = bucketListRepository.findById(bucketListSeq)
                 .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
@@ -193,6 +195,18 @@ public class BucketListServiceImpl implements BucketListService {
 
         // 버킷리스트 삭제
         bucketListRepository.delete(bucketList);
+
+        List<SimpleBucketListDto> list = bucketListRepository.getBucketListByUserWithCompleteRate(user);
+
+        Map<String, List<SimpleBucketListDto>> data = new HashMap<>();
+        data.put(BucketListType.SINGLE.name(), new ArrayList<>());
+        data.put(BucketListType.GROUP.name(), new ArrayList<>());
+
+        for (SimpleBucketListDto simpleBucketListDto : list) {
+            data.get(simpleBucketListDto.getType().name()).add(simpleBucketListDto);
+        }
+
+        return data;
     }
 
     @Override
