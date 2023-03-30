@@ -36,13 +36,19 @@ public class BucketListController {
 
     @GetMapping("/{bucketlist-seq}")
     @ResponseStatus(HttpStatus.OK)
+    public DataResponse<Map<String, Object>> getBucketListInfo(
+            @PathVariable("bucketlist-seq") Long bucketListSeq,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        return new DataResponse<>(bucketListService.getBucketListInfo(userDetails, bucketListSeq));
+    }
+
+    @GetMapping("/{bucketlist-seq}/buckets")
+    @ResponseStatus(HttpStatus.OK)
     public DataResponse<?> getBucketListBuckets(
             @PathVariable("bucketlist-seq") Long bucketListSeq,
-            @AuthenticationPrincipal UserDetails userDetails,
-            Pageable pageable
-    ){
+            @AuthenticationPrincipal UserDetails userDetails){
 
-        return new DataResponse<>(bucketListService.getBucketListBuckets(userDetails, bucketListSeq, pageable));
+        return new DataResponse<>(bucketListService.getBucketListBuckets(userDetails, bucketListSeq));
     }
 
     @PostMapping("/{bucketlist-seq}/buckets")

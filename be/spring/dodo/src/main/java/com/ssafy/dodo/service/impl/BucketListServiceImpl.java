@@ -42,7 +42,42 @@ public class BucketListServiceImpl implements BucketListService {
     private final InviteTokenRepository inviteTokenRepository;
 
     @Override
-    public Page<AddedBucketDto> getBucketListBuckets(UserDetails userDetails, Long bucketListSeq, Pageable pageable) {
+    public Map<String, Object> getBucketListInfo(UserDetails userDetails, Long bucketListSeq) {
+        User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        BucketList bucketList = bucketListRepository.findById(bucketListSeq)
+                .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
+
+
+        List<AddedBucket> allByBucketList = addedBucketRepository.findAllByBucketList(bucketList);
+
+        List<AddedBucketDto> addedBucketDtos = allByBucketList.stream()
+                .map(a -> AddedBucketDto.builder()
+                        .seq(a.getSeq())
+                        .title(a.getPublicBucket().getTitle())
+                        .category(CategoryInfoDto.of(a.getPublicBucket().getCategory()))
+                        .isComplete(a.isComplete())
+                        .emoji(a.getEmoji())
+                        .dDay(a.getDDay())
+                        .location(a.getLocation())
+                        .desc(a.getDesc())
+                        .build())
+                .collect(Collectors.toList());
+
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("bucketListInfo", new BucketListInfoDto(bucketList));
+        ret.put("addedBuckets", addedBucketDtos);
+
+        return ret;
+    }
+
+    @Override
+    public List<AddedBucketDto> getBucketListBuckets(UserDetails userDetails, Long bucketListSeq) {
+
+        /**
+         *  페이징 처리 삭제
+         */
 
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -50,20 +85,20 @@ public class BucketListServiceImpl implements BucketListService {
         BucketList bucketList = bucketListRepository.findById(bucketListSeq)
                 .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
 
-        Page<AddedBucket> allByBucketList = addedBucketRepository.findAllByBucketList(bucketList, pageable);
+        List<AddedBucket> allByBucketList = addedBucketRepository.findAllByBucketList(bucketList);
 
-        Page<AddedBucketDto> addedBucketDtos = allByBucketList
+        List<AddedBucketDto> addedBucketDtos = allByBucketList.stream()
                 .map(a -> AddedBucketDto.builder()
-                        .addedBucketSeq(a.getSeq())
-                        .bucketListSeq(a.getBucketList().getSeq())
-                        .bucketSeq(a.getPublicBucket().getSeq())
+                        .seq(a.getSeq())
+                        .title(a.getPublicBucket().getTitle())
                         .category(CategoryInfoDto.of(a.getPublicBucket().getCategory()))
                         .isComplete(a.isComplete())
                         .emoji(a.getEmoji())
                         .dDay(a.getDDay())
                         .location(a.getLocation())
                         .desc(a.getDesc())
-                        .build());
+                        .build())
+                .collect(Collectors.toList());
 
         return addedBucketDtos;
     }
@@ -117,7 +152,7 @@ public class BucketListServiceImpl implements BucketListService {
 
         // 공개 여부를 바꾸면 자신이 만든 public_buckets의 공개 여부도 똑같이 바꾼다
         if(bucketList.isPublic() != bucketListInfoDto.getIsPublic()){
-            List<AddedBucket> addedBuckets = addedBucketRepository.findAllByBucketList(bucketList, null).getContent();
+            List<AddedBucket> addedBuckets = addedBucketRepository.findAllByBucketList(bucketList);
 
             List<Long> publicBuckets = addedBuckets.stream()
                     .filter(addedBucket -> addedBucket.getPublicBucket().getCreatedBy() == user.getSeq())
@@ -143,7 +178,7 @@ public class BucketListServiceImpl implements BucketListService {
                 .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
 
         // added_buckets의 public_buckets의 선호도 삭제
-        List<AddedBucket> addedBuckets = addedBucketRepository.findAllByBucketList(bucketList, null).getContent();
+        List<AddedBucket> addedBuckets = addedBucketRepository.findAllByBucketList(bucketList);
 
         List<PublicBucket> publicBuckets = addedBuckets.stream()
                 .map(a -> a.getPublicBucket()).collect(Collectors.toList());

@@ -9,9 +9,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface AddedBucketRepository extends JpaRepository<AddedBucket, Long> {
 
-    Page<AddedBucket> findAllByBucketList(BucketList bucketList, Pageable pageable);
+    @Query("select ab from AddedBucket ab " +
+            "join fetch ab.publicBucket pb " +
+            "join fetch pb.category")
+    List<AddedBucket> findAllByBucketList(BucketList bucketList);
+
     @Modifying
     @Query("UPDATE AddedBucket ab SET ab.isDelete = true WHERE ab.bucketList = :bucketList")
     void deleteByBucketList(BucketList bucketList);

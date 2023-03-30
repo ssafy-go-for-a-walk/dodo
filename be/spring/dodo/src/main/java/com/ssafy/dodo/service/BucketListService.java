@@ -11,9 +11,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+import java.util.Map;
+
 public interface BucketListService {
 
-    Page<AddedBucketDto> getBucketListBuckets(UserDetails userDetails, Long bucketListSeq, Pageable pageable);
+    Map<String, Object> getBucketListInfo(UserDetails userDetails, Long bucketListSeq);
+
+    List<AddedBucketDto> getBucketListBuckets(UserDetails userDetails, Long bucketListSeq);
 
     void addSearchedBucket(Long bucketListSeq, Long publicBucketSeq, UserDetails userDetails);
 
