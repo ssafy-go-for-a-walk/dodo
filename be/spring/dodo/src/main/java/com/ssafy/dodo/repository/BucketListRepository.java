@@ -28,4 +28,7 @@ public interface BucketListRepository extends JpaRepository<BucketList, Long> {
             "join AddedBucket ab on ab.bucketList = bl " +
             "where bl = :bucketList")
     Double getBucketListCompleteRate(@Param("bucketList") BucketList bucketList);
+
+    @Query("SELECT COUNT(*) FROM BucketList bl join BucketListMember bm on bm.bucketList = bl WHERE bm.user = :user")
+    int countByUser(User user);
 }

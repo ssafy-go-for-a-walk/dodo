@@ -73,22 +73,22 @@ public class BucketListController {
 
     @PatchMapping("/{bucketlist-seq}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateBucketListInfo(
+    public DataResponse<?> updateBucketListInfo(
             @PathVariable("bucketlist-seq") Long bucketListSeq,
             @RequestPart("bucketlistinfo") BucketListInfoDto bucketListInfoDto,
             @RequestPart(value = "file", required = false) MultipartFile file,
             @AuthenticationPrincipal UserDetails userDetails
     ){
-         bucketListService.updateBucketListInfo(bucketListSeq, bucketListInfoDto, file, userDetails);
+         return new DataResponse<>(bucketListService.updateBucketListInfo(bucketListSeq, bucketListInfoDto, file, userDetails));
     }
 
     @DeleteMapping("/{bucketlist-seq}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteBucketList(
+    public DataResponse<?> deleteBucketList(
             @PathVariable("bucketlist-seq") Long bucketListSeq,
             @AuthenticationPrincipal UserDetails userDetails
     ){
-       bucketListService.deleteBucketList(bucketListSeq, userDetails);
+       return new DataResponse<>(bucketListService.deleteBucketList(bucketListSeq, userDetails));
     }
 
     @GetMapping("/{bucketlist-seq}/diaries")
