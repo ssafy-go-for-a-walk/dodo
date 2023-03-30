@@ -13,7 +13,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
 from surprise import Dataset, SVD, accuracy, Reader
-from database.schemas import Category_dto
+from database.schemas import *
 # from surprise.model_selection import train_test_split
 
 
@@ -34,7 +34,7 @@ def session_test(db: Session = Depends(engine.get_session)):
 
 # Preference - title을 활용한 CBF - 코사인 유사도 활용
 @router.get("/buckets", status_code=200)
-def bucket_recommand_cbf(category: str, page: int = 0, size: int = 100,
+def bucket_recommand_cbf(category: str, page: int = 0, size: int = 10,
 		    db: Session = Depends(engine.get_session), 
 	      	credentials: HTTPAuthorizationCredentials= Depends(security)):
 	
@@ -56,14 +56,19 @@ def bucket_recommand_cbf(category: str, page: int = 0, size: int = 100,
 	search_category_seq = category_seq[category]
 	logger.info(f"카테고리 seq: {search_category_seq}")
 
-	prefer_data = db.query(Preference).filter(Preference.user_seq == user_seq).filter(Preference.is_delete == 0).all()
-	pb_data = db.query(PublicBucket).filter(PublicBucket.is_public == 0).all()
+	prefer_data = db.query(PublicBucket.title, PublicBucket.category_seq)\
+			.filter(Preference.user_seq == user_seq)\
+			.filter(Preference.is_delete == 0)\
+			.filter(Preference.bucket_seq == PublicBucket.seq)\
+			.all()
+	pb_data = db.query(PublicBucket.emoji, PublicBucket.title, PublicBucket.added_count, PublicBucket.seq.label("bucket_seq"), Category.seq, Category.item)\
+			.filter(PublicBucket.is_public == 0)\
+			.filter(PublicBucket.category_seq == Category.seq)\
+			.all()
+	
 
-	for i in pb_data:
-		i.category
-
-	# temp = jsonable_encoder(pb_data[0])
-	# print(temp)
+	print(prefer_data[0].category_seq)
+		
 
 	# TODO 유저가 몇명 이상이면 협업 필터링을 해야할까?
 	user_sum = db.query(User).count()
@@ -96,7 +101,15 @@ def bucket_recommand_cbf(category: str, page: int = 0, size: int = 100,
 
 	# idx = (title_to_index['등산하면서 경치 구경하기'])
 	# print(idx)
+
+	list_prefer_data = []
+
+	for i in prefer_data:
+		print(i.title)
+		list_prefer_data.append(i.title)
 	
+	print(list_prefer_data)
+
 	# 추천 함수
 	def get_recommendations(title, cosine_sim=cosine_sim):
 		idx = title_to_index[title]
@@ -131,8 +144,8 @@ def bucket_recommand_cbf(category: str, page: int = 0, size: int = 100,
 		result = pd.DataFrame()
 
 		for i in random_prefer:
-			logger.info(f"random select title: {prefer_data[i].publicBucket.title}")
-			temp = get_recommendations(prefer_data[i].publicBucket.title)
+			logger.info(f"random select title: {prefer_data[i].title}")
+			temp = get_recommendations(prefer_data[i].title)
 
 			# print(temp)
 
@@ -147,15 +160,31 @@ def bucket_recommand_cbf(category: str, page: int = 0, size: int = 100,
 		# temp = result.drop_duplicates(subset=['등산하고 경치 구경하기'])
 		result = result.sort_index()
 		# print(search_category_seq)
+		# print(result)
 		
 		# 카테고리 별 검색
 		if(search_category_seq != 0):
-			result = result[result.category_seq == search_category_seq]
+			result = result[result.seq == search_category_seq]
 
 		result = result.to_dict('records')
 
+		temp_result = []
+		
+		for i in result:
+			is_added = i["title"] in list_prefer_data
+			category = Category_dto(i['seq'], i['item'])
+			temp = Bucket_recoomm_dto(i['title'], i['emoji'], i['added_count'], i['bucket_seq'], is_added, category)
+			temp_result.append(temp)
+
+		print(temp_result)
+
+		data = {"content": temp_result}
+		response = {"data": data, "success": True}
+
+		# data = {"content": result, "last": is_end, "size": size, "number": page, "empty": len(result) == 0}
+
 		# TODO 페이징
-		return result
+		return response
 
 
 	# prefer_data 3개 이하인 경우
@@ -165,8 +194,8 @@ def bucket_recommand_cbf(category: str, page: int = 0, size: int = 100,
 		result = pd.DataFrame()
 
 		for i in range(len(prefer_data)):
-			logger.info(f"random select title: {prefer_data[i].publicBucket.title}")
-			temp = get_recommendations(prefer_data[i].publicBucket.title)
+			logger.info(f"random select title: {prefer_data[i].title}")
+			temp = get_recommendations(prefer_data[i].title)
 
 			result = pd.concat([result, temp])
 
@@ -177,17 +206,31 @@ def bucket_recommand_cbf(category: str, page: int = 0, size: int = 100,
 
 		# 카테고리 별 검색
 		if(search_category_seq != 0):
-			result = result[result.category_seq == search_category_seq]
+			result = result[result.seq == search_category_seq]
 		
 		result = result.to_dict('records')
 
-		print(result[0])
+		temp_result = []
+
+		for i in result:
+			is_added = i["title"] in list_prefer_data
+			category = Category_dto(i['seq'], i['item'])
+			temp = Bucket_recoomm_dto(i['title'], i['emoji'], i['added_count'], i['bucket_seq'], is_added, category)
+			temp_result.append(temp)
+
+		print(temp_result)
+
+		data = {"content": temp_result}
+		response = {"data": data, "success": True}
+
+
+		# data = {"content": result, "last": is_end, "size": size, "number": page, "empty": len(result) == 0}
 
 		# TODO 페이징
-		return result
+		return response
 
 
-# Preference - title을 활용한 CF - ?? 활용
+# TODO Preference - title을 활용한 CF - ?? 활용
 # 코사인 유사도 - 사용자 간의 유사도 계산 후 유사도 높은 사용자의 버킷리스트 추천
 @router.get("/social/bucketlists", status_code=200)
 def user_recommand_cf(page: int = 0, size: int = 2,
@@ -272,46 +315,49 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 		end = len(user_list)-1
 		is_end = True
 	else:
-		return {"is_end" : True}
+		data = {"content": [], "last": True, "size": size, "number": page, "empty": True}
+		response = {"data": data, "success": True}
+		return response
 	
 	logger.info(f"start: {start}, end: {end}")
-	
+
 	result = []
 
 	for i in range(start, end):
 		now_user_seq = user_list.index[i+1] 
 		logger.info(f"now_user_seq: {now_user_seq}")
 
-		user_data = db.query(BucketList).join(BucketListMember).join(AddedBucket).join(PublicBucket)\
-			.filter(BucketList.seq == BucketListMember.bucketlist_seq)\
-			.filter(BucketList.seq  == AddedBucket.bucketlist_seq)\
+		user_data = db.query(BucketList.title.label('bucketListTitle'), BucketList.image.label('bucketListImage'), \
+		        User.profile_image.label('UserProfileImage'), User.nickname.label('UserProfileNickname'), \
+				Category.item.label('CategoryItem'), \
+				AddedBucket.emoji.label('BucketEmoji'), PublicBucket.title.label('BucketTitle'))\
+			.filter(BucketListMember.bucketlist_seq == BucketList.seq)\
+			.filter(BucketList.type == 'SINGLE')\
+			.filter(BucketListMember.user_seq == now_user_seq)\
+			.filter(AddedBucket.bucketlist_seq == BucketList.seq)\
 			.filter(AddedBucket.bucket_seq == PublicBucket.seq)\
+			.filter(BucketListMember.user_seq == User.seq)\
+			.filter(AddedBucket.is_delete == 0)\
+			.filter(PublicBucket.category_seq == Category.seq)\
 			.all()
-
-
-			# .filter(BucketList.type == 'SINGLE')\
-			# .filter(BucketListMember.user_seq == now_user_seq)\
-			# .filter(AddedBucket.bucketlist_seq == BucketList.seq)\
-
 		
-		print(user_data)
-		print(len(user_data))
+		if (len(user_data) != 0):
+			
+			buckets = []
 
+			for j in user_data:
+				temp = Bucket_dto(j.BucketTitle, j.BucketEmoji, j.CategoryItem)
+				buckets.append(temp)
+		
+			
+			user = User_dto(user_data[0].UserProfileNickname, user_data[0].UserProfileImage)
+			bucketlist = Bucketlist_dto(user_data[0].bucketListTitle, user_data[0].bucketListImage)
+			
+		
+		temp = User_recoomm_dto(user, bucketlist, buckets)
+		result.append(temp)
 	
-	# for i in range(len(user_data)):
-	# 	print(user_data[i].bucketlist.title)
-
-
-
-
-	# trainset, testset = train_test_split(temp, test_size=0.25, random_state=0)
-
-	# algo = SVD(n_factors=50, random_state=13)
-	# algo.fit(trainset)
-	# predictions = algo.test(testset)
-	# accuracy.rmse(predictions)
-
-	# print(predictions[:5])
-
-
-	return "data"
+	data = {"content": result, "last": is_end, "size": size, "number": page, "empty": len(result) == 0}
+	response = {"data": data, "success": True}
+		
+	return response

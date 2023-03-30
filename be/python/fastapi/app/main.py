@@ -4,8 +4,6 @@ from sqlalchemy.orm import Session
 from routes import recommand
 from config import conn
 
-from database.schemas import Category_dto
-
 app = FastAPI()
 
 origins = ["*"]
