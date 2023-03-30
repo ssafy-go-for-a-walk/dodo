@@ -13,10 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
@@ -34,9 +32,20 @@ public class BucketServiceImpl implements BucketService {
     private final PublicBucketRepository publicBucketRepository;
     private final CategoryRepository categoryRepository;
     private final PreferenceRepository preferenceRepository;
+    private final BucketListRepository bucketListRepository;
 
     @Override
-    public Page<PublicBucketDto> searchBucket(String word, Long category, Pageable pageable, UserDetails userDetails) {
+    public Page<PublicBucketDto> searchBucket(String word, Long category, Long bucketListSeq, Pageable pageable, UserDetails userDetails) {
+        User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        BucketList bucketList = bucketListRepository.findById(bucketListSeq)
+                .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
+
+        List<AddedBucket> addedBuckets = addedBucketRepository.findAllByBucketList(bucketList);
+
+        List<PublicBucket> userAddedPublicBuckets = addedBuckets.stream()
+                .map(a -> a.getPublicBucket()).collect(Collectors.toList());
 
         Page<PublicBucket> publicBuckets = null;
         if(category != null){
@@ -55,6 +64,9 @@ public class BucketServiceImpl implements BucketService {
                                                                                 .title(pb.getTitle())
                                                                                 .category(CategoryInfoDto.of(pb.getCategory()))
                                                                                 .addedCount(pb.getAddedCount())
+                                                                                .isAdded(
+                                                                                        userAddedPublicBuckets.contains(pb) ? true : false
+                                                                                )
                                                                                 .build());
 
         return publicBucketDtos;
