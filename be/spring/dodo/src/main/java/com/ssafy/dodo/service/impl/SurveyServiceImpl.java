@@ -42,6 +42,10 @@ public class SurveyServiceImpl implements SurveyService {
         preferenceRepository.saveAll(preferenceList);
     }
 
+    private List<Long> removeDuplicate(User user, List<Long> preferences) {
+        return null;
+    }
+
     @Override
     public List<PublicBucket> surveyBuckets(Pageable pageable) {
         return publicBucketRepository.findAll(pageable).getContent();
