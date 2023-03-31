@@ -123,7 +123,7 @@ public class BucketServiceImpl implements BucketService {
 
         BucketList bucketList = addedBucket.getBucketList();
 
-        addedBucket.completeBucket();
+        addedBucket.completeToggleBucket();
 
         List<AddedBucket> allByBucketList = addedBucketRepository.findAllByBucketList(bucketList);
 
