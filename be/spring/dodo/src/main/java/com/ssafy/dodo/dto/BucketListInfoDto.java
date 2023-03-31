@@ -13,6 +13,7 @@ public class BucketListInfoDto {
     private String title;
     private String image;
     private BucketListType type;
+    private boolean isDefault;
     private Boolean isPublic;
 
     public BucketListInfoDto(BucketList bucketList) {
@@ -20,6 +21,7 @@ public class BucketListInfoDto {
         this.title = bucketList.getTitle();
         this.image = bucketList.getImage();
         this.type = bucketList.getType();
+        this.isDefault = bucketList.isDefault();
         this.isPublic = bucketList.isPublic();
     }
 }
