@@ -277,6 +277,7 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 	# 	prefer_data['is_delete']+1
 
 	print(pb_data.head(3))
+	print(prefer_data.head(3))
 
 	reader = Reader(rating_scale=(0.5, 5.0))
 	temp = Dataset.load_from_df(prefer_data[['seq', 'bucket_seq', 'user_seq']], reader)
@@ -290,6 +291,8 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 	# index = user_seq, column = bucket_seq 행렬 만들기
 	x = prefer_data.copy()
 	y = prefer_data['user_seq']
+
+	print(y)
 
 	x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.26, stratify=y, random_state=0)
 
