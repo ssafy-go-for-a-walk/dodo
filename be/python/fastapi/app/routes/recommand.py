@@ -86,8 +86,11 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 	print(pb_data[1])
 	print(pb_data[0].title)
 	
-	tt = jsonable_encoder(prefer_data[0])
-	temp = jsonable_encoder(pb_data[0])
+	# tt = jsonable_encoder(prefer_data[0])
+	# temp = jsonable_encoder(pb_data[0])
+
+	print(tt)
+	print(temp)
 
 	# TODO 유저가 몇명 이상이면 협업 필터링을 해야할까?
 	user_sum = db.query(User).count()
@@ -97,7 +100,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 	# else:
 
 	# json 형태로 변환
-	pb_data = jsonable_encoder(pb_data)
+	# pb_data = jsonable_encoder(pb_data)
 	# print(data[0]['title'])
 
 	# DataFrame 형태로 변환
