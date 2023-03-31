@@ -37,7 +37,7 @@ def session_test(db: Session = Depends(engine.get_session)):
 
 # Preference - title을 활용한 CBF - 코사인 유사도 활용
 @router.get("/buckets", status_code=200)
-def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20,
+def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 100,
 		    db: Session = Depends(engine.get_session), 
 	      	credentials: HTTPAuthorizationCredentials= Depends(security)):
 	
@@ -78,13 +78,14 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 	logger.info(f"prefer_data 개수 : {len(pb_data)}")
 
 	if(len(pb_data) == 0 or len(prefer_data) == 0):
+		# TODO 랜덤으로 뽑아주기
 		raise HTTPException(status_code=400, detail="설문 조사를 하지 않은 유저는 추천이 불가합니다.")
 
 	# print(prefer_data[0].category_seq)
-	print(prefer_data[0])
-	print(pb_data[0])
-	print(pb_data[1])
-	print(pb_data[0].title)
+	# print(prefer_data[0])
+	# print(pb_data[0])
+	# print(pb_data[1])
+	# print(pb_data[0].title)
 	
 	# tt = jsonable_encoder(prefer_data[0])
 	# temp = jsonable_encoder(pb_data[0])
@@ -127,14 +128,14 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 	list_prefer_data = []
 
 	for i in prefer_data:
-		print(i.title)
 		list_prefer_data.append(i.title)
 	
-	print(list_prefer_data)
+	logger.info(f"prefernce title data list: {list_prefer_data}")
 
 	# 추천 함수
 	def get_recommendations(title, cosine_sim=cosine_sim):
 		idx = title_to_index[title]
+		logger.info(f"idx 정보 : {idx}")
 
 		sim_scores = list(enumerate(cosine_sim[idx]))
 
@@ -196,9 +197,8 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 			temp_result.append(temp)
 
 		data = {"content": temp_result}
+		# data = {"content": temp_result, "last": is_end, "size": size, "number": page+1, "empty": len(result) == 0}
 		response = {"data": data, "success": True}
-
-		# data = {"content": result, "last": is_end, "size": size, "number": page, "empty": len(result) == 0}
 
 		# TODO 페이징
 		return response
@@ -211,7 +211,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 		result = pd.DataFrame()
 
 		for i in range(len(prefer_data)):
-			logger.info(f"random select title: {prefer_data[i].title}")
+			logger.info(f"select title: {prefer_data[i].title}")
 			temp = get_recommendations(prefer_data[i].title)
 
 			result = pd.concat([result, temp])
@@ -235,17 +235,16 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 			temp = Bucket_recoomm_dto(i['title'], i['emoji'], i['added_count'], i['bucket_seq'], is_added, category)
 			temp_result.append(temp)
 
+
 		data = {"content": temp_result}
+		# data = {"content": temp_result, "last": is_end, "size": size, "number": page+1, "empty": len(result) == 0}
+
 		response = {"data": data, "success": True}
-
-
-		# data = {"content": result, "last": is_end, "size": size, "number": page, "empty": len(result) == 0}
 
 		# TODO 페이징
 		return response
 
 
-# TODO Preference - title을 활용한 CF - ?? 활용
 # 코사인 유사도 - 사용자 간의 유사도 계산 후 유사도 높은 사용자의 버킷리스트 추천
 @router.get("/social/bucketlists", status_code=200)
 def user_recommand_cf(page: int = 0, size: int = 2,
@@ -270,11 +269,68 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 		.all()
 	pb_data = db.query(PublicBucket).filter(PublicBucket.is_public == 0).all()
 
+	prefer_sum = db.query(Preference).filter(Preference.user_seq == userSeq).filter(Preference.is_delete == 0).count()
+	logger.info(f"{userSeq}의 preferences 개수: {prefer_sum}")
+
 	logger.info(f"prefer_data 개수 : {len(prefer_data)}")
 
-	if(len(pb_data) == 0 or len(prefer_data) == 0):
-		raise HTTPException(status_code=400, detail="설문 조사를 하지 않은 유저는 추천이 불가합니다.")
+	if(len(pb_data) == 0):
+		raise HTTPException(status_code=400, detail="bucket data is null")
 
+	user_sum = db.query(User).count()
+	logger.info(f"유저 수: {user_sum}")
+
+	if(user_sum <= 1):
+		raise HTTPException(status_code=400, detail="user data is null")
+
+	# 선호 데이터가 없는 경우 랜덤으로 추천
+	if(prefer_sum == 0):
+		user_list_data = db.query(User).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
+
+		random_user = random.sample(range(1, len(user_list_data)), 2)
+
+		logger.info(f"random user list: {random_user}")
+
+		result = []
+
+		for i in random_user:
+			user_data = db.query(BucketList.title.label('bucketListTitle'), BucketList.image.label('bucketListImage'), \
+		        User.profile_image.label('UserProfileImage'), User.nickname.label('UserProfileNickname'), \
+				Category.item.label('CategoryItem'), \
+				AddedBucket.emoji.label('BucketEmoji'), PublicBucket.title.label('BucketTitle'))\
+			.filter(BucketListMember.bucketlist_seq == BucketList.seq)\
+			.filter(BucketList.type == 'SINGLE')\
+			.filter(BucketListMember.user_seq == i)\
+			.filter(AddedBucket.bucketlist_seq == BucketList.seq)\
+			.filter(AddedBucket.bucket_seq == PublicBucket.seq)\
+			.filter(BucketListMember.user_seq == User.seq)\
+			.filter(AddedBucket.is_delete == 0)\
+			.filter(BucketList.is_public == 0)\
+			.filter(PublicBucket.category_seq == Category.seq)\
+			.all()
+
+			if (len(user_data) != 0):
+				
+				buckets = []
+
+				for j in user_data:
+					temp = Bucket_dto(j.BucketTitle, j.BucketEmoji, j.CategoryItem)
+					buckets.append(temp)
+			
+				
+				user = User_dto(user_data[0].UserProfileNickname, user_data[0].UserProfileImage)
+				bucketlist = Bucketlist_dto(user_data[0].bucketListTitle, user_data[0].bucketListImage)
+			
+		
+			temp = User_recoomm_dto(user, bucketlist, buckets)
+			result.append(temp)
+
+		# data = {"content": result, "last": ie_end, "size": size, "number": page, "empty": len(result) == 0}
+		data = {"content": result, "last": "페이징 하는중", "size": size, "number": page, "empty": "페이징 하는중"}
+		response = {"data": data, "success": True}
+			
+		return response
+		
 
 	# json 형태로 변환
 	prefer_data = jsonable_encoder(prefer_data)
@@ -289,8 +345,8 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 	# if(prefer_data['is_delete'] == 1):
 	# 	prefer_data['is_delete']+1
 
-	print(pb_data.head(3))
-	print(prefer_data.head(3))
+	# print(pb_data.head(3))
+	# print(prefer_data.head(3))
 
 	reader = Reader(rating_scale=(0.5, 5.0))
 	temp = Dataset.load_from_df(prefer_data[['seq', 'bucket_seq', 'user_seq']], reader)
@@ -316,7 +372,7 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 
 	for i in iteration:
 		try:
-			print(round(i, 5))
+			logger.info(f"try test size: {round(i, 5)}")
 			x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=round(i, 5), stratify=y, random_state=0)
 			logger.info(f"success {a}")
 			a = "pivot"
@@ -332,8 +388,7 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 				raise HTTPException(status_code=400, detail="too low data")
 			pass
 
-		
-
+	
 	# print(prefer_matrix)
 
 	# user sim matrix
@@ -347,8 +402,9 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 	user_list = user_sim[userSeq].sort_values(ascending=False)
 	user_list = pd.DataFrame(user_list)
 
+	print("--------유사도 출력--------")
 	print(user_list)
-	print("---------------")
+	print("----------------")
 
 	logger.info(f"user list length: {len(user_list)}")
 
@@ -384,6 +440,7 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 			.filter(AddedBucket.bucket_seq == PublicBucket.seq)\
 			.filter(BucketListMember.user_seq == User.seq)\
 			.filter(AddedBucket.is_delete == 0)\
+			.filter(BucketList.is_public == 0)\
 			.filter(PublicBucket.category_seq == Category.seq)\
 			.all()
 		
