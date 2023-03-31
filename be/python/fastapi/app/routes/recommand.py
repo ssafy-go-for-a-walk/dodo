@@ -34,7 +34,7 @@ def session_test(db: Session = Depends(engine.get_session)):
 
 # Preference - title을 활용한 CBF - 코사인 유사도 활용
 @router.get("/buckets", status_code=200)
-def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10,
+def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 100,
 		    db: Session = Depends(engine.get_session), 
 	      	credentials: HTTPAuthorizationCredentials= Depends(security)):
 	
@@ -47,13 +47,18 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 	token = decodeJWT(credentials.credentials)
 	
 	if('message' in token):
-		raise HTTPException(status_code=401, detail="token is no valid")
+		raise HTTPException(status_code=401, detail="token is not valid")
 	
 	user_seq=token['userSeq']
 	logger.info(f"LOGIN 정보: {user_seq}")
 
 	category_seq = {"전체" : 0, "대자연" : 1, "일상" : 2, "쇼핑" : 3, "여행" :4, "문화예술" : 5, "자기계발" : 6, "푸드" : 7, "아웃도어" : 8, "스포츠" : 9}
-	search_category_seq = category_seq[category]
+	
+	try:
+		search_category_seq = category_seq[category]
+	except:
+		return HTTPException(status_code=400, detail="parameter is not valid")
+	
 	logger.info(f"카테고리 seq: {search_category_seq}")
 
 	prefer_data = db.query(PublicBucket.title, PublicBucket.category_seq)\
@@ -67,7 +72,10 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			.all()
 	
 
+	logger.info(f"pb_data 개수 : {len(pb_data)}")
+	logger.info(f"prefer_data 개수 : {len(prefer_data)}")
 	print(prefer_data[0].category_seq)
+
 		
 
 	# TODO 유저가 몇명 이상이면 협업 필터링을 해야할까?
@@ -154,9 +162,6 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 		
 		result = result.drop_duplicates(['title'])
 		
-		# TODO 선호도에서 겹치는 거 빼주기
-		# print(type(prefer_data))
-
 		# temp = result.drop_duplicates(subset=['등산하고 경치 구경하기'])
 		result = result.sort_index()
 		# print(search_category_seq)
@@ -175,8 +180,6 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			category = Category_dto(i['seq'], i['item'])
 			temp = Bucket_recoomm_dto(i['title'], i['emoji'], i['added_count'], i['bucket_seq'], is_added, category)
 			temp_result.append(temp)
-
-		print(temp_result)
 
 		data = {"content": temp_result}
 		response = {"data": data, "success": True}
@@ -217,8 +220,6 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			category = Category_dto(i['seq'], i['item'])
 			temp = Bucket_recoomm_dto(i['title'], i['emoji'], i['added_count'], i['bucket_seq'], is_added, category)
 			temp_result.append(temp)
-
-		print(temp_result)
 
 		data = {"content": temp_result}
 		response = {"data": data, "success": True}
