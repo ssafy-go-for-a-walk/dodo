@@ -1,6 +1,7 @@
 import random
 import logging
 import pandas as pd
+import numpy as np
 from fastapi import Depends, APIRouter, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.encoders import jsonable_encoder
@@ -292,17 +293,32 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 	x = prefer_data.copy()
 	y = prefer_data['user_seq']
 
-	print(x)
-	print(y)
+	iteration = np.arange(0.20, 1.00, 0.01)
 
-	x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.5, stratify=y, random_state=0)
+	# x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25, stratify=y, random_state=0)
 
-	x_train = x_train.reset_index(drop=True)
+	global a
+	a = "train_test_split"
 
-	print(x_train)
+	for i in iteration:
+		try:
+			print(round(i, 5))
+			x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=round(i, 5), stratify=y, random_state=0)
+			logger.info(f"success {a}")
+			x_train = x_train.reset_index(drop=True)
+			# test_size = 0.25, 25% 랜덤 데이터가 x_test로 추출됨
+			prefer_matrix = x_train.pivot(values='is_delete', index='user_seq', columns='bucket_seq')
+			a = "pivot"
+			logger.info(f"success {a}")
+			break
+		except:
+			logger.info(f"fail {a}")
+			if(i == 0.99):
+				raise HTTPException(status_code=400, detail="too low data")
+			pass
 
-	# test_size = 0.25, 25% 랜덤 데이터가 x_test로 추출됨
-	prefer_matrix = x_train.pivot(values='is_delete', index='user_seq', columns='bucket_seq')
+		
+
 	# print(prefer_matrix)
 
 	# user sim matrix
