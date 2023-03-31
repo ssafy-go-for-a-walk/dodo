@@ -17,6 +17,7 @@ public class ExpDiaryInfoDto {
 
     private Long seq;
     private String emoji;
+    private String title;
     private String content;
     private Boolean isContainImage;
     private List<String> images;
@@ -35,6 +36,7 @@ public class ExpDiaryInfoDto {
         ExpDiaryInfoDto dto = new ExpDiaryInfoDto();
         dto.seq = expDiary.getSeq();
         dto.emoji = expDiary.getAddedBucket().getEmoji();
+        dto.title = expDiary.getAddedBucket().getPublicBucket().getTitle();
         dto.content = expDiary.getContent();
         dto.isContainImage = images.size() > 0;
         dto.images = images;
