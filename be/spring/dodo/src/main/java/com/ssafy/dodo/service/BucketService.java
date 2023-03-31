@@ -8,10 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BucketService {
 
-    double completeBucket(Long bucketSeq, UserDetails userDetails);
+    Map<String, Object> completeBucket(Long bucketSeq, UserDetails userDetails);
 
     List<AddedBucketDto> updateBucketInfo(Long bucketSeq, BucketInfoDto bucketInfoDto, UserDetails userDetails);
 
