@@ -28,6 +28,7 @@ const Categorys = styled.div`
 
 export default function SearchPage() {
   const [selectCate, setSelectCate] = useState("전체");
+  // const [paging, setPaging] = useState({ last: false, number: 0 });
   const [buckets, setBuckets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [ref] = useInView();
@@ -37,7 +38,9 @@ export default function SearchPage() {
 
   const changeCate = useCallback(
     async categoryName => {
+      // if (!paging.last) {
       const params = { category: categoryName };
+      // const params = { category: categoryName, page: paging.number };
       setLoading(true);
       axios
         .get("https://j8b104.p.ssafy.io/api/recomm/buckets", {
@@ -46,10 +49,14 @@ export default function SearchPage() {
             Authorization: `Bearer ${userToken}`,
           },
         })
-        .then(res => setBuckets(res.data))
+        .then(res => {
+          setBuckets(res.data.data.content);
+          // setPaging({last: res.data.data.last, number: res.data.data.number})
+        })
         .catch(err => console.log(err));
       setSelectCate(categoryName);
       setLoading(false);
+      // }
     },
     [userToken],
   );
@@ -63,18 +70,6 @@ export default function SearchPage() {
 
   useEffect(() => {
     changeCate(selectCate);
-    // const params = { category: selectCate };
-    // setLoading(true);
-    // axios
-    //   .get("https://j8b104.p.ssafy.io/api/recomm/buckets", {
-    //     params: params,
-    //     headers: {
-    //       Authorization: `Bearer ${user.value.token}`,
-    //     },
-    //   })
-    //   .then(res => setBuckets(res.data))
-    //   .catch(err => console.log(err));
-    // setLoading(false);
   }, [changeCate, selectCate]);
 
   // const addBuckets = useCallback(async () => {
