@@ -197,8 +197,8 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			temp = Bucket_recoomm_dto(i['title'], i['emoji'], i['added_count'], i['bucket_seq'], is_added, category)
 			temp_result.append(temp)
 
-		data = {"content": temp_result}
-		# data = {"content": temp_result, "last": is_end, "size": size, "number": page+1, "empty": len(result) == 0}
+		# data = {"content": temp_result}
+		data = {"content": temp_result, "last": False, "size": size, "number": page+1, "empty": len(temp_result) == 0}
 		response = {"data": data, "success": True}
 
 		# TODO 페이징
@@ -293,13 +293,19 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 	if(prefer_sum == 0):
 		user_list_data = db.query(User).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
 
-		random_user = random.sample(range(1, len(user_list_data)), 2)
+		random_user = random.sample(range(1, len(user_list_data)), 4)
 
 		logger.info(f"random user list: {random_user}")
 
 		result = []
 
+
 		for i in random_user:
+			check = db.query(User).filter(User.seq == i).all()
+			if(check[0].nickname is None or check[0].seq == userSeq):
+				logger.info("동일 사용자이거나 혹은 닉네임이 없는 사용자입니다.")
+				continue
+
 			user_data = db.query(BucketList.title.label('bucketListTitle'), BucketList.image.label('bucketListImage'), \
 		        User.profile_image.label('UserProfileImage'), User.nickname.label('UserProfileNickname'), \
 				Category.item.label('CategoryItem'), \
@@ -316,7 +322,6 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 			.all()
 
 			if (len(user_data) != 0):
-				
 				buckets = []
 
 				for j in user_data:
