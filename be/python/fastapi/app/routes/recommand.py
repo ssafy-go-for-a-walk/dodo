@@ -295,7 +295,9 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 
 	iteration = np.arange(0.20, 1.00, 0.01)
 
-	# x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25, stratify=y, random_state=0)
+	# x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.6, stratify=y, random_state=0)
+	# x_train = x_train.reset_index(drop=True)
+	# prefer_matrix = x_train.pivot(values='is_delete', index='user_seq', columns='bucket_seq')
 
 	global a
 	a = "train_test_split"
@@ -313,7 +315,7 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 			break
 		except:
 			logger.info(f"fail {a}")
-			if(i == 0.99):
+			if(i >= 0.60):
 				raise HTTPException(status_code=400, detail="too low data")
 			pass
 
