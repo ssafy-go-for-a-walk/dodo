@@ -293,7 +293,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 	if(prefer_sum == 0):
 		user_list_data = db.query(User).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
 
-		random_user = random.sample(range(1, len(user_list_data)), 4)
+		random_user = random.sample(range(1, len(user_list_data)), size)
 
 		logger.info(f"random user list: {random_user}")
 
