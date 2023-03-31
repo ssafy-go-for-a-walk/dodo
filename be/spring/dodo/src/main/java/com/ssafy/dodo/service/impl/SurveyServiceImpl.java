@@ -31,7 +31,7 @@ public class SurveyServiceImpl implements SurveyService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 설문조사에서 선택한 public 버킷들 조회
-        List<PublicBucket> publicBuckets = publicBucketRepository.findAllBySeqIn(preferences);
+        List<PublicBucket> publicBuckets = preferenceRepository.findPublicBucketByUserAndNotIn(user, preferences);
 
         // 사용자 선호도 저장
         List<Preference> preferenceList = publicBuckets.stream().map(pb -> Preference.builder()
@@ -40,10 +40,6 @@ public class SurveyServiceImpl implements SurveyService {
                         .build())
                 .collect(Collectors.toList());
         preferenceRepository.saveAll(preferenceList);
-    }
-
-    private List<Long> removeDuplicate(User user, List<Long> preferences) {
-        return null;
     }
 
     @Override
