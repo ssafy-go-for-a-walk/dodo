@@ -84,14 +84,14 @@ public class BucketServiceImpl implements BucketService {
 
         PublicBucket publicBucket = addedBucket.getPublicBucket();
 
-        // added_buckets에서 담은 버킷 삭제
-        addedBucketRepository.deleteById(bucketSeq);
-
         // addedBucket의 publicBucket의 선호도 삭제
         preferenceRepository.deleteAllByUserAndPublicBucket(user, publicBucket);
 
         // public_buckets의 담은 수 -1
         publicBucketRepository.minusAddedCount(Arrays.asList(publicBucket));
+
+        // added_buckets에서 담은 버킷 삭제
+        addedBucketRepository.deleteById(bucketSeq);
 
         BucketList bucketList = addedBucket.getBucketList();
 
