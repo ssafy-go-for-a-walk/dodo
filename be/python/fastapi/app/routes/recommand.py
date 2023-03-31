@@ -295,7 +295,7 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 	print(x)
 	print(y)
 
-	x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, stratify=y, random_state=0)
+	x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.5, stratify=y, random_state=0)
 
 	x_train = x_train.reset_index(drop=True)
 
