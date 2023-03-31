@@ -10,9 +10,9 @@ import com.ssafy.dodo.repository.PublicBucketRepository;
 import com.ssafy.dodo.repository.UserRepository;
 import com.ssafy.dodo.service.SurveyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,5 +40,10 @@ public class SurveyServiceImpl implements SurveyService {
                         .build())
                 .collect(Collectors.toList());
         preferenceRepository.saveAll(preferenceList);
+    }
+
+    @Override
+    public List<PublicBucket> surveyBuckets(Pageable pageable) {
+        return publicBucketRepository.findAll(pageable).getContent();
     }
 }
