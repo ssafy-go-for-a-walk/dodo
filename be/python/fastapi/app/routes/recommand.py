@@ -71,8 +71,9 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			.filter(PublicBucket.category_seq == Category.seq)\
 			.all()
 	
-	if(len(pb_data) == 0 | len(prefer_data)):
-		logger.info(f"prefer_data 개수 : {len(prefer_data)}")
+	logger.info(f"prefer_data 개수 : {len(prefer_data)}")
+	
+	if(len(pb_data) == 0 | len(prefer_data) == 0):
 		raise HTTPException(status_code=400, detail="설문 조사를 하지 않은 유저는 추천이 불가합니다.")
 
 	# print(prefer_data[0].category_seq)
@@ -256,9 +257,9 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 		.all()
 	pb_data = db.query(PublicBucket).filter(PublicBucket.is_public == 0).all()
 
+	logger.info(f"prefer_data 개수 : {len(prefer_data)}")
 
-	if(len(pb_data) == 0 | len(prefer_data)):
-		logger.info(f"prefer_data 개수 : {len(prefer_data)}")
+	if(len(pb_data) == 0 | len(prefer_data) == 0):
 		raise HTTPException(status_code=400, detail="설문 조사를 하지 않은 유저는 추천이 불가합니다.")
 
 
