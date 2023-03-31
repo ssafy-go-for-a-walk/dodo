@@ -1,4 +1,4 @@
-#-*- coding: utf8mb4 -*-
+#-*- coding: utf-8 -*-
 
 import random
 import logging
