@@ -89,8 +89,8 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 	# tt = jsonable_encoder(prefer_data[0])
 	# temp = jsonable_encoder(pb_data[0])
 
-	print(tt)
-	print(temp)
+	# print(tt)
+	# print(temp)
 
 	# TODO 유저가 몇명 이상이면 협업 필터링을 해야할까?
 	user_sum = db.query(User).count()
