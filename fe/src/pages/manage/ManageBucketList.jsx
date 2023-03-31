@@ -3,7 +3,18 @@ import styled from "styled-components";
 import ManageBucket from "./ManageBucket";
 import Filter from "./Filter";
 import ManageSearchBar from "./ManageSearchBar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { changeMyBucketlist } from "../../redux/user";
+import * as htmlToImage from "html-to-image";
+
+const ImageBox = styled.div`
+  padding-top: 24px;
+  width: 100%;
+  display: flex;
+  background-color: rgb(245 245 245);
+  flex-direction: column;
+  align-items: center;
+`;
 
 const BucketList = styled.div`
   display: flex;
@@ -14,7 +25,6 @@ const BucketList = styled.div`
 const FilterSearch = styled.div`
   width: 80%;
   max-width: 800px;
-  margin-bottom: 24px;
   z-index: 2;
   display: flex;
   align-items: center;
@@ -23,21 +33,30 @@ const FilterSearch = styled.div`
 
 export default function ManageBucketList() {
   const { user } = useSelector(state => state);
-  const myBuckets = user.bucketList.buckets;
   const [bucketFilter, setBucketFilter] = useState("전체");
+  const myBuckets = user.bucketList.buckets;
+  const dispatch = useDispatch();
   const changeBucketFilter = fil => {
     setBucketFilter(fil);
   };
+  const saveImgUrl = () => {
+    const document = window.document.getElementById("bucketlist")
+    htmlToImage
+    .toPng(document)
+    .then((dataUrl) => dispatch(changeMyBucketlist(dataUrl)))
+  }
 
   return (
-    <BucketList>
+    <BucketList> 
       <FilterSearch>
         <Filter bucketFilter={bucketFilter} propFunction={changeBucketFilter} />
         <ManageSearchBar />
       </FilterSearch>
-      {bucketFilter === "전체" && myBuckets.map(bucket => <ManageBucket bucket={bucket} key={bucket.seq} />)}
-      {bucketFilter === "완료" && myBuckets.filter(bucket => bucket.complete === true).map(bucket => <ManageBucket bucket={bucket} key={bucket.seq} />)}
-      {bucketFilter === "미완" && myBuckets.filter(bucket => bucket.complete === false).map(bucket => <ManageBucket bucket={bucket} key={bucket.seq} />)}
+      <ImageBox id="bucketlist">
+        {bucketFilter === "전체" && myBuckets.map((bucket, index) => <ManageBucket bucket={bucket} sendSignal={saveImgUrl} signal={bucketFilter.length === index - 1} key={bucket.seq} />)}
+        {bucketFilter === "완료" && myBuckets.filter(bucket => bucket.complete === true).map(bucket => <ManageBucket bucket={bucket} key={bucket.seq} />)}
+        {bucketFilter === "미완" && myBuckets.filter(bucket => bucket.complete === false).map(bucket => <ManageBucket bucket={bucket} key={bucket.seq} />)}
+      </ImageBox>
     </BucketList>
   );
 }

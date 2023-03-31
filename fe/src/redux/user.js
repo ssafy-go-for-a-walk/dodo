@@ -20,6 +20,7 @@ export const userSlice = createSlice({
     appState: "",
     survey: [],
     bucketList: { info: {}, buckets: [] },
+    myBucketlist: "",
   },
   reducers: {
     login: (state, action) => {
@@ -57,8 +58,11 @@ export const userSlice = createSlice({
     changeCompleteRate: (state, action) => {
       state.value.selectedBucketlist.completeRate = action.payload;
     },
+    changeMyBucketlist: (state, action) => {
+      state.myBucketlist = action.payload;
+    },
   },
 });
 
-export const { setSurvey, profile, login, logout, change, setAppState, setBucketList, reBucketList, changeListInfo, changeCompleteRate } = userSlice.actions;
+export const { changeMyBucketlist, setSurvey, profile, login, logout, change, setAppState, setBucketList, reBucketList, changeListInfo, changeCompleteRate } = userSlice.actions;
 export default userSlice.reducer;
