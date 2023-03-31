@@ -57,7 +57,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 	try:
 		search_category_seq = category_seq[category]
 	except:
-		return HTTPException(status_code=400, detail="parameter is not valid")
+		raise HTTPException(status_code=400, detail="parameter is not valid")
 	
 	logger.info(f"카테고리 seq: {search_category_seq}")
 
@@ -71,11 +71,11 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			.filter(PublicBucket.category_seq == Category.seq)\
 			.all()
 	
+	if(len(pb_data) == 0 | len(prefer_data)):
+		logger.info(f"prefer_data 개수 : {len(prefer_data)}")
+		raise HTTPException(status_code=400, detail="설문 조사를 하지 않은 유저는 추천이 불가합니다.")
 
-	logger.info(f"pb_data 개수 : {len(pb_data)}")
-	logger.info(f"prefer_data 개수 : {len(prefer_data)}")
-	print(prefer_data[0].category_seq)
-
+	# print(prefer_data[0].category_seq)
 		
 
 	# TODO 유저가 몇명 이상이면 협업 필터링을 해야할까?
@@ -255,6 +255,11 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 		db.query(Preference.user_seq).group_by(Preference.user_seq).having(func.count(Preference.user_seq) > 1)))\
 		.all()
 	pb_data = db.query(PublicBucket).filter(PublicBucket.is_public == 0).all()
+
+
+	if(len(pb_data) == 0 | len(prefer_data)):
+		logger.info(f"prefer_data 개수 : {len(prefer_data)}")
+		raise HTTPException(status_code=400, detail="설문 조사를 하지 않은 유저는 추천이 불가합니다.")
 
 
 	# json 형태로 변환
