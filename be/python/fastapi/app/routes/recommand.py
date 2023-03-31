@@ -276,7 +276,7 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 	# if(prefer_data['is_delete'] == 1):
 	# 	prefer_data['is_delete']+1
 
-	# print(pb_data.head(3))
+	print(pb_data.head(3))
 
 	reader = Reader(rating_scale=(0.5, 5.0))
 	temp = Dataset.load_from_df(prefer_data[['seq', 'bucket_seq', 'user_seq']], reader)
