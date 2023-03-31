@@ -180,7 +180,7 @@ public class BucketListServiceImpl implements BucketListService {
 
         bucketList.updateBucketListInfo(bucketListInfoDto.getTitle(), bucketListInfoDto.getIsPublic());
 
-        return bucketListInfoDto;
+        return new BucketListInfoDto(bucketList);
     }
 
     @Override
