@@ -292,9 +292,12 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 	x = prefer_data.copy()
 	y = prefer_data['user_seq']
 
+	print(x)
 	print(y)
 
 	x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.26, stratify=y, random_state=0)
+
+	print(x_train)
 
 	# test_size = 0.25, 25% 랜덤 데이터가 x_test로 추출됨
 	prefer_matrix = x_train.pivot(values='is_delete', index='user_seq', columns='bucket_seq')
