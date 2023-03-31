@@ -43,7 +43,8 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 	
 	skip = size*page
 	limit = size*page+size
-	logger.info(f"skp: {skip}, limit: {limit}")
+	logger.info(f"page: {page}, size: {size}")
+	logger.info(f"skip: {skip}, limit: {limit}")
 
 	logger.info(f"카테고리 정보: {category}")
 	logger.info(credentials)
@@ -247,9 +248,14 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 
 # 코사인 유사도 - 사용자 간의 유사도 계산 후 유사도 높은 사용자의 버킷리스트 추천
 @router.get("/social/bucketlists", status_code=200)
-def user_recommand_cf(page: int = 0, size: int = 2,
+def user_recommand_cf(page: int = 0, size: int = 4,
 		    db: Session = Depends(engine.get_session), 
 	      	credentials: HTTPAuthorizationCredentials= Depends(security)):
+	
+	skip = size*page
+	limit = size*page+size
+	logger.info(f"page: {page}, size: {size}")
+	logger.info(f"skip: {skip}, limit: {limit}")
 
 	logger.info(credentials)
 	token = decodeJWT(credentials.credentials)
