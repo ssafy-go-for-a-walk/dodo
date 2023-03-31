@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class ExpDiaryInfoDto {
 
+    private Long seq;
     private String emoji;
     private String content;
     private Boolean isContainImage;
@@ -32,6 +33,7 @@ public class ExpDiaryInfoDto {
                 .getCategory());
 
         ExpDiaryInfoDto dto = new ExpDiaryInfoDto();
+        dto.seq = expDiary.getSeq();
         dto.emoji = expDiary.getAddedBucket().getEmoji();
         dto.content = expDiary.getContent();
         dto.isContainImage = images.size() > 0;

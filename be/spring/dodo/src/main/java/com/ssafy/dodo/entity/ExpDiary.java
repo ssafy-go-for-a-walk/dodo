@@ -42,4 +42,8 @@ public class ExpDiary extends BaseEntity {
         this.addedBucket = addedBucket;
         this.isDelete = isDelete;
     }
+
+    public void addImage(DiaryImage image) {
+        this.images.add(image);
+    }
 }

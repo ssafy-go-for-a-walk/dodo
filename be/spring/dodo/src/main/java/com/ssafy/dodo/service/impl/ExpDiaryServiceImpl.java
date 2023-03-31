@@ -63,10 +63,12 @@ public class ExpDiaryServiceImpl implements ExpDiaryService {
                         .path(path)
                         .build();
 
+                expDiary.addImage(diaryImage);
                 diaryImages.add(diaryImage);
             }
 
             expDiaryImageRepository.saveAll(diaryImages);
+
         }
 
         return expDiary;
