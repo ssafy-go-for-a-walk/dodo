@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -112,25 +114,43 @@ public class BucketServiceImpl implements BucketService {
     }
 
     @Override
-    public double completeBucket(Long bucketSeq, UserDetails userDetails) {
+    public Map<String, Object> completeBucket(Long bucketSeq, UserDetails userDetails) {
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         AddedBucket addedBucket = addedBucketRepository.findById(bucketSeq)
                 .orElseThrow(() -> new CustomException(ErrorCode.ADDED_BUCKET_NOT_FOUND));
 
-        log.info(String.valueOf(addedBucketRepository.countByBucketListAndIsComplete(addedBucket.getBucketList(), true)));
-        log.info(String.valueOf(addedBucketRepository.countByBucketList(addedBucket.getBucketList())));
+        BucketList bucketList = addedBucket.getBucketList();
 
         addedBucket.completeBucket();
 
-        double part = addedBucketRepository.countByBucketListAndIsComplete(addedBucket.getBucketList(), true);
-        double total = addedBucketRepository.countByBucketList(addedBucket.getBucketList());
+        List<AddedBucket> allByBucketList = addedBucketRepository.findAllByBucketList(bucketList);
+
+        double part = allByBucketList.stream().filter(bl -> bl.isComplete()).collect(Collectors.toList()).size();
+        double total = allByBucketList.size();
+
         double completeRate = (double) Math.round(part / total * 100 * 10) / 10;
 
-//        log.info("{} / {} * 100 = {} -> {}", part, total, part/total*100, completeRate);
+        List<AddedBucketDto> addedBucketDtos = allByBucketList.stream()
+                .map(a -> AddedBucketDto.builder()
+                        .seq(a.getSeq())
+                        .title(a.getPublicBucket().getTitle())
+                        .category(a.getPublicBucket().getCategory() != null ? CategoryInfoDto.of(a.getPublicBucket().getCategory()) : null)
+                        .isComplete(a.isComplete())
+                        .emoji(a.getEmoji())
+                        .dDay(a.getDDay())
+                        .location(a.getLocation())
+                        .desc(a.getDesc())
+                        .build())
+                .collect(Collectors.toList());
 
-        return completeRate;
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("completeRate", completeRate);
+        result.put("buckets", addedBucketDtos);
+
+        return result;
     }
 
     @Override
