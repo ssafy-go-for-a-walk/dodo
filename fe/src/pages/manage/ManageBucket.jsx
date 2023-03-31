@@ -5,6 +5,9 @@ import CompleteButton from "../../components/common/button/CompleteButton";
 import Modal from "react-modal";
 import DetailModalStyle from "../../components/common/modal/DetailModalStyle";
 import DetailModal from "../../components/common/modal/detailBucket/DetailModal";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { reBucketList } from "../../redux/user";
 
 const BucketBox = styled.div`
   width: 80%;
@@ -81,8 +84,11 @@ const DeleteBtn = styled.div`
 
 export default function Bucket(props) {
   const bucket = props.bucket;
+  const { user } = useSelector(state => state);
+  const userToken = user.value.token;
   const [activateDelete, setActivateDelete] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const openDetailModal = () => {
     setIsOpen(true);
@@ -95,7 +101,14 @@ export default function Bucket(props) {
 
   const deleteBucket = () => {
     if (activateDelete) {
-      console.log(bucket);
+      axios
+        .delete(`https://j8b104.p.ssafy.io/api/buckets/${bucket.seq}`, {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        })
+        .then(res => dispatch(reBucketList(res.data.data)))
+        .catch(err => console.log(err));
     } else {
       setActivateDelete(true);
     }

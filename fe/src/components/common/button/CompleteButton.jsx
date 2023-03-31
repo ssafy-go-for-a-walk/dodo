@@ -1,5 +1,8 @@
+import axios from "axios";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { changeCompleteRate, reBucketList } from "../../../redux/user";
 
 const ButtonBox = styled.button`
   min-width: 64px;
@@ -16,12 +19,28 @@ const ButtonBox = styled.button`
 `;
 
 export default function CompleteButton(props) {
-  const { complete } = props;
-  // const { complete, bucketId } = props;
+  const { complete, bucketId } = props;
+  const { user } = useSelector(state => state);
+  const userToken = user.value.token;
+  const dispatch = useDispatch();
   const completeBucket = event => {
     event.stopPropagation();
     event.preventDefault();
-    console.log("complete");
+    axios
+      .post(
+        `https://j8b104.p.ssafy.io/api/buckets/${bucketId}/complete`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        },
+      )
+      .then(res => {
+        dispatch(reBucketList(res.data.data.buckets));
+        dispatch(changeCompleteRate(res.data.data.completeRate));
+      })
+      .catch(err => console.log(err));
   };
 
   return (

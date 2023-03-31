@@ -50,8 +50,15 @@ export const userSlice = createSlice({
     reBucketList: (state, action) => {
       state.bucketList.buckets = action.payload;
     },
+    changeListInfo: (state, action) => {
+      state.bucketList.info = action.payload;
+      state.value.selectedBucketlist.title = action.payload.title;
+    },
+    changeCompleteRate: (state, action) => {
+      state.value.selectedBucketlist.completeRate = action.payload;
+    },
   },
 });
 
-export const { setSurvey, profile, login, logout, change, setAppState, setBucketList, reBucketList } = userSlice.actions;
+export const { setSurvey, profile, login, logout, change, setAppState, setBucketList, reBucketList, changeListInfo, changeCompleteRate } = userSlice.actions;
 export default userSlice.reducer;
