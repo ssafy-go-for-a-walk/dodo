@@ -299,7 +299,7 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 
 	global a
 	a = "train_test_split"
-	
+
 	for i in iteration:
 		try:
 			print(round(i, 5))
@@ -313,7 +313,10 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 			break
 		except:
 			logger.info(f"fail {a}")
+			if(i == 0.99):
+				raise HTTPException(status_code=400, detail="too low data")
 			pass
+
 		
 
 	# print(prefer_matrix)
