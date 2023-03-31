@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
 import { IconButton } from "@mui/material";
@@ -12,8 +12,9 @@ import CategorySelect from "./CategorySelect";
 import Diary from "./Diary";
 import DiaryForm from "./DiaryForm";
 import Picker from "emoji-picker-react";
-// import axios from "axios";
-// import { useSelector } from "react-redux";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { reBucketList } from "../../../../redux/user";
 
 const Modal = styled.div`
   display: flex;
@@ -120,26 +121,31 @@ const Content = styled.textarea`
   border-bottom: 1px solid #acabab;
   text-align: center;
   font-size: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 8px;
+  overflow: hidden;
 `;
 
 const Diaries = styled.div`
   width: 580px;
   height: 280px;
-  overflow: auto;
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export default function GroupModal(props) {
   const bucket = props.bucket;
+  const [emoji, setEmoji] = useState(bucket.emoji);
   const [endDate, setEndDate] = useState(bucket.dday !== null ? bucket.dday : new Date());
   const [location, setLocation] = useState(bucket.location !== null ? bucket.location : "");
   const [content, setContent] = useState(bucket.desc !== null ? bucket.desc : "");
-  const [emoji, setEmoji] = useState(bucket.emoji);
-  const [showPicker, setShowPicker] = useState(false);
   const [category, setCate] = useState(bucket.category !== null ? bucket.category.item : null);
-  // const { user } = useSelector(state => state);
-  // const userToken = user.value.token
-
+  const [showPicker, setShowPicker] = useState(false);
+  const [diaries, setDiaries] = useState([]);
+  const { user } = useSelector(state => state);
+  const userToken = user.value.token;
+  const dispatch = useDispatch();
   const onEmojiClick = emojiObject => {
     setEmoji(emojiObject.emoji);
     setShowPicker(false);
@@ -159,14 +165,46 @@ export default function GroupModal(props) {
   };
 
   const closeDetailModal = () => {
+    if (emoji !== bucket.emoji || endDate !== bucket.dday || location !== bucket.location || content !== bucket.desc || category !== bucket.category) {
+      const data = {
+        emoji: emoji,
+        dDay: endDate,
+        location: location,
+        desc: content,
+        category: category,
+      };
+      axios
+        .patch(`https://j8b104.p.ssafy.io/api/buckets/${bucket.seq}`, data, {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        })
+        .then(res => dispatch(reBucketList(res.data.data)))
+        .catch(err => console.log(err));
+    }
     props.closeModal();
   };
+
+  const changeDiaries = diaries => {
+    setDiaries(diaries);
+  };
+
+  useEffect(() => {
+    axios
+      .get(`https://j8b104.p.ssafy.io/api/buckets/${bucket.seq}/diaries`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then(res => changeDiaries(res.data.data))
+      .catch(err => console.log(err));
+  }, [userToken, bucket.seq]);
 
   return (
     <Modal>
       <div style={{ display: "flex", justifyContent: "end" }}>
         <IconButton>
-          <CloseIcon style={{ color: "#1C9BFF", fontSize: "40px" }} onClick={closeDetailModal} />
+          <CloseIcon style={{ color: "#1C9BFF", fontSize: "32px" }} onClick={closeDetailModal} />
         </IconButton>
       </div>
       <Div>
@@ -206,11 +244,9 @@ export default function GroupModal(props) {
             <Place value={location} onChange={locationChange} />
           </Detail>
         </Header>
-        <Content value={content} onChange={contentChange} />
-        <Diaries>
-          <Diary />
-        </Diaries>
-        <DiaryForm />
+        <Content defaultValue={content} onChange={contentChange} />
+        <Diaries>{diaries.length !== 0 && diaries.content.map(diary => <Diary diary={diary} />)}</Diaries>
+        <DiaryForm bucketId={bucket.seq} changeDiaries={changeDiaries} />
       </Div>
     </Modal>
   );
