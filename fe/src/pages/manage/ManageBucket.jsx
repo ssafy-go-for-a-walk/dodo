@@ -8,6 +8,7 @@ import DetailModal from "../../components/common/modal/detailBucket/DetailModal"
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { reBucketList } from "../../redux/user";
+import { useEffect } from "react";
 
 const BucketBox = styled.div`
   width: 80%;
@@ -86,6 +87,7 @@ export default function Bucket(props) {
   const bucket = props.bucket;
   const { user } = useSelector(state => state);
   const userToken = user.value.token;
+  const signal = props.signal
   const [activateDelete, setActivateDelete] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
@@ -113,6 +115,11 @@ export default function Bucket(props) {
       setActivateDelete(true);
     }
   };
+  useEffect(() => {
+    if (signal) {
+      props.sendSignal()
+    }
+  }, [signal, props])
 
   return (
     <BucketBox>

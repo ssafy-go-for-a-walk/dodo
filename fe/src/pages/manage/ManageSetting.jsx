@@ -111,6 +111,13 @@ export default function ManageSetting() {
   const createCode = () => {
     return;
   };
+  const saveImage = () => {
+    const imageUrl = user.myBucketlist
+    const link = window.document.createElement("a");
+    link.download = "my_bucketlist.png";
+    link.href = imageUrl;
+    link.click();
+  }
   return (
     <Settings>
       <div>
@@ -134,7 +141,7 @@ export default function ManageSetting() {
       <FullButton propFunction={createCode}>참여코드 생성하기</FullButton>
       <HalfButtons>
         <HalfButton>공유하기</HalfButton>
-        <HalfButton>내보내기</HalfButton>
+        <HalfButton onClick={saveImage}>내보내기</HalfButton>
       </HalfButtons>
       <DeleteButton />
     </Settings>
