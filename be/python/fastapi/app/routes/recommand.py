@@ -237,8 +237,8 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			temp_result.append(temp)
 
 
-		data = {"content": temp_result}
-		# data = {"content": temp_result, "last": is_end, "size": size, "number": page+1, "empty": len(result) == 0}
+		# data = {"content": temp_result}
+		data = {"content": temp_result, "last": False, "size": size, "number": page+1, "empty": len(temp_result) == 0}
 
 		response = {"data": data, "success": True}
 
@@ -293,7 +293,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 	if(prefer_sum == 0):
 		user_list_data = db.query(User).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
 
-		random_user = random.sample(range(1, len(user_list_data)), 4)
+		random_user = random.sample(range(1, len(user_list_data)), size)
 
 		logger.info(f"random user list: {random_user}")
 
