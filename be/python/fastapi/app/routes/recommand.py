@@ -72,7 +72,10 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			.all()
 	
 
+	logger.info(f"pb_data 개수 : {len(pb_data)}")
+	logger.info(f"prefer_data 개수 : {len(prefer_data)}")
 	print(prefer_data[0].category_seq)
+
 		
 
 	# TODO 유저가 몇명 이상이면 협업 필터링을 해야할까?
