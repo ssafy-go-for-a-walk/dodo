@@ -237,8 +237,8 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			temp_result.append(temp)
 
 
-		data = {"content": temp_result}
-		# data = {"content": temp_result, "last": is_end, "size": size, "number": page+1, "empty": len(result) == 0}
+		# data = {"content": temp_result}
+		data = {"content": temp_result, "last": False, "size": size, "number": page+1, "empty": len(temp_result) == 0}
 
 		response = {"data": data, "success": True}
 
