@@ -73,12 +73,14 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			.all()
 	
 	logger.info(f"prefer_data 개수 : {len(prefer_data)}")
+	logger.info(f"prefer_data 개수 : {len(pb_data)}")
 
 	if(len(pb_data) == 0 or len(prefer_data) == 0):
 		raise HTTPException(status_code=400, detail="설문 조사를 하지 않은 유저는 추천이 불가합니다.")
 
 	# print(prefer_data[0].category_seq)
 	print(prefer_data[0])
+	print(pb_data[0])
 		
 
 	# TODO 유저가 몇명 이상이면 협업 필터링을 해야할까?
