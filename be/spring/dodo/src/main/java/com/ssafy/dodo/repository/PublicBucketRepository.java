@@ -33,4 +33,6 @@ public interface PublicBucketRepository extends JpaRepository<PublicBucket, Long
     Page<PublicBucket> findAllByTitleContaining(String title, Pageable pageable);
 
     Page<PublicBucket> findAllByTitleContainingAndCategory(String title, Category category, Pageable pageable);
+
+    Page<PublicBucket> findAll(Pageable pageable);
 }
