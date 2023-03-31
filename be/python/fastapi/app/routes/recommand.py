@@ -64,7 +64,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 	
 	logger.info(f"카테고리 seq: {search_category_seq}")
 
-	prefer_data = db.query(PublicBucket.title, PublicBucket.category_seq, PublicBucket.seq)\
+	prefer_data = db.query(PublicBucket.title, PublicBucket.category_seq)\
 			.filter(Preference.user_seq == user_seq)\
 			.filter(Preference.is_delete == 0)\
 			.filter(Preference.bucket_seq == PublicBucket.seq)\
@@ -83,8 +83,10 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 	# print(prefer_data[0].category_seq)
 	print(prefer_data[0])
 	print(pb_data[0])
+	print(pb_data[1])
 	print(pb_data[0].title)
 	
+	tt = jsonable_encoder(prefer_data[0])
 	temp = jsonable_encoder(pb_data[0])
 
 	# TODO 유저가 몇명 이상이면 협업 필터링을 해야할까?
@@ -314,14 +316,15 @@ def user_recommand_cf(page: int = 0, size: int = 2,
 			print(round(i, 5))
 			x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=round(i, 5), stratify=y, random_state=0)
 			logger.info(f"success {a}")
-			x_train = x_train.reset_index(drop=True)
 			a = "pivot"
+			x_train = x_train.reset_index(drop=True)
 			# test_size = 0.25, 25% 랜덤 데이터가 x_test로 추출됨
 			prefer_matrix = x_train.pivot(values='is_delete', index='user_seq', columns='bucket_seq')
 			logger.info(f"success {a}")
 			break
 		except:
 			logger.info(f"fail {a}")
+			a = "train_test_split"
 			if(i >= 0.60):
 				raise HTTPException(status_code=400, detail="too low data")
 			pass
