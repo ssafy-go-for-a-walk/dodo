@@ -30,6 +30,7 @@ public class BucketList extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private BucketListType type;
 
+    private boolean isDefault;
     private boolean isDelete;
 
     @Builder
@@ -41,12 +42,13 @@ public class BucketList extends BaseEntity {
         this.type = type;
     }
 
-    public BucketList(Long seq, String title, String image, boolean isPublic, BucketListType type, boolean isDelete) {
+    public BucketList(Long seq, String title, String image, boolean isPublic, BucketListType type, boolean isDefault, boolean isDelete) {
         this.seq = seq;
         this.title = title;
         this.image = image;
         this.isPublic = isPublic;
         this.type = type;
+        this.isDefault = isDefault;
         this.isDelete = isDelete;
     }
 
