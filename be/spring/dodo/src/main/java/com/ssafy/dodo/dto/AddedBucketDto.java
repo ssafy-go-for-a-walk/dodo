@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
@@ -18,7 +21,8 @@ public class AddedBucketDto {
     private CategoryInfoDto category;
     private boolean isComplete;
     private String emoji;
-    private String dDay;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dDay;
     private String location;
     private String desc;
 

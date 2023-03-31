@@ -6,6 +6,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "added_buckets")
@@ -22,7 +23,7 @@ public class AddedBucket extends BaseEntity {
 
     private boolean isComplete;
     private String emoji;
-    private String dDay;
+    private LocalDate dDay;
     private String location;
     private String desc;
 
@@ -37,7 +38,7 @@ public class AddedBucket extends BaseEntity {
     private boolean isDelete;
 
     @Builder
-    public AddedBucket(Long seq, boolean isComplete, String emoji, String dDay, String location, String desc, BucketList bucketList, PublicBucket publicBucket, boolean isDelete) {
+    public AddedBucket(Long seq, boolean isComplete, String emoji, LocalDate dDay, String location, String desc, BucketList bucketList, PublicBucket publicBucket, boolean isDelete) {
         this.seq = seq;
         this.isComplete = isComplete;
         this.emoji = emoji;
@@ -49,7 +50,7 @@ public class AddedBucket extends BaseEntity {
         this.isDelete = isDelete;
     }
 
-    public void updateBucketInfo(String emoji, String dDay, String location, String desc) {
+    public void updateBucketInfo(String emoji, LocalDate dDay, String location, String desc) {
         this.emoji = emoji;
         this.dDay = dDay;
         this.location = location;

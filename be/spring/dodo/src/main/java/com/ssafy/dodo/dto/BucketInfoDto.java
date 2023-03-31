@@ -1,15 +1,17 @@
 package com.ssafy.dodo.dto;
 
-import com.ssafy.dodo.entity.BucketList;
-import com.ssafy.dodo.entity.PublicBucket;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import lombok.Getter;
 
-import javax.persistence.*;
+import java.time.LocalDate;
 
 @Getter
 public class BucketInfoDto {
     private String emoji;
-    private String dDay;
+
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate dDay;
     private String location;
     private String desc;
 }
