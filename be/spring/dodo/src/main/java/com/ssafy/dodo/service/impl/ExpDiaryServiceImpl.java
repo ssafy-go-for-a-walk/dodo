@@ -8,6 +8,7 @@ import com.ssafy.dodo.repository.*;
 import com.ssafy.dodo.service.ExpDiaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,7 +76,7 @@ public class ExpDiaryServiceImpl implements ExpDiaryService {
     }
 
     @Override
-    public List<ExpDiary> getExpDiaryByAddedBucket(Long userSeq, Long bucketSeq, Pageable pageable) {
+    public Page<ExpDiary> getExpDiaryByAddedBucket(Long userSeq, Long bucketSeq, Pageable pageable) {
         // 버킷이 요청한 사람의 것이 맞는지 확인
         User writer = userRepository.findById(userSeq)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -92,7 +93,7 @@ public class ExpDiaryServiceImpl implements ExpDiaryService {
     }
 
     @Override
-    public List<ExpDiary> getExpDiaryByBucketList(Long userSeq, Long bucketListSeq, Pageable pageable) {
+    public Page<ExpDiary> getExpDiaryByBucketList(Long userSeq, Long bucketListSeq, Pageable pageable) {
         // 버킷리스트에 요청한 사람이 소속되어있는지 확인
         User member = userRepository.findById(userSeq)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));

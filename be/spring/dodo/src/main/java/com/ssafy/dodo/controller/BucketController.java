@@ -9,7 +9,6 @@ import com.ssafy.dodo.service.ExpDiaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -93,16 +92,10 @@ public class BucketController {
          * 현재 각 경험일기에서 저장된 이미지 조회하기 위해 경험일기마다 select 쿼리 실행
          * 경험일기의 이미지까지 join fetch 시 메모리 터짐
          */
-
         Long userSeq = Long.parseLong(userDetails.getUsername());
-        List<ExpDiary> expDiaries = expDiaryService.getExpDiaryByAddedBucket(userSeq, bucketSeq, pageable);
+        Page<ExpDiary> expDiaryPage = expDiaryService.getExpDiaryByAddedBucket(userSeq, bucketSeq, pageable);
 
-        List<ExpDiaryInfoDto> content = expDiaries.stream()
-                .map(ExpDiaryInfoDto::of)
-                .collect(Collectors.toList());
-
-        Page<ExpDiaryInfoDto> data = new PageImpl<>(content, pageable, content.size());
-        return new DataResponse<>(data);
+        return new DataResponse<>(ExpDiaryInfoDto.toPagingDto(expDiaryPage));
     }
 
     @PostMapping("/{bucket-seq}/diaries")
@@ -117,13 +110,8 @@ public class BucketController {
         expDiaryService.write(userSeq, bucketSeq, dto, files);
 
         // 생성된 경험일기를 포함한 해당 버킷에 대한 경험일기 응답(요청사항)
-        List<ExpDiary> expDiaries = expDiaryService.getExpDiaryByAddedBucket(userSeq, bucketSeq, pageable);
+        Page<ExpDiary> expDiaryPage = expDiaryService.getExpDiaryByAddedBucket(userSeq, bucketSeq, pageable);
 
-        List<ExpDiaryInfoDto> content = expDiaries.stream()
-                .map(ExpDiaryInfoDto::of)
-                .collect(Collectors.toList());
-
-        Page<ExpDiaryInfoDto> data = new PageImpl<>(content, pageable, content.size());
-        return new DataResponse<>(data);
+        return new DataResponse<>(ExpDiaryInfoDto.toPagingDto(expDiaryPage));
     }
 }

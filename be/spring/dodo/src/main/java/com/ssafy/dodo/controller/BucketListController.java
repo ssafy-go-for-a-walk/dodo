@@ -8,7 +8,6 @@ import com.ssafy.dodo.service.PublicBucketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -104,13 +101,9 @@ public class BucketListController {
             Pageable pageable,
             @AuthenticationPrincipal UserDetails userDetails) {
         Long userSeq = Long.parseLong(userDetails.getUsername());
-        List<ExpDiary> expDiaries = expDiaryService.getExpDiaryByBucketList(userSeq, bucketListSeq, pageable);
-        List<ExpDiaryInfoDto> content = expDiaries.stream()
-                .map(ExpDiaryInfoDto::of)
-                .collect(Collectors.toList());
+        Page<ExpDiary> expDiaryPage = expDiaryService.getExpDiaryByBucketList(userSeq, bucketListSeq, pageable);
 
-        Page<ExpDiaryInfoDto> data = new PageImpl<>(content, pageable, content.size());
-        return new DataResponse<>(data);
+        return new DataResponse<>(ExpDiaryInfoDto.toPagingDto(expDiaryPage));
     }
 
     @PostMapping("/{bucketlist-seq}/invite")

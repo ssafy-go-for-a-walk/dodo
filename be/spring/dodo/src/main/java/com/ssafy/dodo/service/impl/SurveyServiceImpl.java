@@ -10,6 +10,7 @@ import com.ssafy.dodo.repository.PublicBucketRepository;
 import com.ssafy.dodo.repository.UserRepository;
 import com.ssafy.dodo.service.SurveyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -42,12 +43,8 @@ public class SurveyServiceImpl implements SurveyService {
         preferenceRepository.saveAll(preferenceList);
     }
 
-    private List<Long> removeDuplicate(User user, List<Long> preferences) {
-        return null;
-    }
-
     @Override
-    public List<PublicBucket> surveyBuckets(Pageable pageable) {
-        return publicBucketRepository.findAll(pageable).getContent();
+    public Page<PublicBucket> surveyBuckets(Pageable pageable) {
+        return publicBucketRepository.findAll(pageable);
     }
 }

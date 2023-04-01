@@ -5,6 +5,7 @@ import com.ssafy.dodo.entity.ExpDiary;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,5 +44,9 @@ public class ExpDiaryInfoDto {
         dto.createdAt = expDiary.getCreatedAt();
         dto.category = category;
         return dto;
+    }
+
+    public static Page<ExpDiaryInfoDto> toPagingDto(Page<ExpDiary> expDiaryPage) {
+        return expDiaryPage.map(ExpDiaryInfoDto::of);
     }
 }

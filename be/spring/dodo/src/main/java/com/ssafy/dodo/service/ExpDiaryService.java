@@ -2,14 +2,13 @@ package com.ssafy.dodo.service;
 
 import com.ssafy.dodo.dto.WriteExpDiaryDto;
 import com.ssafy.dodo.entity.ExpDiary;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 public interface ExpDiaryService {
 
     ExpDiary write(Long userSeq, Long bucketSeq, WriteExpDiaryDto dto, MultipartFile[] files);
-    List<ExpDiary> getExpDiaryByAddedBucket(Long userSeq, Long bucketSeq, Pageable pageable);
-    List<ExpDiary> getExpDiaryByBucketList(Long userSeq, Long bucketListSeq, Pageable pageable);
+    Page<ExpDiary> getExpDiaryByAddedBucket(Long userSeq, Long bucketSeq, Pageable pageable);
+    Page<ExpDiary> getExpDiaryByBucketList(Long userSeq, Long bucketListSeq, Pageable pageable);
 }

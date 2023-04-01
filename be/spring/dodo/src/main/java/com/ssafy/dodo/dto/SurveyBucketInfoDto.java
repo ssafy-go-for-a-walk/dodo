@@ -4,6 +4,7 @@ import com.ssafy.dodo.entity.PublicBucket;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.domain.Page;
 
 @Getter
 @ToString
@@ -20,5 +21,9 @@ public class SurveyBucketInfoDto {
         dto.emoji = publicBucket.getEmoji();
         dto.title = publicBucket.getTitle();
         return dto;
+    }
+
+    public static Page<SurveyBucketInfoDto> toPagingDto(Page<PublicBucket> bucketPage) {
+        return bucketPage.map(SurveyBucketInfoDto::of);
     }
 }
