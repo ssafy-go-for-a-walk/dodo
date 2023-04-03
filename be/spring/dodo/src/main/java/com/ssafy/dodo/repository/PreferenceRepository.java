@@ -19,8 +19,9 @@ public interface PreferenceRepository extends JpaRepository<Preference, Long> {
     @Modifying(flushAutomatically = true)
     void deleteAllByUserAndPublicBucket(User user, PublicBucket publicBucket);
 
-    @Query("SELECT pb from Preference p " +
-            "join p.publicBucket pb " +
-            "where p.user = :user and p.seq not in :publicBucketSeq")
-    List<PublicBucket> findPublicBucketByUserAndNotInFrom(@Param("user") User user, @Param("publicBucketSeq") List<Long> publicBucketSeq);
+    // 선호도에 이미 저장된 퍼블릭 버킷리스트를 제외한 버킷리스트 조회
+    @Query("select pb from PublicBucket pb " +
+            "where pb.seq in :publicBucketSeq and pb.seq not in " +
+            "(select p.publicBucket.seq from Preference p where p.user = :user)")
+    List<PublicBucket> findPublicBucketByUserAndNotIn(@Param("user") User user, @Param("publicBucketSeq") List<Long> publicBucketSeq);
 }
