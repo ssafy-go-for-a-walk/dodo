@@ -53,8 +53,8 @@ export default function SocialItem(props) {
   const [buttonStatus, setButtonStatus] = useState(true);
   const info = props.data;
   const length = 6;
-  const [datas, setdatas] = useState(info.bucketlist.slice(0, length));
-  const resDatas = info.bucketlist.slice(length);
+  const [datas, setdatas] = useState(info.buckets);
+  const resDatas = info.buckets.slice(length);
   const clickEvent = () => {
     setButtonStatus(pre => !pre);
     setdatas(pre => [...pre, ...resDatas]);
@@ -63,12 +63,12 @@ export default function SocialItem(props) {
   return (
     <TopDiv>
       <TitleDiv>
-        <BuckitlistImg src={info.bucketlistImg} alt="#" />
+        <BuckitlistImg src={info.bucketlist.image} alt="#" />
         <SubDiv>
-          <BuckitlistName>{info.bucketlistName}</BuckitlistName>
+          <BuckitlistName>{info.bucketlist.title}</BuckitlistName>
           <UserDiv>
-            <UserImg src={info.userImg} alt="#" />
-            <UserNickNAME>{info.userNickname}</UserNickNAME>
+            <UserImg src={info.user.image} alt="#" />
+            <UserNickNAME>{info.user.nickname}</UserNickNAME>
           </UserDiv>
         </SubDiv>
       </TitleDiv>

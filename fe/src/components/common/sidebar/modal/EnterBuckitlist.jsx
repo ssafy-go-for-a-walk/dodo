@@ -3,7 +3,8 @@ import styled from "styled-components";
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from "@mui/material";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { uploadBucketlist } from "../../../../redux/user";
 
 const TopDiv = styled.div`
 	display: flex;
@@ -55,6 +56,7 @@ const SubmitButton = styled.div`
 export default function EnterBuckitlist(props) {
 	const [code, setCode] = useState("")
 	const { user } = useSelector((state) => state)
+	const dispatch = useDispatch();
 	const closeModal = () => {props.closeModal()}
 	const changeName = (eve) => {
 		setCode(eve.target.value)
@@ -68,7 +70,7 @@ export default function EnterBuckitlist(props) {
 		})
 		.then(() => {
 			props.closeModal()
-			props.uploadBuckitlist()
+			dispatch(uploadBucketlist());
 		})
 		.catch((err) => alert(err.response.data.message))
 	}

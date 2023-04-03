@@ -22,7 +22,7 @@ const PTag = styled.p`
 
 export default function SocialItemContent(props) {
 	const category = props.data.category
-	const content = props.data.content
+	const title = props.data.title
 	const emoji = props.data.emoji
 	return (
 		<Div>
@@ -31,7 +31,7 @@ export default function SocialItemContent(props) {
 				{emoji}
 			</div>
 			<PTag>
-				{content}
+				{title}
 			</PTag>
 		</Div>
 	)

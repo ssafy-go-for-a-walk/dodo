@@ -12,12 +12,9 @@ export default function SidebarNav() {
   const [form, setForm] = useState({
     single: [],
     group: [],
-    update: true,
   });
   const { user } = useSelector(state => state);
-  const uploadBuckitlist = () => {
-    setForm({ ...form, update: pre => !pre });
-  };
+  const signal = user.sidebar
   const getBuckitlist = useCallback(async () => {
     await axios
       .get("https://j8b104.p.ssafy.io/api/users/bucketlists", {
@@ -35,12 +32,12 @@ export default function SidebarNav() {
 
   useEffect(() => {
     getBuckitlist();
-  }, [getBuckitlist, form.update]);
+  }, [getBuckitlist, signal]);
 
   return (
     <>
-      <MakeNewBuckitlist uploadBuckitlist={uploadBuckitlist} />
-      <EnterNewBuckitlist uploadBuckitlist={uploadBuckitlist} />
+      <MakeNewBuckitlist />
+      <EnterNewBuckitlist />
       {appRoutes.map((route, index) => (route.sidebarProps ? <SidebarItem item={route} key={index} /> : null))}
       <SelectedItem />
       <SidebarItemCollapse item={form.single} type={"single"} name={"나의 버킷리스트"} />
