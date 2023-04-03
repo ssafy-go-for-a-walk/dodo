@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BucketListRepository extends JpaRepository<BucketList, Long> {
 
@@ -31,4 +32,9 @@ public interface BucketListRepository extends JpaRepository<BucketList, Long> {
 
     @Query("SELECT COUNT(*) FROM BucketList bl join BucketListMember bm on bm.bucketList = bl WHERE bm.user = :user")
     int countByUser(User user);
+
+    @Query("select bl from BucketList bl " +
+            "join BucketListMember bm on bm.bucketList = bl " +
+            "where bm.user = :user and bl.isDefault = true")
+    Optional<BucketList> findDefaultBucketListByUser(@Param("user") User user);
 }

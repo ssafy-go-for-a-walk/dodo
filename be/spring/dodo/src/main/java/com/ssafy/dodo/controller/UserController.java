@@ -1,6 +1,7 @@
 package com.ssafy.dodo.controller;
 
 import com.ssafy.dodo.dto.*;
+import com.ssafy.dodo.entity.BucketList;
 import com.ssafy.dodo.entity.BucketListType;
 import com.ssafy.dodo.entity.User;
 import com.ssafy.dodo.exception.CustomException;
@@ -40,15 +41,16 @@ public class UserController {
     public DataResponse<UserInfoDto> getUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
         Long userSeq = Long.parseLong(userDetails.getUsername());
 
-        List<UserInfoDto> result = userRepository.findUserInfoBySeq(userSeq, PageRequest.of(0, 1));
-        if (result.size() == 0) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
-        }
+        User user = userRepository.findById(userSeq)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        UserInfoDto userInfoDto = result.get(0);
+        BucketList defaultBucketList = bucketListRepository.findDefaultBucketListByUser(user)
+                .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
+
+        UserInfoDto userInfoDto = UserInfoDto.of(user, defaultBucketList);
 
         // 기본 버킷리스트의 달성률 조회
-        Double completeRate = bucketListService.getBucketListCompleteRate(userInfoDto.getDefaultBucketList().getSeq());
+        Double completeRate = bucketListService.getBucketListCompleteRate(defaultBucketList.getSeq());
         userInfoDto.getDefaultBucketList().setCompleteRate(completeRate);
 
         return new DataResponse<>(userInfoDto);
@@ -97,7 +99,7 @@ public class UserController {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 버킷리스트 생성
-        bucketListService.createBucketList(user, dto, image);
+        bucketListService.createBucketList(user, dto, image, false);
         return new CommonResponse(true);
     }
 

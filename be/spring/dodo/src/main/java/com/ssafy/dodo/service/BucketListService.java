@@ -25,8 +25,8 @@ public interface BucketListService {
 
     BucketListInfoDto updateBucketListInfo(Long bucketListSeq, BucketListInfoDto bucketListInfoDto, MultipartFile file, UserDetails userDetails);
 
-    BucketList createBucketList(User user, CreateBucketListDto dto, MultipartFile image);
-    BucketList createBucketList(User user, String title, BucketListType type, MultipartFile image);
+    BucketList createBucketList(User user, CreateBucketListDto dto, MultipartFile image, boolean isDefault);
+    BucketList createBucketList(User user, String title, BucketListType type, MultipartFile image, boolean isDefault);
     Double getBucketListCompleteRate(Long bucketListSeq);
     String createInviteToken(Long bucketListSeq, Long inviterSeq);
     void joinBucketList(Long participantSeq, String inviteToken);

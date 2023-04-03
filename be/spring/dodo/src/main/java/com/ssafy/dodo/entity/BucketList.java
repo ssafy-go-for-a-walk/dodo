@@ -34,12 +34,13 @@ public class BucketList extends BaseEntity {
     private boolean isDelete;
 
     @Builder
-    public BucketList(Long seq, String title, String image, boolean isPublic, BucketListType type) {
+    public BucketList(Long seq, String title, String image, boolean isPublic, BucketListType type, boolean isDefault) {
         this.seq = seq;
         this.title = title;
         this.image = image;
         this.isPublic = isPublic;
         this.type = type;
+        this.isDefault = isDefault;
     }
 
     public BucketList(Long seq, String title, String image, boolean isPublic, BucketListType type, boolean isDefault, boolean isDelete) {
