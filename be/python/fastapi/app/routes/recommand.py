@@ -285,7 +285,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 
 	# 선호 데이터가 없는 경우 랜덤으로 추천
 	if(prefer_sum == 0):
-		social_random_recomm(db, userSeq, size)
+		social_random_recomm(db, userSeq, size, page)
 		# user_list_data = db.query(User).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
 
 		# random_user = random.sample(range(1, len(user_list_data)), size)
@@ -391,7 +391,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 			logger.info(f"fail {a}")
 			a = "train_test_split"
 			if(i >= 0.60):
-				social_random_recomm(db, userSeq, size)
+				social_random_recomm(db, userSeq, size, page)
 				# raise HTTPException(status_code=400, detail="too low data")
 			pass
 
@@ -473,7 +473,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 	return response
 
 
-def social_random_recomm(db: Session, userSeq: int, size: int):
+def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 	user_list_data = db.query(User.seq).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
 
 	logger.info(f"user list data: {user_list_data}")
