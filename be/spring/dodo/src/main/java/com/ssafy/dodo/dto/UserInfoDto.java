@@ -1,5 +1,6 @@
 package com.ssafy.dodo.dto;
 
+import com.ssafy.dodo.entity.BucketList;
 import com.ssafy.dodo.entity.User;
 import lombok.*;
 
@@ -26,12 +27,14 @@ public class UserInfoDto {
         this.defaultBucketList = new DefaultBucketList(defaultBucketListSeq, defaultBucketListTitle);
     }
 
-    public static UserInfoDto of(User user) {
+    public static UserInfoDto of(User user, BucketList bucketList) {
         return UserInfoDto.builder()
                 .seq(user.getSeq())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .profileImage(user.getProfileImage())
+                .defaultBucketListSeq(bucketList.getSeq())
+                .defaultBucketListTitle(bucketList.getTitle())
                 .build();
     }
 

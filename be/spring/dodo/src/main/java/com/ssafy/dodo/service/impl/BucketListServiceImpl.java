@@ -226,12 +226,12 @@ public class BucketListServiceImpl implements BucketListService {
     }
 
     @Override
-    public BucketList createBucketList(User user, CreateBucketListDto dto, MultipartFile image) {
-        return createBucketList(user, dto.getTitle(), dto.getType(), image);
+    public BucketList createBucketList(User user, CreateBucketListDto dto, MultipartFile image, boolean isDefault) {
+        return createBucketList(user, dto.getTitle(), dto.getType(), image, isDefault);
     }
 
     @Override
-    public BucketList createBucketList(User user, String title, BucketListType type, MultipartFile image) {
+    public BucketList createBucketList(User user, String title, BucketListType type, MultipartFile image, boolean isDefault) {
         // title이 없는 경우 기본 버킷리스트 이름으로 생성
         title = title == null ? DEFAULT_BUCKETLIST_NAME : title;
 
@@ -244,6 +244,7 @@ public class BucketListServiceImpl implements BucketListService {
                 .title(title)
                 .type(type)
                 .image(bucketListImage)
+                .isDefault(isDefault)
                 .build();
         bucketList = bucketListRepository.save(bucketList);
 

@@ -56,7 +56,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user = userRepository.save(user);
 
             // 기본 버킷리스트 생성
-            bucketListService.createBucketList(user, null, BucketListType.SINGLE, null);
+            bucketListService.createBucketList(user, null, BucketListType.SINGLE, null, true);
 
             return user;
         } else { // 있으면 가져온다.
