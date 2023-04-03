@@ -9,7 +9,8 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 
 const Div = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   padding: 0 16px;
 `;
 
@@ -20,41 +21,26 @@ export default function ManageDiary() {
   const [ref, inView] = useInView();
   const { user } = useSelector(state => state);
   const listId = user.value.selectedBucketlist.pk;
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`https://j8b104.p.ssafy.io/api/bucketlists/${listId}/diaries`, {
-  //       headers: {
-  //         Authorization: `Bearer ${user.value.token}`,
-  //       },
-  //     })
-  //     .then(res => {
-  //       const resData = res.data.data;
-  //       setDiaries(resData.content);
-  //       setLast(resData.last);
-  //     })
-  //     .catch(err => console.log(err));
-  // }, []);
+  const userToken = user.value.token;
 
   const getDiaries = useCallback(async () => {
-    const params = { params: paging.page };
     setLoading(true);
-    axios
+    const params = { page: paging.page };
+    await axios
       .get(`https://j8b104.p.ssafy.io/api/bucketlists/${listId}/diaries`, {
         params: params,
         headers: {
-          Authorization: `Bearer ${user.value.token}`,
+          Authorization: `Bearer ${userToken}`,
         },
       })
       .then(res => {
-        console.log("ok");
         const resData = res.data.data;
         setDiaries(pre => [...pre, ...resData.content]);
-        setPaging({ page: resData.number, last: resData.last });
+        setPaging({ page: resData.number + 1, last: resData.last });
       })
       .catch(err => console.log(err));
     setLoading(false);
-  }, []);
+  }, [listId, userToken, paging.page]);
 
   useEffect(() => {
     if (inView && !paging.last) {
@@ -63,15 +49,15 @@ export default function ManageDiary() {
   }, [inView, paging, getDiaries]);
 
   return (
-    diaries.length !== 0 && (
-      <Div>
+    <Div>
+      {Array.isArray(diaries) && (
         <Masonry columns={{ xs: 1, md: 2, lg: 3, xl: 4 }} spacing={2}>
           {diaries.map(diary => (
-            <DiaryCard diary={diary} key={diary.createdAt} loading="lazy" />
+            <DiaryCard diary={diary} key={diary.seq} loading="lazy" />
           ))}
         </Masonry>
-        <RefreshIcon sx={{ marginTop: "8px" }} ref={ref} />
-      </Div>
-    )
+      )}
+      {!paging.last && !loading && <RefreshIcon ref={ref} />}
+    </Div>
   );
 }

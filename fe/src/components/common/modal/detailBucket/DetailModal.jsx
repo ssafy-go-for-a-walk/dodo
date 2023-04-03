@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
 import { IconButton } from "@mui/material";
@@ -15,6 +15,8 @@ import Picker from "emoji-picker-react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { reBucketList } from "../../../../redux/user";
+import { useInView } from "react-intersection-observer";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 const Modal = styled.div`
   display: flex;
@@ -128,6 +130,9 @@ const Content = styled.textarea`
 const Diaries = styled.div`
   width: 580px;
   height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   overflow: scroll;
   &::-webkit-scrollbar {
     display: none;
@@ -137,15 +142,19 @@ const Diaries = styled.div`
 export default function GroupModal(props) {
   const bucket = props.bucket;
   const [emoji, setEmoji] = useState(bucket.emoji);
-  const [endDate, setEndDate] = useState(bucket.dday !== null ? bucket.dday : new Date());
+  const [endDate, setEndDate] = useState(bucket.dday !== null ? new Date(bucket.dday) : new Date());
   const [location, setLocation] = useState(bucket.location !== null ? bucket.location : "");
   const [content, setContent] = useState(bucket.desc !== null ? bucket.desc : "");
   const [category, setCate] = useState(bucket.category !== null ? bucket.category.item : null);
   const [showPicker, setShowPicker] = useState(false);
   const [diaries, setDiaries] = useState([]);
+  const [paging, setPaging] = useState({ page: 0, last: false });
+  const [loading, setLoading] = useState(false);
   const { user } = useSelector(state => state);
   const userToken = user.value.token;
   const dispatch = useDispatch();
+  const [ref, inView] = useInView();
+
   const onEmojiClick = emojiObject => {
     setEmoji(emojiObject.emoji);
     setShowPicker(false);
@@ -185,26 +194,41 @@ export default function GroupModal(props) {
     props.closeModal();
   };
 
-  const changeDiaries = diaries => {
-    setDiaries(diaries);
+  const changeDiaries = resData => {
+    setDiaries(resData.content);
+    setPaging({ page: resData.number + 1, last: resData.last });
   };
 
-  useEffect(() => {
-    axios
+  const moreDiaries = useCallback(async () => {
+    setLoading(true);
+    const params = { page: paging.page };
+    await axios
       .get(`https://j8b104.p.ssafy.io/api/buckets/${bucket.seq}/diaries`, {
+        params: params,
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
       })
-      .then(res => changeDiaries(res.data.data))
+      .then(res => {
+        const resData = res.data.data;
+        setDiaries(pre => [...pre, ...resData.content]);
+        setPaging({ page: resData.number + 1, last: resData.last });
+      })
       .catch(err => console.log(err));
-  }, [userToken, bucket.seq]);
+    setLoading(false);
+  }, [paging.page, bucket.seq, userToken]);
+
+  useEffect(() => {
+    if (inView && !paging.last) {
+      moreDiaries();
+    }
+  }, [inView, paging, moreDiaries]);
 
   return (
     <Modal>
       <div style={{ display: "flex", justifyContent: "end" }}>
-        <IconButton>
-          <CloseIcon style={{ color: "#1C9BFF", fontSize: "32px" }} onClick={closeDetailModal} />
+        <IconButton sx={{ width: "40px", right: "10ox", left: "auto" }} onClick={closeDetailModal}>
+          <CloseIcon style={{ color: "#1C9BFF" }} />
         </IconButton>
       </div>
       <Div>
@@ -245,7 +269,10 @@ export default function GroupModal(props) {
           </Detail>
         </Header>
         <Content defaultValue={content} onChange={contentChange} />
-        <Diaries>{diaries.length !== 0 && diaries.content.map(diary => <Diary diary={diary} />)}</Diaries>
+        <Diaries>
+          {Array.isArray(diaries) && diaries.map(diary => <Diary diary={diary} key={diary.seq} />)}
+          {!paging.last && !loading && <RefreshIcon sx={{ marginTop: "8px" }} ref={ref} />}
+        </Diaries>
         <DiaryForm bucketId={bucket.seq} changeDiaries={changeDiaries} />
       </Div>
     </Modal>

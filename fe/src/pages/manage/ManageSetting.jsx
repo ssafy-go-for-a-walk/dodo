@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import FullButton from "../../components/common/button/FullButton";
 import HalfButton from "../../components/common/button/HalfButton";
@@ -78,6 +78,16 @@ export default function ManageSetting() {
   });
   const photoInput = useRef();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setBucketListInfo({
+      title: info.title,
+      image: info.image,
+      imageConfirm: null,
+      isPublic: info.isPublic,
+    });
+  }, [info]);
+
   const changeImage = event => {
     setBucketListInfo({ ...bucketListInfo, image: URL.createObjectURL(event.target.files[0]), imageConfirm: event.target.files[0] });
   };
@@ -85,7 +95,8 @@ export default function ManageSetting() {
     setBucketListInfo({ ...bucketListInfo, title: event.target.value });
   };
   const saveSetting = isPublic => {
-    if (bucketListInfo.title !== info.title || bucketListInfo.imageConfirm !== null || bucketListInfo.isPublic !== isPublic) {
+    setBucketListInfo({ ...bucketListInfo, isPublic: isPublic });
+    if (bucketListInfo.title !== info.title || bucketListInfo.imageConfirm !== null || isPublic !== info.isPublic) {
       const formData = new FormData();
       const data = JSON.stringify({
         title: bucketListInfo.title,
@@ -104,12 +115,23 @@ export default function ManageSetting() {
         .catch(err => console.log(err));
     }
   };
-  const changePublic = e => {
-    setBucketListInfo({ ...bucketListInfo, isPublic: !e });
-    saveSetting(!e);
-  };
   const createCode = () => {
-    return;
+    axios
+      .post(`https://j8b104.p.ssafy.io/api/bucketlists/${listId}/invite`)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+  };
+  const deleteBucketList = () => {
+    axios
+      .delete(`https://j8b104.p.ssafy.io/api/bucketlists/${listId}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then(res => {
+        console.log(res.data.data);
+      })
+      .catch(err => console.log(err));
   };
   const saveImage = () => {
     const imageUrl = user.myBucketlist
@@ -135,15 +157,15 @@ export default function ManageSetting() {
         <TitleInput value={bucketListInfo.title} onChange={changeTitle} />
       </BucketTitle>
       <FullButton propFunction={() => saveSetting(info.isPublic)}>저장하기</FullButton>
-      <FullButton public={info.isPublic} propFunction={() => changePublic(info.isPublic)}>
+      <FullButton public={info.isPublic} propFunction={() => saveSetting(!info.isPublic)}>
         Private / Public
       </FullButton>
-      <FullButton propFunction={createCode}>참여코드 생성하기</FullButton>
+      {info.type === "GROUP" && <FullButton propFunction={createCode}>참여코드 생성하기</FullButton>}
       <HalfButtons>
         <HalfButton>공유하기</HalfButton>
         <HalfButton onClick={saveImage}>내보내기</HalfButton>
       </HalfButtons>
-      <DeleteButton />
+      <DeleteButton onClick={deleteBucketList} />
     </Settings>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { MdSearch } from "react-icons/md";
+import { HiPlus } from "react-icons/hi";
 import ManageSearchBucket from "./ManageSearchBucket";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -91,37 +91,39 @@ export default function ManageSearchBar() {
     }
   };
 
-  const resetValue = () => {
-    setValue("");
-    setBuckets([]);
-  };
+  // const resetValue = () => {
+  //   setValue("");
+  //   setBuckets([]);
+  // };
 
   const addBucket = () => {
-    axios
-      .post(
-        `https://j8b104.p.ssafy.io/api/bucketlists/${bucketListId}/buckets`,
-        { title: value },
-        {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
+    if (value.length > 0) {
+      axios
+        .post(
+          `https://j8b104.p.ssafy.io/api/bucketlists/${bucketListId}/buckets`,
+          { title: value },
+          {
+            headers: {
+              Authorization: `Bearer ${userToken}`,
+            },
           },
-        },
-      )
-      .then(res => dispatch(reBucketList(res.data.data)))
-      .catch(err => console.log(err));
-    setValue("");
-    setBuckets([]);
+        )
+        .then(res => dispatch(reBucketList(res.data.data)))
+        .catch(err => console.log(err));
+      setValue("");
+      setBuckets([]);
+    }
   };
 
   return (
     <SearchBox>
       <InputBox>
-        <SearchInput onChange={searchBucket} value={value} onKeyPress={onKeyPress} onBlur={resetValue} />
+        <SearchInput onChange={searchBucket} value={value} onKeyPress={onKeyPress} />
         <SearchIcon onClick={addBucket}>
-          <MdSearch className="searchIcon" />
+          <HiPlus className="searchIcon" />
         </SearchIcon>
       </InputBox>
-      <SearchResult>{buckets.legnth !== 0 && buckets.map(bucket => <ManageSearchBucket bucket={bucket} key={bucket.publicBucketSeq} />)}</SearchResult>
+      <SearchResult>{Array.isArray(buckets) && buckets.map(bucket => <ManageSearchBucket bucket={bucket} key={bucket.publicBucketSeq} />)}</SearchResult>
     </SearchBox>
   );
 }

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-// import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import SlideUp from "../../components/common/button/SlideUp";
 import SearchBar from "./SearchBar";
@@ -28,19 +27,16 @@ const Categorys = styled.div`
 
 export default function SearchPage() {
   const [selectCate, setSelectCate] = useState("전체");
-  // const [paging, setPaging] = useState({ last: false, number: 0 });
+  const [paging, setPaging] = useState({ last: false, page: 0 });
   const [buckets, setBuckets] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [ref] = useInView();
-  // const [ref, inView] = useInView();
+  const [ref, inView] = useInView();
   const { user } = useSelector(state => state);
   const userToken = user.value.token;
 
   const changeCate = useCallback(
     async categoryName => {
-      // if (!paging.last) {
       const params = { category: categoryName };
-      // const params = { category: categoryName, page: paging.number };
       setLoading(true);
       axios
         .get("https://j8b104.p.ssafy.io/api/recomm/buckets", {
@@ -50,13 +46,13 @@ export default function SearchPage() {
           },
         })
         .then(res => {
-          setBuckets(res.data.data.content);
-          // setPaging({last: res.data.data.last, number: res.data.data.number})
+          const resData = res.data.data;
+          setBuckets(resData.content);
+          setPaging({ page: resData.number + 1, last: resData.last });
         })
         .catch(err => console.log(err));
       setSelectCate(categoryName);
       setLoading(false);
-      // }
     },
     [userToken],
   );
@@ -72,15 +68,30 @@ export default function SearchPage() {
     changeCate(selectCate);
   }, [changeCate, selectCate]);
 
-  // const addBuckets = useCallback(async () => {
-  //
-  // }, [datas]);
+  const addBuckets = useCallback(async () => {
+    setLoading(true);
+    const params = { category: selectCate, page: paging.page };
+    axios
+      .get("https://j8b104.p.ssafy.io/api/recomm/buckets", {
+        params: params,
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then(res => {
+        const resData = res.data.data;
+        setBuckets(pre => [...pre, ...resData.content]);
+        setPaging({ page: resData.number + 1, last: resData.last });
+      })
+      .catch(err => console.log(err));
+    setLoading(false);
+  }, [selectCate, paging.page, userToken]);
 
-  // useEffect(() => {
-  //   if (inView && !loading) {
-  //     addBuckets();
-  //   }
-  // }, [inView, loading, getBuckets]);
+  useEffect(() => {
+    if (inView && !paging.last) {
+      addBuckets();
+    }
+  }, [inView, paging.last, addBuckets]);
 
   return (
     <Div>
@@ -97,8 +108,8 @@ export default function SearchPage() {
         ))}
       </Categorys>
       <Banner />
-      {buckets.length !== 0 ? buckets.map(bucket => <RecommBucket bucket={bucket} key={bucket.publicBucketSeq} />) : null}
-      {loading && <RefreshIcon ref={ref} />}
+      {Array.isArray(buckets) && buckets.map(bucket => <RecommBucket bucket={bucket} key={bucket.publicBucketSeq} />)}
+      {!paging.last && !loading && <RefreshIcon ref={ref} />}
       <SlideUp />
     </Div>
   );
