@@ -30,9 +30,9 @@ public interface PublicBucketRepository extends JpaRepository<PublicBucket, Long
 
     List<PublicBucket> findAllBySeqIn(List<Long> publicBuckets);
 
-    Page<PublicBucket> findAllByTitleContaining(String title, Pageable pageable);
+    Page<PublicBucket> findAllByTitleContainingAndIsPublic(String title, boolean isPublic, Pageable pageable);
 
-    Page<PublicBucket> findAllByTitleContainingAndCategory(String title, Category category, Pageable pageable);
+    Page<PublicBucket> findAllByTitleContainingAndCategoryAndIsPublic(String title, Category category, boolean isPublic, Pageable pageable);
 
     Page<PublicBucket> findAll(Pageable pageable);
 }
