@@ -19,6 +19,10 @@ export default function ManagePage() {
   };
 
   useEffect(() => {
+    setpageFilter("bucketList");
+  }, [listId]);
+
+  useEffect(() => {
     axios
       .get(`https://j8b104.p.ssafy.io/api/bucketlists/${listId}`, {
         headers: {
@@ -26,9 +30,10 @@ export default function ManagePage() {
         },
       })
       .then(res => {
+        const resData = res.data.data;
         const data = {
-          info: res.data.data.bucketListInfo,
-          buckets: res.data.data.addedBuckets,
+          info: resData.bucketListInfo,
+          buckets: resData.addedBuckets,
         };
         dispatch(setBucketList(data));
       })
