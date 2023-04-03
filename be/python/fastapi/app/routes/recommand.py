@@ -39,7 +39,7 @@ def session_test(db: Session = Depends(engine.get_session)):
 
 # Preference - title을 활용한 CBF - 코사인 유사도 활용
 @router.get("/buckets", status_code=200)
-def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 100,
+def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20,
 		    db: Session = Depends(engine.get_session), 
 	      	credentials: HTTPAuthorizationCredentials= Depends(security)):
 	
@@ -241,7 +241,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			category = Category_dto(i['category_seq'], i['item'])
 			temp = Bucket_recoomm_dto(i['title'], i['emoji'], i['added_count'], i['bucket_seq'], is_added, category)
 			temp_result.append(temp)
-			logger.info(temp.__str__)
+			logger.info(temp)
 
 		# logger.info(temp_result)
 
@@ -561,6 +561,7 @@ def bucket_random_recomm(db: Session, userSeq: int, size: int, page: int, search
 		category = Category_dto(i.category_seq, i.item)
 		temp = Bucket_recoomm_dto(i.title, i.emoji, i.added_count, i.bucket_seq, is_added, category)
 		temp_result.append(temp)
+		logger.info(temp)
 
 
 	data = {"content": temp_result, "last": len(pb_data) == 0, "size": size, "number": page+1, "empty": len(temp_result) == 0}
