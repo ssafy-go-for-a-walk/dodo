@@ -527,15 +527,13 @@ def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 
 			for j in user_data:
 				temp = Bucket_dto(j.BucketTitle, j.BucketEmoji, j.CategoryItem)
-				buckets.append(temp)
-		
+				buckets.append(temp)			
 			
 			user = User_dto(user_data[0].UserProfileNickname, user_data[0].UserProfileImage)
 			bucketlist = Bucketlist_dto(user_data[0].bucketListTitle, user_data[0].bucketListImage)
-		
 	
-		temp = User_recoomm_dto(user, bucketlist, buckets)
-		result.append(temp)
+			temp = User_recoomm_dto(user, bucketlist, buckets)
+			result.append(temp)
 
 	# data = {"content": result, "last": ie_end, "size": size, "number": page, "empty": len(result) == 0}
 	data = {"content": result, "last": "페이징 하는중", "size": size, "number": page, "empty": "페이징 하는중"}
