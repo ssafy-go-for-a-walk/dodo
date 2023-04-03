@@ -5,6 +5,7 @@ import { useInView } from "react-intersection-observer";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import SlideUp from "../../components/common/button/SlideUp";
 
 const Div = styled.div`
   display: flex;
@@ -53,6 +54,7 @@ export default function SocialPage() {
     <Div>
       {items.length !== 0 ? items.map((data, index) => <SocialItem data={data} key={index} />) : null}
       {last ? null: <RefreshIcon ref={ref} />}
+      <SlideUp />
     </Div>
   );
 }
