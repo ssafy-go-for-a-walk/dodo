@@ -34,6 +34,7 @@ logger = logging.getLogger(__name__)
 @router.get('/test')
 def session_test(db: Session = Depends(engine.get_session)):
 	example = db.query(Category).all()
+	example = db.query(User).filter(User.nickname != 'null').all()
 	return example
 
 # Preference - title을 활용한 CBF - 코사인 유사도 활용
@@ -70,14 +71,19 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			.filter(Preference.user_seq == user_seq)\
 			.filter(Preference.is_delete == 0)\
 			.filter(Preference.bucket_seq == PublicBucket.seq)\
-			.filter(PublicBucket.category_seq is not None)\
+			.filter(PublicBucket.category_seq != 'null')\
 			.all()
 	
-	print(prefer_data)
+	logger.info(f"prefer_data: {prefer_data}")
+
+	# 추천할만한 prefer data가 없는 경우
+	if(len(prefer_data) == 0):
+		logger.info("prefer data 부족, random recomm")
+		response = bucket_random_recomm(db, user_seq, size, page, search_category_seq)
+		return response
 	
-	# TODO 1로 바꿔야됨
 	pb_data = db.query(PublicBucket.emoji, PublicBucket.title, PublicBucket.added_count, PublicBucket.seq.label("bucket_seq"), Category.seq.label("category_seq"), Category.item)\
-			.filter(PublicBucket.is_public == 0)\
+			.filter(PublicBucket.is_public == 1)\
 			.filter(PublicBucket.category_seq == Category.seq)\
 			.all()
 	
@@ -85,8 +91,9 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 	logger.info(f"public bucket data 개수 : {len(pb_data)}")
 
 	if(len(pb_data) == 0 or len(prefer_data) == 0):
-		# TODO 랜덤으로 뽑아주기
-		raise HTTPException(status_code=400, detail="설문 조사를 하지 않은 유저는 추천이 불가합니다.")
+		response = bucket_random_recomm(db, user_seq, size, page)
+		return response
+		# raise HTTPException(status_code=400, detail="설문 조사를 하지 않은 유저는 추천이 불가합니다.")
 
 
 	# TODO 유저가 몇명 이상이면 협업 필터링을 해야할까?
@@ -273,8 +280,8 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 		.filter(Preference.user_seq.in_(\
 		db.query(Preference.user_seq).group_by(Preference.user_seq).having(func.count(Preference.user_seq) > 1)))\
 		.all()
-	# TODO 1로 바꿔야됨
-	pb_data = db.query(PublicBucket).filter(PublicBucket.is_public == 0).all()
+	
+	pb_data = db.query(PublicBucket).filter(PublicBucket.is_public == 1).all()
 
 	prefer_sum = db.query(Preference).filter(Preference.user_seq == userSeq).filter(Preference.is_delete == 0).count()
 	logger.info(f"{userSeq}의 preferences 개수: {prefer_sum}")
@@ -507,3 +514,57 @@ def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 	response = {"data": data, "success": True}
 		
 	return response
+
+
+def bucket_random_recomm(db: Session, userSeq: int, size: int, page: int, search_category_seq: int):
+
+	if(search_category_seq == 0):
+		pb_data = db.query(PublicBucket.emoji, PublicBucket.title, PublicBucket.added_count, PublicBucket.seq.label("bucket_seq"), Category.seq.label("category_seq"), Category.item)\
+				.filter(PublicBucket.is_public == 1)\
+				.filter(PublicBucket.category_seq == Category.seq)\
+				.filter(PublicBucket.is_delete == 0)\
+				.filter(PublicBucket.category_seq != 'null')\
+				.all()
+		
+	else:
+		pb_data = db.query(PublicBucket.emoji, PublicBucket.title, PublicBucket.added_count, PublicBucket.seq.label("bucket_seq"), Category.seq.label("category_seq"), Category.item)\
+				.filter(PublicBucket.is_public == 1)\
+				.filter(PublicBucket.category_seq == Category.seq)\
+				.filter(PublicBucket.is_delete == 0)\
+				.filter(PublicBucket.category_seq == search_category_seq)\
+				.filter(PublicBucket.category_seq != 'null')\
+				.all()
+
+
+	prefer_data = db.query(PublicBucket.title, PublicBucket.category_seq)\
+			.filter(Preference.user_seq == userSeq)\
+			.filter(Preference.is_delete == 0)\
+			.filter(Preference.bucket_seq == PublicBucket.seq)\
+			.filter(PublicBucket.category_seq != 'null')\
+			.all()
+	
+	list_prefer_data = []
+
+	for i in prefer_data:
+		list_prefer_data.append(i.title)
+
+	random_pb_data= random.sample(pb_data, size)
+
+	temp_result = []
+
+
+	for i in random_pb_data:
+		pb_data.remove(i)
+
+		is_added = i["title"] in list_prefer_data
+		category = Category_dto(i.category_seq, i.item)
+		temp = Bucket_recoomm_dto(i.title, i.emoji, i.added_count, i.bucket_seq, is_added, category)
+		temp_result.append(temp)
+
+
+	data = {"content": temp_result, "last": len(pb_data) == 0, "size": size, "number": page+1, "empty": len(temp_result) == 0}
+	response = {"data": data, "success": True}
+
+	# TODO 페이징
+	return response
+
