@@ -60,6 +60,9 @@ export const userSlice = createSlice({
     changeListInfo: (state, action) => {
       state.bucketList.info = action.payload;
       state.value.selectedBucketlist.title = action.payload.title;
+      if (action.payload.seq === state.value.defaultBucketlist.pk) {
+        state.value.defaultBucketlist.title = action.payload.title;
+      }
     },
     changeCompleteRate: (state, action) => {
       state.value.selectedBucketlist.completeRate = action.payload;

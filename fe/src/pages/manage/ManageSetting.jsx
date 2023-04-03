@@ -118,7 +118,10 @@ export default function ManageSetting() {
             "Content-Type": "multipart/form-data",
           },
         })
-        .then(res => dispatch(changeListInfo(res.data.data)))
+        .then(res => {
+          console.log(res.data.data);
+          dispatch(changeListInfo(res.data.data));
+        })
         .catch(err => console.log(err));
     }
   };

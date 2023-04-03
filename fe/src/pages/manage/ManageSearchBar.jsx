@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import { HiPlus } from "react-icons/hi";
-import ManageSearchBucket from "./ManageSearchBucket";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { reBucketList } from "../../redux/user";
+import ManageSearchBucket from "./ManageSearchBucket";
+import { HiPlus } from "react-icons/hi";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import { useInView } from "react-intersection-observer";
 
 const SearchBox = styled.div`
   width: 80%;
@@ -52,27 +54,35 @@ const SearchResult = styled.div`
   max-height: 560px;
   border-radius: 8px;
   overflow: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
   position: absolute;
   z-index: 10;
   top: 36px;
   background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export default function ManageSearchBar() {
   const [buckets, setBuckets] = useState([]);
   const [value, setValue] = useState("");
+  const [paging, setPaging] = useState({ page: 0, last: false });
+  const [loading, setLoading] = useState(false);
+  const [ref, inView] = useInView();
   const { user } = useSelector(state => state);
-  const bucketListId = user.value.selectedBucketlist.pk;
+  const listId = user.value.selectedBucketlist.pk;
   const userToken = user.value.token;
   const dispatch = useDispatch();
 
   const searchBucket = event => {
-    setValue(event.target.value);
-    if (event.target.value.length > 0) {
-      const params = { q: event.target.value, bucketlist: bucketListId };
+    setLoading(true);
+    const searchValue = event.target.value;
+    setValue(searchValue);
+    if (searchValue.length > 0) {
+      const params = { q: searchValue, bucketlist: listId };
       axios
         .get("https://j8b104.p.ssafy.io/api/buckets/search", {
           params: params,
@@ -80,10 +90,34 @@ export default function ManageSearchBar() {
             Authorization: `Bearer ${userToken}`,
           },
         })
-        .then(res => setBuckets(res.data.data.content))
+        .then(res => {
+          const resData = res.data.data;
+          setBuckets(resData.content);
+          setPaging({ page: resData.number + 1, last: resData.last });
+        })
         .catch(err => console.log(err));
+      setLoading(false);
     } else setBuckets([]);
   };
+
+  const moreBucket = useCallback(async () => {
+    setLoading(true);
+    const params = { q: value, bucketlist: listId, page: paging.page };
+    await axios
+      .get("https://j8b104.p.ssafy.io/api/buckets/search", {
+        params: params,
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then(res => {
+        const resData = res.data.data;
+        setBuckets(pre => [...pre, ...resData.content]);
+        setPaging({ page: resData.number + 1, last: resData.last });
+      })
+      .catch(err => console.log(err));
+    setLoading(false);
+  }, [listId, userToken, paging.page, value]);
 
   const onKeyPress = event => {
     if (event.key === "Enter") {
@@ -91,16 +125,11 @@ export default function ManageSearchBar() {
     }
   };
 
-  // const resetValue = () => {
-  //   setValue("");
-  //   setBuckets([]);
-  // };
-
   const addBucket = () => {
     if (value.length > 0) {
       axios
         .post(
-          `https://j8b104.p.ssafy.io/api/bucketlists/${bucketListId}/buckets`,
+          `https://j8b104.p.ssafy.io/api/bucketlists/${listId}/buckets`,
           { title: value },
           {
             headers: {
@@ -115,6 +144,14 @@ export default function ManageSearchBar() {
     }
   };
 
+  useEffect(() => {
+    if (inView && !paging.last && value.length > 0) {
+      moreBucket();
+    } else if (value.length === 0) {
+      setLoading(true);
+    }
+  }, [inView, paging, moreBucket, value]);
+
   return (
     <SearchBox>
       <InputBox>
@@ -123,7 +160,10 @@ export default function ManageSearchBar() {
           <HiPlus className="searchIcon" />
         </SearchIcon>
       </InputBox>
-      <SearchResult>{Array.isArray(buckets) && buckets.map(bucket => <ManageSearchBucket bucket={bucket} key={bucket.publicBucketSeq} />)}</SearchResult>
+      <SearchResult>
+        {Array.isArray(buckets) && buckets.map(bucket => <ManageSearchBucket bucket={bucket} key={bucket.publicBucketSeq} />)}
+        {!paging.last && !loading && <RefreshIcon ref={ref} />}
+      </SearchResult>
     </SearchBox>
   );
 }
