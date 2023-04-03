@@ -82,17 +82,6 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 		# TODO 랜덤으로 뽑아주기
 		raise HTTPException(status_code=400, detail="설문 조사를 하지 않은 유저는 추천이 불가합니다.")
 
-	# print(prefer_data[0].category_seq)
-	# print(prefer_data[0])
-	# print(pb_data[0])
-	# print(pb_data[1])
-	# print(pb_data[0].title)
-	
-	# tt = jsonable_encoder(prefer_data[0])
-	# temp = jsonable_encoder(pb_data[0])
-
-	# print(tt)
-	# print(temp)
 
 	# TODO 유저가 몇명 이상이면 협업 필터링을 해야할까?
 	user_sum = db.query(User).count()
@@ -135,7 +124,11 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 
 	# 추천 함수
 	def get_recommendations(title, cosine_sim=cosine_sim):
-		idx = title_to_index[title]
+		try:
+			idx = title_to_index[title]
+		except:
+			result = pd.DataFrame()
+			return result
 		logger.info(f"idx 정보 : {idx}")
 
 		sim_scores = list(enumerate(cosine_sim[idx]))
