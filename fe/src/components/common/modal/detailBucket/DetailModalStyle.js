@@ -6,7 +6,7 @@ const DetailModalStyle = {
     right: 0,
     bottom: 0,
     backgroundColor: "rgba(255,255,255,0.5)",
-    zIndex: 10,
+    zIndex: 9999,
   },
   content: {
     backgroundColor: "white",

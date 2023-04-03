@@ -1,28 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
 import { IconButton } from "@mui/material";
+import { MdContentCopy } from "react-icons/md";
 
 const Modal = styled.div`
-  position: fixed;
-  z-index: 99;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 728px;
-  height: 360px;
-  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Div = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff;
 `;
 
 const Title = styled.div`
   height: 44px;
   font-size: 28px;
-  text-align: center;
   margin-bottom: 16px;
 `;
 
@@ -52,22 +48,41 @@ const Copy = styled.div`
   color: #7b7b7b;
 `;
 
-export default function GroupModal(props) {
+export default function CodeModal(props) {
+  const { code } = props;
+  const [copy, setCopy] = useState(false);
   const closeModal = () => {
     props.closeModal();
   };
+  const handleCopyClipBoard = async joinCode => {
+    try {
+      await navigator.clipboard.writeText(joinCode);
+      setCopy(true);
+    } catch (e) {
+      alert("복사에 실패하였습니다");
+    }
+  };
   return (
     <Modal>
-      <IconButton sx={{ width: "40px", right: "10ox", left: "auto" }}>
-        <CloseIcon style={{ color: "#1C9BFF" }} onClick={closeModal} />
-      </IconButton>
-      <Title>참여코드</Title>
-      <Content>참여코드는 N분간 유효합니다.</Content>
-      <Code>
-        BCD2E90
-        <MdContentCopy className="copy" />
-      </Code>
-      <Copy>복사되었습니다.</Copy>
+      <div style={{ display: "flex", justifyContent: "end" }}>
+        <IconButton sx={{ width: "40px", right: "10ox", left: "auto" }} onClick={closeModal}>
+          <CloseIcon style={{ color: "#1C9BFF" }} />
+        </IconButton>
+      </div>
+      <Div>
+        <Title>참여코드</Title>
+        <Content>참여코드는 30분간 유효합니다.</Content>
+        <Code>
+          {code}
+          <MdContentCopy
+            className="copy"
+            onClick={() => {
+              handleCopyClipBoard(code);
+            }}
+          />
+        </Code>
+        {copy && <Copy>복사되었습니다.</Copy>}
+      </Div>
     </Modal>
   );
 }

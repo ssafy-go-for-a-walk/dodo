@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { changeListInfo, deleteBucketlist } from "../../redux/user";
+import axios from "axios";
 import styled from "styled-components";
 import FullButton from "../../components/common/button/FullButton";
 import HalfButton from "../../components/common/button/HalfButton";
 import DeleteButton from "../../components/common/button/DeleteButton";
-import { useDispatch, useSelector } from "react-redux";
 import BrightnessHighIcon from "@mui/icons-material/BrightnessHigh";
-import axios from "axios";
-import { changeListInfo, deleteBucketlist } from "../../redux/user";
-import { useNavigate } from "react-router";
+import Modal from "react-modal";
+import CodeModal from "../../components/common/modal/CodeModal";
+import CodeModalStyle from "../../components/common/modal/CodeModalStyle";
 
 const Settings = styled.div`
   display: flex;
@@ -77,6 +80,8 @@ export default function ManageSetting() {
     imageConfirm: null,
     isPublic: info.isPublic,
   });
+  const [isOpen, setIsOpen] = useState(false);
+  const [code, setCode] = useState("");
   const photoInput = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -119,8 +124,19 @@ export default function ManageSetting() {
   };
   const createCode = () => {
     axios
-      .post(`https://j8b104.p.ssafy.io/api/bucketlists/${listId}/invite`)
-      .then(res => console.log(res))
+      .post(
+        `https://j8b104.p.ssafy.io/api/bucketlists/${listId}/invite`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        },
+      )
+      .then(res => {
+        setCode(res.data.data.inviteToken);
+        setIsOpen(true);
+      })
       .catch(err => console.log(err));
   };
   const deleteList = () => {
@@ -162,16 +178,17 @@ export default function ManageSetting() {
         <TitleLadel>제목</TitleLadel>
         <TitleInput value={bucketListInfo.title} onChange={changeTitle} />
       </BucketTitle>
-      <FullButton propFunction={() => saveSetting(info.isPublic)}>저장하기</FullButton>
-      <FullButton public={info.isPublic} propFunction={() => saveSetting(!info.isPublic)}>
-        Private / Public
-      </FullButton>
-      {info.type === "GROUP" && <FullButton propFunction={createCode}>참여코드 생성하기</FullButton>}
+      <FullButton propFunction={() => saveSetting(info.isPublic)} content="저장하기" />
+      <FullButton isPublic={info.isPublic} content="Private / Public" propFunction={() => saveSetting(!info.isPublic)} />
+      {info.type === "GROUP" && <FullButton propFunction={createCode} content="참여코드 생성하기" />}
       <HalfButtons>
         <HalfButton>공유하기</HalfButton>
         <HalfButton onClick={saveImage}>내보내기</HalfButton>
       </HalfButtons>
       <DeleteButton onClick={deleteList} />
+      <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)} style={CodeModalStyle} ariaHideApp={false}>
+        <CodeModal closeModal={() => setIsOpen(false)} code={code} />
+      </Modal>
     </Settings>
   );
 }
