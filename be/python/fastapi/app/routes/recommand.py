@@ -2,6 +2,7 @@
 
 import random
 import logging
+import redis
 import pandas as pd
 import numpy as np
 from fastapi import Depends, APIRouter, HTTPException
@@ -480,6 +481,8 @@ def social_random_recomm(db: Session, userSeq: int, size: int):
 	if(size > user_sum): 
 		size = user_sum -1
 
+	logger.info(f"size: {size}")
+
 	random_user = random.sample(range(1, len(user_list_data)), size)
 
 	logger.info(f"random user list: {random_user}")
@@ -488,6 +491,7 @@ def social_random_recomm(db: Session, userSeq: int, size: int):
 
 	for i in random_user:
 		check = db.query(User).filter(User.seq == i).all()
+		logger.info(f"check: {check}")
 		if(check[0].nickname is None or check[0].seq == userSeq):
 			logger.info("동일 사용자이거나 혹은 닉네임이 없는 사용자입니다.")
 			continue
