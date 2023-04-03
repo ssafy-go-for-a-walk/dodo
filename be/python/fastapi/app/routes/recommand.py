@@ -82,17 +82,6 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 		# TODO 랜덤으로 뽑아주기
 		raise HTTPException(status_code=400, detail="설문 조사를 하지 않은 유저는 추천이 불가합니다.")
 
-	# print(prefer_data[0].category_seq)
-	# print(prefer_data[0])
-	# print(pb_data[0])
-	# print(pb_data[1])
-	# print(pb_data[0].title)
-	
-	# tt = jsonable_encoder(prefer_data[0])
-	# temp = jsonable_encoder(pb_data[0])
-
-	# print(tt)
-	# print(temp)
 
 	# TODO 유저가 몇명 이상이면 협업 필터링을 해야할까?
 	user_sum = db.query(User).count()
@@ -135,7 +124,11 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 
 	# 추천 함수
 	def get_recommendations(title, cosine_sim=cosine_sim):
-		idx = title_to_index[title]
+		try:
+			idx = title_to_index[title]
+		except:
+			result = pd.DataFrame()
+			return result
 		logger.info(f"idx 정보 : {idx}")
 
 		sim_scores = list(enumerate(cosine_sim[idx]))
@@ -291,56 +284,57 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 
 	# 선호 데이터가 없는 경우 랜덤으로 추천
 	if(prefer_sum == 0):
-		user_list_data = db.query(User).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
+		social_random_recomm(db, userSeq, size)
+		# user_list_data = db.query(User).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
 
-		random_user = random.sample(range(1, len(user_list_data)), size)
+		# random_user = random.sample(range(1, len(user_list_data)), size)
 
-		logger.info(f"random user list: {random_user}")
+		# logger.info(f"random user list: {random_user}")
 
-		result = []
+		# result = []
 
 
-		for i in random_user:
-			check = db.query(User).filter(User.seq == i).all()
-			if(check[0].nickname is None or check[0].seq == userSeq):
-				logger.info("동일 사용자이거나 혹은 닉네임이 없는 사용자입니다.")
-				continue
+		# for i in random_user:
+		# 	check = db.query(User).filter(User.seq == i).all()
+		# 	if(check[0].nickname is None or check[0].seq == userSeq):
+		# 		logger.info("동일 사용자이거나 혹은 닉네임이 없는 사용자입니다.")
+		# 		continue
 
-			user_data = db.query(BucketList.title.label('bucketListTitle'), BucketList.image.label('bucketListImage'), \
-		        User.profile_image.label('UserProfileImage'), User.nickname.label('UserProfileNickname'), \
-				Category.item.label('CategoryItem'), \
-				AddedBucket.emoji.label('BucketEmoji'), PublicBucket.title.label('BucketTitle'))\
-			.filter(BucketListMember.bucketlist_seq == BucketList.seq)\
-			.filter(BucketList.type == 'SINGLE')\
-			.filter(BucketListMember.user_seq == i)\
-			.filter(AddedBucket.bucketlist_seq == BucketList.seq)\
-			.filter(AddedBucket.bucket_seq == PublicBucket.seq)\
-			.filter(BucketListMember.user_seq == User.seq)\
-			.filter(AddedBucket.is_delete == 0)\
-			.filter(BucketList.is_public == 0)\
-			.filter(PublicBucket.category_seq == Category.seq)\
-			.all()
+		# 	user_data = db.query(BucketList.title.label('bucketListTitle'), BucketList.image.label('bucketListImage'), \
+		#         User.profile_image.label('UserProfileImage'), User.nickname.label('UserProfileNickname'), \
+		# 		Category.item.label('CategoryItem'), \
+		# 		AddedBucket.emoji.label('BucketEmoji'), PublicBucket.title.label('BucketTitle'))\
+		# 	.filter(BucketListMember.bucketlist_seq == BucketList.seq)\
+		# 	.filter(BucketList.type == 'SINGLE')\
+		# 	.filter(BucketListMember.user_seq == i)\
+		# 	.filter(AddedBucket.bucketlist_seq == BucketList.seq)\
+		# 	.filter(AddedBucket.bucket_seq == PublicBucket.seq)\
+		# 	.filter(BucketListMember.user_seq == User.seq)\
+		# 	.filter(AddedBucket.is_delete == 0)\
+		# 	.filter(BucketList.is_public == 0)\
+		# 	.filter(PublicBucket.category_seq == Category.seq)\
+		# 	.all()
 
-			if (len(user_data) != 0):
-				buckets = []
+		# 	if (len(user_data) != 0):
+		# 		buckets = []
 
-				for j in user_data:
-					temp = Bucket_dto(j.BucketTitle, j.BucketEmoji, j.CategoryItem)
-					buckets.append(temp)
+		# 		for j in user_data:
+		# 			temp = Bucket_dto(j.BucketTitle, j.BucketEmoji, j.CategoryItem)
+		# 			buckets.append(temp)
 			
 				
-				user = User_dto(user_data[0].UserProfileNickname, user_data[0].UserProfileImage)
-				bucketlist = Bucketlist_dto(user_data[0].bucketListTitle, user_data[0].bucketListImage)
+		# 		user = User_dto(user_data[0].UserProfileNickname, user_data[0].UserProfileImage)
+		# 		bucketlist = Bucketlist_dto(user_data[0].bucketListTitle, user_data[0].bucketListImage)
 			
 		
-			temp = User_recoomm_dto(user, bucketlist, buckets)
-			result.append(temp)
+		# 	temp = User_recoomm_dto(user, bucketlist, buckets)
+		# 	result.append(temp)
 
-		# data = {"content": result, "last": ie_end, "size": size, "number": page, "empty": len(result) == 0}
-		data = {"content": result, "last": "페이징 하는중", "size": size, "number": page, "empty": "페이징 하는중"}
-		response = {"data": data, "success": True}
+		# # data = {"content": result, "last": ie_end, "size": size, "number": page, "empty": len(result) == 0}
+		# data = {"content": result, "last": "페이징 하는중", "size": size, "number": page, "empty": "페이징 하는중"}
+		# response = {"data": data, "success": True}
 			
-		return response
+		# return response
 		
 
 	# json 형태로 변환
@@ -396,7 +390,8 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 			logger.info(f"fail {a}")
 			a = "train_test_split"
 			if(i >= 0.60):
-				raise HTTPException(status_code=400, detail="too low data")
+				social_random_recomm(db, userSeq, size)
+				# raise HTTPException(status_code=400, detail="too low data")
 			pass
 
 	
@@ -472,6 +467,63 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 		result.append(temp)
 	
 	data = {"content": result, "last": is_end, "size": size, "number": page, "empty": len(result) == 0}
+	response = {"data": data, "success": True}
+		
+	return response
+
+
+def social_random_recomm(db: Session, userSeq: int, size: int):
+	user_list_data = db.query(User).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
+	
+	user_sum = db.query(User).count()
+
+	if(size > user_sum): 
+		size = user_sum -1
+
+	random_user = random.sample(range(1, len(user_list_data)), size)
+
+	logger.info(f"random user list: {random_user}")
+
+	result = []
+
+	for i in random_user:
+		check = db.query(User).filter(User.seq == i).all()
+		if(check[0].nickname is None or check[0].seq == userSeq):
+			logger.info("동일 사용자이거나 혹은 닉네임이 없는 사용자입니다.")
+			continue
+
+		user_data = db.query(BucketList.title.label('bucketListTitle'), BucketList.image.label('bucketListImage'), \
+			User.profile_image.label('UserProfileImage'), User.nickname.label('UserProfileNickname'), \
+			Category.item.label('CategoryItem'), \
+			AddedBucket.emoji.label('BucketEmoji'), PublicBucket.title.label('BucketTitle'))\
+		.filter(BucketListMember.bucketlist_seq == BucketList.seq)\
+		.filter(BucketList.type == 'SINGLE')\
+		.filter(BucketListMember.user_seq == i)\
+		.filter(AddedBucket.bucketlist_seq == BucketList.seq)\
+		.filter(AddedBucket.bucket_seq == PublicBucket.seq)\
+		.filter(BucketListMember.user_seq == User.seq)\
+		.filter(AddedBucket.is_delete == 0)\
+		.filter(BucketList.is_public == 0)\
+		.filter(PublicBucket.category_seq == Category.seq)\
+		.all()
+
+		if (len(user_data) != 0):
+			buckets = []
+
+			for j in user_data:
+				temp = Bucket_dto(j.BucketTitle, j.BucketEmoji, j.CategoryItem)
+				buckets.append(temp)
+		
+			
+			user = User_dto(user_data[0].UserProfileNickname, user_data[0].UserProfileImage)
+			bucketlist = Bucketlist_dto(user_data[0].bucketListTitle, user_data[0].bucketListImage)
+		
+	
+		temp = User_recoomm_dto(user, bucketlist, buckets)
+		result.append(temp)
+
+	# data = {"content": result, "last": ie_end, "size": size, "number": page, "empty": len(result) == 0}
+	data = {"content": result, "last": "페이징 하는중", "size": size, "number": page, "empty": "페이징 하는중"}
 	response = {"data": data, "success": True}
 		
 	return response
