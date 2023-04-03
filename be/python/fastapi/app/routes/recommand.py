@@ -2,7 +2,6 @@
 
 import random
 import logging
-import redis
 import pandas as pd
 import numpy as np
 from fastapi import Depends, APIRouter, HTTPException
