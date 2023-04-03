@@ -73,6 +73,8 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			.filter(PublicBucket.category_seq is not None)\
 			.all()
 	
+	print(prefer_data)
+	
 	# TODO 1로 바꿔야됨
 	pb_data = db.query(PublicBucket.emoji, PublicBucket.title, PublicBucket.added_count, PublicBucket.seq.label("bucket_seq"), Category.seq.label("category_seq"), Category.item)\
 			.filter(PublicBucket.is_public == 0)\
