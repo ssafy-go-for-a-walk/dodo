@@ -2,6 +2,7 @@
 
 import random
 import logging
+import redis
 import pandas as pd
 import numpy as np
 from fastapi import Depends, APIRouter, HTTPException
@@ -473,7 +474,9 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 
 
 def social_random_recomm(db: Session, userSeq: int, size: int):
-	user_list_data = db.query(User).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
+	user_list_data = db.query(User.seq).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
+
+	logger.info(f"user list data: {user_list_data}")
 	
 	user_sum = db.query(User).count()
 
@@ -482,7 +485,7 @@ def social_random_recomm(db: Session, userSeq: int, size: int):
 
 	logger.info(f"size: {size}")
 
-	random_user = random.sample(range(1, len(user_list_data)), size)
+	random_user = random.sample(len(user_list_data), size)
 
 	logger.info(f"random user list: {random_user}")
 
