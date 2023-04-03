@@ -241,8 +241,9 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			category = Category_dto(i['category_seq'], i['item'])
 			temp = Bucket_recoomm_dto(i['title'], i['emoji'], i['added_count'], i['bucket_seq'], is_added, category)
 			temp_result.append(temp)
+			logger.info(temp.__str__)
 
-		logger.info(temp_result)
+		# logger.info(temp_result)
 
 		# data = {"content": temp_result}
 		data = {"content": temp_result, "last": False, "size": size, "number": page+1, "empty": len(temp_result) == 0}
