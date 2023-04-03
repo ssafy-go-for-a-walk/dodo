@@ -77,7 +77,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			.all()
 	
 	logger.info(f"prefer_data 개수 : {len(prefer_data)}")
-	logger.info(f"prefer_data 개수 : {len(pb_data)}")
+	logger.info(f"public bucket data 개수 : {len(pb_data)}")
 
 	if(len(pb_data) == 0 or len(prefer_data) == 0):
 		# TODO 랜덤으로 뽑아주기
@@ -230,6 +230,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			temp = Bucket_recoomm_dto(i['title'], i['emoji'], i['added_count'], i['bucket_seq'], is_added, category)
 			temp_result.append(temp)
 
+		logger.info(temp_result)
 
 		# data = {"content": temp_result}
 		data = {"content": temp_result, "last": False, "size": size, "number": page+1, "empty": len(temp_result) == 0}
@@ -285,7 +286,8 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 
 	# 선호 데이터가 없는 경우 랜덤으로 추천
 	if(prefer_sum == 0):
-		social_random_recomm(db, userSeq, size)
+		response = social_random_recomm(db, userSeq, size, page)
+		return response
 		# user_list_data = db.query(User).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
 
 		# random_user = random.sample(range(1, len(user_list_data)), size)
@@ -391,7 +393,8 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 			logger.info(f"fail {a}")
 			a = "train_test_split"
 			if(i >= 0.60):
-				social_random_recomm(db, userSeq, size)
+				response = social_random_recomm(db, userSeq, size, page)
+				return response
 				# raise HTTPException(status_code=400, detail="too low data")
 			pass
 
@@ -473,11 +476,17 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 	return response
 
 
-def social_random_recomm(db: Session, userSeq: int, size: int):
-	user_list_data = db.query(User.seq).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
+def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
+	user_list_data_temp = db.query(User.seq).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
 
-	logger.info(f"user list data: {user_list_data}")
+	logger.info(f"user list data: {user_list_data_temp}")
+
+	user_list_data = []
+
+	for i in user_list_data_temp:
+		user_list_data.append(i.seq)
 	
+	print(user_list_data)
 	user_sum = db.query(User).count()
 
 	if(size > user_sum): 
@@ -485,7 +494,7 @@ def social_random_recomm(db: Session, userSeq: int, size: int):
 
 	logger.info(f"size: {size}")
 
-	random_user = random.sample(len(user_list_data), size)
+	random_user = random.sample(user_list_data, size)
 
 	logger.info(f"random user list: {random_user}")
 
