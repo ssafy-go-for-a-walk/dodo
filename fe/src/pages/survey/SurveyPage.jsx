@@ -122,7 +122,7 @@ export default function SurveyPage() {
             <Div style={{ minHeight: "400px", height: "34vw", overflow: "auto"}}>
               {items.map((data, index) => (
                 <Survey
-                select={selected.includes(data.id)}
+                select={selected.includes(data.seq)}
                 content={data.title}
                 emoji={data.emoji}
                 id={data.seq}
