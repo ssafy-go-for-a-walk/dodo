@@ -72,6 +72,10 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			.filter(Preference.bucket_seq == PublicBucket.seq)\
 			.filter(PublicBucket.category_seq is not None)\
 			.all()
+	
+	print(prefer_data)
+	
+	# TODO 1로 바꿔야됨
 	pb_data = db.query(PublicBucket.emoji, PublicBucket.title, PublicBucket.added_count, PublicBucket.seq.label("bucket_seq"), Category.seq.label("category_seq"), Category.item)\
 			.filter(PublicBucket.is_public == 0)\
 			.filter(PublicBucket.category_seq == Category.seq)\
@@ -269,6 +273,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 		.filter(Preference.user_seq.in_(\
 		db.query(Preference.user_seq).group_by(Preference.user_seq).having(func.count(Preference.user_seq) > 1)))\
 		.all()
+	# TODO 1로 바꿔야됨
 	pb_data = db.query(PublicBucket).filter(PublicBucket.is_public == 0).all()
 
 	prefer_sum = db.query(Preference).filter(Preference.user_seq == userSeq).filter(Preference.is_delete == 0).count()
@@ -402,7 +407,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 			.filter(AddedBucket.bucket_seq == PublicBucket.seq)\
 			.filter(BucketListMember.user_seq == User.seq)\
 			.filter(AddedBucket.is_delete == 0)\
-			.filter(BucketList.is_public == 0)\
+			.filter(BucketList.is_public == 1)\
 			.filter(PublicBucket.category_seq == Category.seq)\
 			.all()
 		
@@ -472,7 +477,7 @@ def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 		.filter(AddedBucket.bucket_seq == PublicBucket.seq)\
 		.filter(BucketListMember.user_seq == User.seq)\
 		.filter(AddedBucket.is_delete == 0)\
-		.filter(BucketList.is_public == 0)\
+		.filter(BucketList.is_public == 1)\
 		.filter(PublicBucket.category_seq == Category.seq)\
 		.all()
 
@@ -487,15 +492,15 @@ def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 				print(temp)
 			
 			user = User_dto(user_data[0].UserProfileNickname, user_data[0].UserProfileImage)
-			logger.info(f"user: {user}")
+			logger.info(f"user: {user.__str__}")
 
 			bucketlist = Bucketlist_dto(user_data[0].bucketListTitle, user_data[0].bucketListImage)
-			logger.info(f"bucketlist: {bucketlist}")
+			logger.info(f"bucketlist: {bucketlist.__str__}")
 			
 			temp = User_recoomm_dto(user, bucketlist, buckets)
 			result.append(temp)
 
-			logger.info(f"result: {result}")
+			logger.info(f"result: {result.__str__}")
 
 	# data = {"content": result, "last": ie_end, "size": size, "number": page, "empty": len(result) == 0}
 	data = {"content": result, "last": "페이징 하는중", "size": size, "number": page, "empty": "페이징 하는중"}
