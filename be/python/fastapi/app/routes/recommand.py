@@ -472,7 +472,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 	return response
 
 
-def social_random_recomm(db, userSeq: int, size: int):
+def social_random_recomm(db: Session, userSeq: int, size: int):
 	user_list_data = db.query(User).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
 	
 	user_sum = db.query(User).count()
@@ -485,7 +485,6 @@ def social_random_recomm(db, userSeq: int, size: int):
 	logger.info(f"random user list: {random_user}")
 
 	result = []
-
 
 	for i in random_user:
 		check = db.query(User).filter(User.seq == i).all()
