@@ -1,14 +1,44 @@
 import React from "react";
 import styled from "styled-components";
+import bannerInfo from "../../configs/bannerConfig";
 
-const BannerImg = styled.div`
-  width: 800px;
+const BannerBox = styled.div`
+  width: 80%;
+  max-width: 800px;
   height: 114px;
   margin-top: 32px;
   margin-bottom: 24px;
-  background: #a2d7ff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 3%;
+`;
+const BannerTitle = styled.div`
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
 `;
 
-export default function Banner() {
-  return <BannerImg />;
+const BannerContent = styled.div`
+  font-size: 10px;
+  white-space: pre-line;
+`;
+
+const BannerImg = styled.img`
+  width: 96px;
+  height: 96px;
+`;
+
+export default function Banner(props) {
+  const { category } = props;
+  const bannerData = bannerInfo[`${category}`];
+  return (
+    <BannerBox style={{ backgroundColor: `${bannerData.color}` }}>
+      <div>
+        <BannerTitle>{category}</BannerTitle>
+        <BannerContent>{bannerData.content}</BannerContent>
+      </div>
+      <BannerImg src={bannerData.img} />
+    </BannerBox>
+  );
 }

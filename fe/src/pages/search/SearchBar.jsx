@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { MdSearch } from "react-icons/md";
 import SearchBucket from "./SearchBucket";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { useInView } from "react-intersection-observer";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 const SearchBox = styled.div`
   width: 80%;
@@ -52,36 +54,68 @@ const SearchResult = styled.div`
   max-height: 560px;
   border-radius: 8px;
   overflow: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
   position: absolute;
   z-index: 10;
   top: 36px;
   background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export default function SearchBar(props) {
   const [buckets, setBuckets] = useState([]);
   const [value, setValue] = useState("");
+  const [paging, setPaging] = useState({ page: 0, last: false });
+  const [loading, setLoading] = useState(false);
+  const [ref, inView] = useInView();
   const { user } = useSelector(state => state);
-  const bucketListId = user.value.selectedBucketlist.pk;
+  const listId = user.value.selectedBucketlist.pk;
+  const userToken = user.value.token;
 
-  const bucketSearch = event => {
-    setValue(event.target.value);
-    if (event.target.value.length > 0) {
-      const params = { q: event.target.value, bucketlist: bucketListId };
+  const getSearch = event => {
+    setLoading(true);
+    const searchValue = event.target.value;
+    setValue(searchValue);
+    if (searchValue.length > 0) {
+      const params = { q: searchValue, bucketlist: listId };
       axios
         .get("https://j8b104.p.ssafy.io/api/buckets/search", {
           params: params,
           headers: {
-            Authorization: `Bearer ${user.value.token}`,
+            Authorization: `Bearer ${userToken}`,
           },
         })
-        .then(res => setBuckets(res.data.data.content))
+        .then(res => {
+          const resData = res.data.data;
+          setBuckets(resData.content);
+          setPaging({ page: resData.number + 1, last: resData.last });
+        })
         .catch(err => console.log(err));
     } else setBuckets([]);
   };
+
+  const moreSearch = useCallback(async () => {
+    setLoading(true);
+    const params = { q: value, bucketlist: listId, page: paging.page };
+    await axios
+      .get("https://j8b104.p.ssafy.io/api/buckets/search", {
+        params: params,
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then(res => {
+        const resData = res.data.data;
+        setBuckets(pre => [...pre, ...resData.content]);
+        setPaging({ page: resData.number + 1, last: resData.last });
+      })
+      .catch(err => console.log(err));
+    setLoading(false);
+  }, [listId, userToken, value, paging.page]);
 
   const onKeyPress = event => {
     if (event.key === "Enter") {
@@ -90,7 +124,8 @@ export default function SearchBar(props) {
   };
 
   const search = () => {
-    props.search(buckets);
+    const data = { buckets: buckets, value: value, paging: paging };
+    props.search(data);
     resetValue();
   };
 
@@ -99,15 +134,26 @@ export default function SearchBar(props) {
     setBuckets([]);
   };
 
+  useEffect(() => {
+    if (inView && !paging.last && value.length > 0) {
+      moreSearch();
+    } else if (value.length === 0) {
+      setLoading(true);
+    }
+  }, [inView, paging, moreSearch, value]);
+
   return (
     <SearchBox>
       <InputBox>
-        <SearchInput onChange={bucketSearch} value={value} onKeyPress={onKeyPress} onBlur={resetValue} />
+        <SearchInput onChange={getSearch} value={value} onKeyPress={onKeyPress} onBlur={resetValue} />
         <SearchIcon onClick={search}>
           <MdSearch className="searchIcon" />
         </SearchIcon>
       </InputBox>
-      <SearchResult>{buckets.legnth !== 0 && buckets.map(bucket => <SearchBucket bucket={bucket} key={bucket.publicBucketSeq} />)}</SearchResult>
+      <SearchResult>
+        {Array.isArray(buckets) && buckets.map(bucket => <SearchBucket bucket={bucket} key={bucket.publicBucketSeq} />)}
+        {!paging.last && !loading && <RefreshIcon ref={ref} />}
+      </SearchResult>
     </SearchBox>
   );
 }

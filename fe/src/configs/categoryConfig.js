@@ -1,13 +1,13 @@
-import allImg from "../assets/images/all.png";
-import natureImg from "../assets/images/nature.png";
-import dailyImg from "../assets/images/daily.png";
-import shoppingImg from "../assets/images/shopping.png";
-import travelImg from "../assets/images/travel.png";
-import artImg from "../assets/images/art.png";
-import developmentImg from "../assets/images/development.png";
-import foodImg from "../assets/images/food.png";
-import outdoorImg from "../assets/images/outdoor.png";
-import sportsImg from "../assets/images/sports.png";
+import allImg from "../assets/images/allCate.png";
+import natureImg from "../assets/images/natureCate.png";
+import dailyImg from "../assets/images/dailyCate.png";
+import shoppingImg from "../assets/images/shoppingCate.png";
+import travelImg from "../assets/images/travelCate.png";
+import artImg from "../assets/images/artCate.png";
+import developImg from "../assets/images/developCate.png";
+import foodImg from "../assets/images/foodCate.png";
+import outdoorImg from "../assets/images/outdoorCate.png";
+import sportsImg from "../assets/images/sportsCate.png";
 
 const cate = [
   {
@@ -43,7 +43,7 @@ const cate = [
   {
     seq: 6,
     name: "자기계발",
-    image: developmentImg,
+    image: developImg,
   },
   {
     seq: 7,
