@@ -42,7 +42,7 @@ export default function ManageBucketList() {
   const saveImgUrl = () => {
     const document = window.document.getElementById("bucketlist")
     htmlToImage
-    .toPng(document)
+    .toPng(document, {quality: 0.95, backgroundColor: "white"})
     .then((dataUrl) => dispatch(changeMyBucketlist(dataUrl)))
   }
 
@@ -54,8 +54,8 @@ export default function ManageBucketList() {
       </FilterSearch>
       <ImageBox id="bucketlist">
         {bucketFilter === "전체" && myBuckets.map((bucket, index) => <ManageBucket bucket={bucket} sendSignal={saveImgUrl} signal={bucketFilter.length === index - 1} key={bucket.seq} />)}
-        {bucketFilter === "완료" && myBuckets.filter(bucket => bucket.complete === true).map(bucket => <ManageBucket bucket={bucket} key={bucket.seq} />)}
-        {bucketFilter === "미완" && myBuckets.filter(bucket => bucket.complete === false).map(bucket => <ManageBucket bucket={bucket} key={bucket.seq} />)}
+        {bucketFilter === "완료" && myBuckets.filter(bucket => bucket.complete === true).map(bucket => <ManageBucket signal={false} bucket={bucket} key={bucket.seq} />)}
+        {bucketFilter === "미완" && myBuckets.filter(bucket => bucket.complete === false).map(bucket => <ManageBucket signal={false} bucket={bucket} key={bucket.seq} />)}
       </ImageBox>
     </BucketList>
   );
