@@ -84,7 +84,8 @@ export default function SurveyPage() {
 
   const getItems = useCallback(async () => {
     await axios
-    .get(`https://j8b104.p.ssafy.io/api/survey/buckets`, {
+    .get(`https://j8b104.p.ssafy.io/api/recomm/survey/buckets`, {
+    // .get(`https://j8b104.p.ssafy.io/api/survey/buckets`, {
       params: {
         page: pages,
         size: 10,

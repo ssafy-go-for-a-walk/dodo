@@ -53,7 +53,7 @@ export default function SocialItem(props) {
   const [buttonStatus, setButtonStatus] = useState(true);
   const info = props.data;
   const length = 6;
-  const [datas, setdatas] = useState(info.buckets);
+  const [datas, setdatas] = useState(info.buckets.slice(0, length));
   const resDatas = info.buckets.slice(length);
   const clickEvent = () => {
     setButtonStatus(pre => !pre);
