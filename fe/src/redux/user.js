@@ -68,13 +68,28 @@ export const userSlice = createSlice({
       state.myBucketlist = action.payload;
     },
     deleteBucketlist: state => {
-      state.value.selectedBucketlist = state.value.defaultBucketlist
+      state.value.selectedBucketlist = state.value.defaultBucketlist;
+      state.sidebar = !state.sidebar;
     },
     uploadBucketlist: state => {
-      state.sidebar = !state.sidebar
-    }
+      state.sidebar = !state.sidebar;
+    },
   },
 });
 
-export const { uploadBucketlist, deleteBucketlist, changeMyBucketlist, setSurvey, profile, login, logout, change, setAppState, setBucketList, reBucketList, changeListInfo, changeCompleteRate } = userSlice.actions;
+export const {
+  uploadBucketlist,
+  deleteBucketlist,
+  changeMyBucketlist,
+  setSurvey,
+  profile,
+  login,
+  logout,
+  change,
+  setAppState,
+  setBucketList,
+  reBucketList,
+  changeListInfo,
+  changeCompleteRate,
+} = userSlice.actions;
 export default userSlice.reducer;

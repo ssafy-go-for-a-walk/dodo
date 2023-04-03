@@ -6,7 +6,8 @@ import DeleteButton from "../../components/common/button/DeleteButton";
 import { useDispatch, useSelector } from "react-redux";
 import BrightnessHighIcon from "@mui/icons-material/BrightnessHigh";
 import axios from "axios";
-import { changeListInfo } from "../../redux/user";
+import { changeListInfo, deleteBucketlist } from "../../redux/user";
+import { useNavigate } from "react-router";
 
 const Settings = styled.div`
   display: flex;
@@ -78,6 +79,7 @@ export default function ManageSetting() {
   });
   const photoInput = useRef();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setBucketListInfo({
@@ -121,25 +123,29 @@ export default function ManageSetting() {
       .then(res => console.log(res))
       .catch(err => console.log(err));
   };
-  const deleteBucketList = () => {
+  const deleteList = () => {
     axios
       .delete(`https://j8b104.p.ssafy.io/api/bucketlists/${listId}`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
       })
-      .then(res => {
-        console.log(res.data.data);
+      .then(() => {
+        dispatch(deleteBucketlist());
+        navigate("/");
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        const errMessage = err.response.data.message;
+        alert(errMessage);
+      });
   };
   const saveImage = () => {
-    const imageUrl = user.myBucketlist
+    const imageUrl = user.myBucketlist;
     const link = window.document.createElement("a");
     link.download = "my_bucketlist.png";
     link.href = imageUrl;
     link.click();
-  }
+  };
   return (
     <Settings>
       <div>
@@ -165,7 +171,7 @@ export default function ManageSetting() {
         <HalfButton>공유하기</HalfButton>
         <HalfButton onClick={saveImage}>내보내기</HalfButton>
       </HalfButtons>
-      <DeleteButton onClick={deleteBucketList} />
+      <DeleteButton onClick={deleteList} />
     </Settings>
   );
 }
