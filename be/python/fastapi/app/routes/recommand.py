@@ -70,6 +70,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 10
 			.filter(Preference.user_seq == user_seq)\
 			.filter(Preference.is_delete == 0)\
 			.filter(Preference.bucket_seq == PublicBucket.seq)\
+			.filter(PublicBucket.category_seq is not None)\
 			.all()
 	pb_data = db.query(PublicBucket.emoji, PublicBucket.title, PublicBucket.added_count, PublicBucket.seq.label("bucket_seq"), Category.seq.label("category_seq"), Category.item)\
 			.filter(PublicBucket.is_public == 0)\
