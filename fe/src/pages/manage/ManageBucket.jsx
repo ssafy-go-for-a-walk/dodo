@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Tag from "../../components/common/bucket/Tag";
 import CompleteButton from "../../components/common/button/CompleteButton";
 import Modal from "react-modal";
-import DetailModalStyle from "../../components/common/modal/DetailModalStyle";
+import DetailModalStyle from "../../components/common/modal/detailBucket/DetailModalStyle";
 import DetailModal from "../../components/common/modal/detailBucket/DetailModal";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -87,7 +87,7 @@ export default function Bucket(props) {
   const bucket = props.bucket;
   const { user } = useSelector(state => state);
   const userToken = user.value.token;
-  const signal = props.signal
+  const signal = props.signal;
   const [activateDelete, setActivateDelete] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
@@ -117,9 +117,9 @@ export default function Bucket(props) {
   };
   useEffect(() => {
     if (signal) {
-      props.sendSignal()
+      props.sendSignal();
     }
-  }, [signal, props])
+  }, [signal, props]);
 
   return (
     <BucketBox>
