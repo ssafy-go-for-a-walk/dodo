@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -107,6 +108,7 @@ public class BucketListController {
     }
 
     @PostMapping("/{bucketlist-seq}/invite")
+    @ResponseStatus(HttpStatus.CREATED)
     public DataResponse<Map<String, String>> createInviteToken(
             @PathVariable("bucketlist-seq") Long bucketListSeq,
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -120,11 +122,33 @@ public class BucketListController {
     }
 
     @PostMapping("/join/{invite-token}")
+    @ResponseStatus(HttpStatus.CREATED)
     public CommonResponse joinBucketList(
             @PathVariable("invite-token") String inviteToken,
             @AuthenticationPrincipal UserDetails userDetails) {
         Long participantSeq = Long.parseLong(userDetails.getUsername());
         bucketListService.joinBucketList(participantSeq, inviteToken);
         return new CommonResponse(true);
+    }
+
+    @PostMapping("/{bucketlist-seq}/share")
+    @ResponseStatus(HttpStatus.OK)
+    public DataResponse<Map<String, String>> shareBucketList(
+            HttpServletRequest request,
+            @PathVariable("bucketlist-seq") Long bucketListSeq,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        String domain = request.getScheme() +
+                "://" +
+                request.getServerName() +
+                ":" +
+                request.getServerPort();
+
+        String shareLink = bucketListService.createShareLink(
+                domain, Long.valueOf(userDetails.getUsername()), bucketListSeq);
+
+        Map<String, String> data = new HashMap<>();
+        data.put("shareLink", shareLink);
+
+        return new DataResponse<>(data);
     }
 }

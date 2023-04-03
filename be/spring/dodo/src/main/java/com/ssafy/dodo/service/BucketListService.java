@@ -30,4 +30,5 @@ public interface BucketListService {
     Double getBucketListCompleteRate(Long bucketListSeq);
     String createInviteToken(Long bucketListSeq, Long inviterSeq);
     void joinBucketList(Long participantSeq, String inviteToken);
+    String createShareLink(String domain, Long userSeq, Long bucketListSeq);
 }
