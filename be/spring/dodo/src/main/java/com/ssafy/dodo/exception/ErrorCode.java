@@ -24,7 +24,7 @@ public enum ErrorCode {
     // BucketList
     BUCKET_LIST_NOT_FOUND(HttpStatus.NOT_FOUND, "버킷리스트를 찾을 수 없습니다."),
     NOT_BUCKET_LIST_MEMBER(HttpStatus.FORBIDDEN, "버킷리스트의 멤버가 아닙니다."),
-    LAST_BUCKET_LIST(HttpStatus.FORBIDDEN, "마지막 버킷리스트는 삭제할 수 없습니다."),
+    DEFAULT_BUCKET_LIST(HttpStatus.FORBIDDEN, "기본 버킷리스트는 삭제할 수 없습니다."),
 
     // Bucket
     BUCKET_NOT_FOUND(HttpStatus.NOT_FOUND, "버킷을 찾을 수 없습니다."),

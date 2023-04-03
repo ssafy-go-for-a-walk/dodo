@@ -188,13 +188,12 @@ public class BucketListServiceImpl implements BucketListService {
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        int bucketListCnt = bucketListRepository.countByUser(user);
-        if(bucketListCnt == 1){
-            throw new CustomException(ErrorCode.LAST_BUCKET_LIST);
-        }
-
         BucketList bucketList = bucketListRepository.findById(bucketListSeq)
                 .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
+
+        if(bucketList.isDefault()){
+            throw new CustomException(ErrorCode.DEFAULT_BUCKET_LIST);
+        }
 
         // added_buckets의 public_buckets의 선호도 삭제
         List<AddedBucket> addedBuckets = addedBucketRepository.findAllByBucketList(bucketList);
