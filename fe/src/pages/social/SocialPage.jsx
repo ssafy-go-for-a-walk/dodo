@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import SocialItem from "./SocialItem";
-import DATA from "./datas.json";
 import styled from "styled-components";
 import { useInView } from "react-intersection-observer";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -16,43 +15,44 @@ const Div = styled.div`
 
 export default function SocialPage() {
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [pages, setPages] = useState(1)
+  const [pages, setPages] = useState(0)
+  const [last, setLast] = useState(false)
   const { user } = useSelector((state) => state);
   const [ref, inView] = useInView();
-  const datas = DATA.datas;
 
   const getItems = useCallback(async () => {
-    setLoading(true);
     await axios
     .get("https://j8b104.p.ssafy.io/api/social/bucketlists", {
       headers: {
         Authorization: `Bearer ${user.value.token}`,
       },
+      params: {
+        page: pages,
+        size: 2,
+      },
     })
     .then(res => {
-      setPages(pre => pre + 1)
-      console.log(res.data)
+      setItems(pre => [...pre, ...res.data.data.content]);
+      if (res.data.data.last) {
+        setLast(true)
+      }
     })
-    setItems(pre => [...pre, ...datas]);
-    setLoading(false);
-  }, [datas, user]);
+  }, [user, pages]);
 
   useEffect(() => {
     getItems();
   }, [getItems]);
 
   useEffect(() => {
-    if (inView && !loading) {
-      getItems();
+    if (inView) { 
+      setPages(pre => pre + 1)
     }
-  }, [inView, loading, getItems]);
+  }, [inView, setPages]);
 
   return (
     <Div>
-      {console.log(pages)}
       {items.length !== 0 ? items.map((data, index) => <SocialItem data={data} key={index} />) : null}
-      <RefreshIcon ref={ref} />
+      {last ? null: <RefreshIcon ref={ref} />}
     </Div>
   );
 }

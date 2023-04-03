@@ -5,9 +5,10 @@ import { IconButton } from "@mui/material";
 import BrightnessHighIcon from '@mui/icons-material/BrightnessHigh';
 import axios from "axios";
 import FormData from 'form-data';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Button } from "@mui/material";
+import { uploadBucketlist } from "../../../../redux/user";
 
 const TopDiv = styled.div`
 	display: flex;
@@ -102,6 +103,7 @@ export default function MakeBuckitlist(props) {
 		form: "none",
 	})
 	const { user } = useSelector((state) => state)
+	const dispatch = useDispatch();
 	const photoInput = useRef();
 	const closeModal = () => {props.closeModal()}
 	const goBack = () => {
@@ -134,9 +136,8 @@ export default function MakeBuckitlist(props) {
         },
       })
 			.then(() => {
-				// 버킷리스트 만든거 store에 추가하기
 				props.closeModal()
-				props.uploadBuckitlist()
+				dispatch(uploadBucketlist());
 			})
 			.catch(err => console.log(err))
 		}

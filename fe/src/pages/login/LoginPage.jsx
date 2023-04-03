@@ -26,6 +26,11 @@ export default function LoginPage() {
             title: res.data.data.defaultBucketList.title,
             completeRate: res.data.data.defaultBucketList.completeRate,
           },
+          defaultBucketlist: {
+            pk: res.data.data.defaultBucketList.seq,
+            title: res.data.data.defaultBucketList.title,
+            completeRate: res.data.data.defaultBucketList.completeRate,
+          },
         };
         dispatch(login(data));
         if (res.data.data.firstLogin) {

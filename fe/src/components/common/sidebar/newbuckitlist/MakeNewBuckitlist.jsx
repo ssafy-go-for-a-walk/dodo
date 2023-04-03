@@ -12,9 +12,6 @@ export default function MakeNewBuckitlist(props) {
 	const closeModal = () => {
 		setIsOpen(false);
 	}
-	const uploadBuckitlist = () => {
-		props.uploadBuckitlist()
-	}
 	return (
 	<div>
 		<ListItemButton
@@ -41,7 +38,7 @@ export default function MakeNewBuckitlist(props) {
 			style={MakeBucikitliststyle}
 			ariaHideApp={false}
 		>
-			<MakeBuckitlist closeModal={closeModal} uploadBuckitlist={uploadBuckitlist}/>
+			<MakeBuckitlist closeModal={closeModal}/>
 		</Modal>
 	</div>
 		

@@ -3,11 +3,11 @@ import styled from "styled-components";
 import Survey from "./Survey";
 import LogIn from "./LogIn";
 import { useNavigate } from "react-router-dom";
-import DATA from "./datas.json"
 import { useInView } from 'react-intersection-observer';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { useDispatch } from "react-redux";
 import { setSurvey } from "../../redux/user";
+import axios from "axios";
 
 const DivTop = styled.div`
   min-width: 350px;
@@ -69,13 +69,11 @@ const brTag = <div style={{lineHeight: "500%"}}><br/></div>
 
 export default function SurveyPage() {
   const [items, setItems] = useState([])
-  const [loading, setLoading] = useState(false)
   const [selected, setSelected] = useState([])
-  const [pages, setPages] = useState(1)
+  const [pages, setPages] = useState(0)
   const [ref, inView] = useInView();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const list = DATA.list
   const changeData = (id) => {
       if (selected.includes(id)) {
           setSelected(selec => selec.filter(v => v !== id))
@@ -85,21 +83,27 @@ export default function SurveyPage() {
   }
 
   const getItems = useCallback(async () => {
-    setLoading(true)
-    setPages(pre => pre + 1)
-		setItems(pre => [...pre, ...list])
-    setLoading(false)
-  }, [list])
+    await axios
+    .get(`https://j8b104.p.ssafy.io/api/survey/buckets`, {
+      params: {
+        page: pages,
+        size: 10,
+      }
+    })
+    .then(res => {
+      setItems(pre => [...pre, ...res.data.data.content])
+    })
+  }, [pages])
 
   useEffect(() => {
     getItems()
   }, [getItems])
 
   useEffect(() => {
-    if (inView && !loading) {
-      getItems()
+    if (inView) {
+      setPages(pre => pre + 1)
     }
-  }, [inView, loading, getItems])
+  }, [inView, setPages])
 
   const goToSignUp = () => {
     dispatch(setSurvey(selected))
@@ -107,7 +111,6 @@ export default function SurveyPage() {
   }
     return (
         <DivTop>
-          {console.log(pages)}
             <LogIn/>
             {brTag}
             <Title>
@@ -117,13 +120,13 @@ export default function SurveyPage() {
                 {selected.length !== 0 ? selected.length : null}
             </Title>
             <Div style={{ minHeight: "400px", height: "34vw", overflow: "auto"}}>
-              {items.map(data => (
+              {items.map((data, index) => (
                 <Survey
                 select={selected.includes(data.id)}
-                content={data.content}
+                content={data.title}
                 emoji={data.emoji}
-                id={data.id}
-                key={data.id}
+                id={data.seq}
+                key={index}
                 propFunction={changeData}
                 />
               ))}
