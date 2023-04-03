@@ -11,7 +11,7 @@ const Card = styled.div`
   box-shadow: 0px 4px 4px rgba(182, 86, 86, 0.25);
   border-radius: 8px;
   margin: 0 16px 16px 16px;
-  background: ${props => (props.image !== "" ? "#ffffff" : "#E9F5FF")};
+  background: ${props => (props.images.length !== 0 ? "#ffffff" : "#E9F5FF")};
 `;
 
 const CardHeader = styled.div`
@@ -23,9 +23,8 @@ const CardHeader = styled.div`
   font-size: 24px;
 `;
 
-const BucketImoge = styled.div`
-  width: 24px;
-  height: 24px;
+const BucketImoge = styled.span`
+  font-size: 24px;
 `;
 
 const BucketTitle = styled.div`
@@ -62,17 +61,17 @@ const DiaryContent = styled.div`
 export default function DiaryCard(props) {
   const { diary } = props;
   return (
-    <Card image={diary.image}>
+    <Card images={diary.images}>
       <CardHeader>
-        <BucketImoge>{diary.imoge}</BucketImoge>
+        <BucketImoge role="img">{diary.emoji}</BucketImoge>
         <BucketTitle>{diary.title}</BucketTitle>
-        <Tag category={diary.category} />
+        <Tag category={diary.category.item} />
       </CardHeader>
       <CreateDate>
         <FcCalendar className="calendar" />
-        {diary.created}
+        {diary.createdAt.substring(0, 10)}
       </CreateDate>
-      {diary.image !== "" && <DiaryImg src={diary.image} />}
+      {diary.images.length !== 0 && <DiaryImg src={diary.images} />}
       <DiaryContent>{diary.content}</DiaryContent>
     </Card>
   );
