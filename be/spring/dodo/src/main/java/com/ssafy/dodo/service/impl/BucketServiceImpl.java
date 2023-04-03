@@ -55,16 +55,16 @@ public class BucketServiceImpl implements BucketService {
             Category findCategory = categoryRepository.findById(category)
                     .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 
-            publicBuckets = publicBucketRepository.findAllByTitleContainingAndCategory(word, findCategory, pageable);
+            publicBuckets = publicBucketRepository.findAllByTitleContainingAndCategoryAndIsPublic(word, findCategory, true, pageable);
         }else{
-            publicBuckets = publicBucketRepository.findAllByTitleContaining(word, pageable);
+            publicBuckets = publicBucketRepository.findAllByTitleContainingAndIsPublic(word, true, pageable);
         }
 
         Page<PublicBucketDto> publicBucketDtos = publicBuckets.map(pb -> PublicBucketDto.builder()
                                                                                 .publicBucketSeq(pb.getSeq())
                                                                                 .emoji(pb.getEmoji())
                                                                                 .title(pb.getTitle())
-                                                                                .category(CategoryInfoDto.of(pb.getCategory()))
+                                                                                .category(pb.getCategory() == null ? null : CategoryInfoDto.of(pb.getCategory()))
                                                                                 .addedCount(pb.getAddedCount())
                                                                                 .isAdded(
                                                                                         userAddedPublicBuckets.contains(pb) ? true : false
