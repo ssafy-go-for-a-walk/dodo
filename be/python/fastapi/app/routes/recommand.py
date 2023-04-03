@@ -288,58 +288,8 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 	# 선호 데이터가 없는 경우 랜덤으로 추천
 	if(prefer_sum == 0):
 		response = social_random_recomm(db, userSeq, size, page)
+		logger.info(f"response size: {len(response['data'])}")
 		return response
-		# user_list_data = db.query(User).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
-
-		# random_user = random.sample(range(1, len(user_list_data)), size)
-
-		# logger.info(f"random user list: {random_user}")
-
-		# result = []
-
-
-		# for i in random_user:
-		# 	check = db.query(User).filter(User.seq == i).all()
-		# 	if(check[0].nickname is None or check[0].seq == userSeq):
-		# 		logger.info("동일 사용자이거나 혹은 닉네임이 없는 사용자입니다.")
-		# 		continue
-
-		# 	user_data = db.query(BucketList.title.label('bucketListTitle'), BucketList.image.label('bucketListImage'), \
-		#         User.profile_image.label('UserProfileImage'), User.nickname.label('UserProfileNickname'), \
-		# 		Category.item.label('CategoryItem'), \
-		# 		AddedBucket.emoji.label('BucketEmoji'), PublicBucket.title.label('BucketTitle'))\
-		# 	.filter(BucketListMember.bucketlist_seq == BucketList.seq)\
-		# 	.filter(BucketList.type == 'SINGLE')\
-		# 	.filter(BucketListMember.user_seq == i)\
-		# 	.filter(AddedBucket.bucketlist_seq == BucketList.seq)\
-		# 	.filter(AddedBucket.bucket_seq == PublicBucket.seq)\
-		# 	.filter(BucketListMember.user_seq == User.seq)\
-		# 	.filter(AddedBucket.is_delete == 0)\
-		# 	.filter(BucketList.is_public == 0)\
-		# 	.filter(PublicBucket.category_seq == Category.seq)\
-		# 	.all()
-
-		# 	if (len(user_data) != 0):
-		# 		buckets = []
-
-		# 		for j in user_data:
-		# 			temp = Bucket_dto(j.BucketTitle, j.BucketEmoji, j.CategoryItem)
-		# 			buckets.append(temp)
-			
-				
-		# 		user = User_dto(user_data[0].UserProfileNickname, user_data[0].UserProfileImage)
-		# 		bucketlist = Bucketlist_dto(user_data[0].bucketListTitle, user_data[0].bucketListImage)
-			
-		
-		# 	temp = User_recoomm_dto(user, bucketlist, buckets)
-		# 	result.append(temp)
-
-		# # data = {"content": result, "last": ie_end, "size": size, "number": page, "empty": len(result) == 0}
-		# data = {"content": result, "last": "페이징 하는중", "size": size, "number": page, "empty": "페이징 하는중"}
-		# response = {"data": data, "success": True}
-			
-		# return response
-		
 
 	# json 형태로 변환
 	prefer_data = jsonable_encoder(prefer_data)
@@ -395,6 +345,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 			a = "train_test_split"
 			if(i >= 0.60):
 				response = social_random_recomm(db, userSeq, size, page)
+				logger.info(f"response size: {len(response['data'])}")
 				return response
 				# raise HTTPException(status_code=400, detail="too low data")
 			pass
@@ -473,6 +424,8 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 	
 	data = {"content": result, "last": is_end, "size": size, "number": page, "empty": len(result) == 0}
 	response = {"data": data, "success": True}
+	
+	logger.info(f"response size: {len(response['data'])}")
 		
 	return response
 
@@ -523,18 +476,26 @@ def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 		.filter(PublicBucket.category_seq == Category.seq)\
 		.all()
 
+		logger.info(f"user data len: {len(user_data)}")
+
 		if (len(user_data) != 0):
 			buckets = []
 
 			for j in user_data:
 				temp = Bucket_dto(j.BucketTitle, j.BucketEmoji, j.CategoryItem)
 				buckets.append(temp)			
+				print(temp)
 			
 			user = User_dto(user_data[0].UserProfileNickname, user_data[0].UserProfileImage)
+			logger.info(f"user: {user}")
+
 			bucketlist = Bucketlist_dto(user_data[0].bucketListTitle, user_data[0].bucketListImage)
-	
+			logger.info(f"bucketlist: {bucketlist}")
+			
 			temp = User_recoomm_dto(user, bucketlist, buckets)
 			result.append(temp)
+
+			logger.info(f"result: {result}")
 
 	# data = {"content": result, "last": ie_end, "size": size, "number": page, "empty": len(result) == 0}
 	data = {"content": result, "last": "페이징 하는중", "size": size, "number": page, "empty": "페이징 하는중"}
