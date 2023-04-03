@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -45,18 +47,17 @@ public class SocialServiceImpl implements SocialService {
         Page<BucketList> bucketLists = bucketListRepository.findAllByIsPublic(true, pageable);
 
         return bucketLists.map(bucketList -> SocialBucketListsDto.builder()
-                .bucketListSeq(bucketList.getSeq())
-                .title(bucketList.getTitle())
-                .bucketListImage(bucketList.getImage())
+                .user(Map.of("nickname", "nickname", "image", "https://dodo-walk-bucket.s3.ap-northeast-2.amazonaws.com/f26e4e74-e2e4-41fc-baca-28568b477c77-image%2051.png"))
+                .bucketlist(Map.of("title", bucketList.getTitle(), "image", bucketList.getImage()))
                 .buckets(
                         addedBucketRepository.findAllByBucketList(bucketList).stream()
                                 .map(addedBucket -> SocialBucketDto.builder()
                                         .title(addedBucket.getPublicBucket().getTitle())
                                         .emoji(addedBucket.getEmoji())
-                                        .category(CategoryInfoDto.of(addedBucket.getPublicBucket().getCategory()))
+                                        .category(addedBucket.getPublicBucket().getCategory() == null ? null : addedBucket.getPublicBucket().getCategory().getItem())
+
                                         .build())
                                 .collect(Collectors.toList())
-                )
-                .build());
+                ).build());
     }
 }

@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 public class SocialBucketDto {
     private String emoji;
-    private CategoryInfoDto category;
+    private String category;
     private String title;
 
     @Builder
-    public SocialBucketDto(String emoji, CategoryInfoDto category, String title) {
+    public SocialBucketDto(String emoji, String category, String title) {
         this.emoji = emoji;
         this.category = category;
         this.title = title;

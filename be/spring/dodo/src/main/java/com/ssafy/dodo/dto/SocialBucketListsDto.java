@@ -5,23 +5,18 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 public class SocialBucketListsDto {
-    private Long bucketListSeq;
-    private String title;
-    private String bucketListImage;
-    private String nickname;
-    private String userImage;
+    private Map<String, String> user;
+    private Map<String, String> bucketlist;
     private List<SocialBucketDto> buckets = new ArrayList<>();
 
     @Builder
-    public SocialBucketListsDto(Long bucketListSeq, String title, String bucketListImage, String nickname, String userImage, List<SocialBucketDto> buckets) {
-        this.bucketListSeq = bucketListSeq;
-        this.title = title;
-        this.bucketListImage = bucketListImage;
-        this.nickname = nickname;
-        this.userImage = userImage;
+    public SocialBucketListsDto(Map<String, String> user, Map<String, String> bucketlist, List<SocialBucketDto> buckets) {
+        this.user = user;
+        this.bucketlist = bucketlist;
         this.buckets = buckets;
     }
 }
