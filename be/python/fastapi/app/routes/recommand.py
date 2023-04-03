@@ -136,7 +136,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 	logger.info(f"prefernce title data list: {list_prefer_data}")
 
 	# 추천 함수
-	def get_recommendations(title, cosine_sim=cosine_sim):
+	def get_recommendations(title, cosine_sim = cosine_sim):
 		try:
 			idx = title_to_index[title]
 		except:
@@ -204,7 +204,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 			temp_result.append(temp)
 
 		# data = {"content": temp_result}
-		data = {"content": temp_result, "last": False, "size": size, "number": page+1, "empty": len(temp_result) == 0}
+		data = {"content": temp_result, "last": False, "size": size, "number": page, "empty": len(temp_result) == 0}
 		response = {"data": data, "success": True}
 
 		# TODO 페이징
@@ -246,7 +246,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 		# logger.info(temp_result)
 
 		# data = {"content": temp_result}
-		data = {"content": temp_result, "last": False, "size": size, "number": page+1, "empty": len(temp_result) == 0}
+		data = {"content": temp_result, "last": False, "size": size, "number": page, "empty": len(temp_result) == 0}
 
 		response = {"data": data, "success": True}
 
@@ -564,7 +564,7 @@ def bucket_random_recomm(db: Session, userSeq: int, size: int, page: int, search
 		logger.info(temp)
 
 
-	data = {"content": temp_result, "last": len(pb_data) == 0, "size": size, "number": page+1, "empty": len(temp_result) == 0}
+	data = {"content": temp_result, "last": len(pb_data) == 0, "size": size, "number": page, "empty": len(temp_result) == 0}
 	response = {"data": data, "success": True}
 
 	# TODO 페이징
