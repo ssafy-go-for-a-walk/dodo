@@ -11,4 +11,5 @@ public interface ExpDiaryService {
     ExpDiary write(Long userSeq, Long bucketSeq, WriteExpDiaryDto dto, MultipartFile[] files);
     Page<ExpDiary> getExpDiaryByAddedBucket(Long userSeq, Long bucketSeq, Pageable pageable);
     Page<ExpDiary> getExpDiaryByBucketList(Long userSeq, Long bucketListSeq, Pageable pageable);
+    Page<ExpDiary> getExpDiaryBySharedBucketList(String shareToken, Pageable pageable);
 }

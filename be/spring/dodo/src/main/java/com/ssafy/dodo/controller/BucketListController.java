@@ -151,4 +151,19 @@ public class BucketListController {
 
         return new DataResponse<>(data);
     }
+
+    @GetMapping("/share/{share-token}")
+    @ResponseStatus(HttpStatus.OK)
+    public DataResponse<Map<String, Object>> getSharedBucketListInfo(@PathVariable("share-token") String shareToken) {
+        return new DataResponse<>(bucketListService.getSharedBucketListInfo(shareToken));
+    }
+
+    @GetMapping("/share/{share-token}/diaries")
+    @ResponseStatus(HttpStatus.OK)
+    public DataResponse<Page<ExpDiaryInfoDto>> getExpDiaryBySharedBucketList(
+            @PathVariable("share-token") String shareToken,
+            Pageable pageable) {
+        Page<ExpDiary> expDiaryPage = expDiaryService.getExpDiaryBySharedBucketList(shareToken, pageable);
+        return new DataResponse<>(ExpDiaryInfoDto.toPagingDto(expDiaryPage));
+    }
 }
