@@ -1,8 +1,11 @@
 #-*- coding: utf-8 -*-
 
+import json
+import redis
 import random
 import logging
-import redis
+import time
+import datetime
 import pandas as pd
 import numpy as np
 from fastapi import Depends, APIRouter, HTTPException
@@ -10,7 +13,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import func
 from sqlalchemy.orm import Session
-from config import conn
+from config import conn, redis_config
 from database.models import Category, Preference, PublicBucket, User, BucketListMember, BucketList, AddedBucket
 from auth.auth_handler import decodeJWT
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -37,12 +40,23 @@ def session_test(db: Session = Depends(engine.get_session)):
 	example = db.query(User).filter(User.nickname != 'null').all()
 	return example
 
+@router.get('/redistest')
+def redis_test():
+	rd = redis_config()
+	rd.set("juice", "orange") # set
+	
+	return {
+	    "data": rd.get("juice") # get
+	}
+
 # Preference - title을 활용한 CBF - 코사인 유사도 활용
 @router.get("/buckets", status_code=200)
 def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20,
 		    db: Session = Depends(engine.get_session), 
 	      	credentials: HTTPAuthorizationCredentials= Depends(security)):
 	
+	rd = redis_config()
+
 	skip = size*page
 	limit = size*page+size
 	logger.info(f"page: {page}, size: {size}")
@@ -85,6 +99,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 	pb_data = db.query(PublicBucket.emoji, PublicBucket.title, PublicBucket.added_count, PublicBucket.seq.label("bucket_seq"), Category.seq.label("category_seq"), Category.item)\
 			.filter(PublicBucket.is_public == 1)\
 			.filter(PublicBucket.category_seq == Category.seq)\
+			.filter(PublicBucket.category_seq != 0)\
 			.all()
 	
 	logger.info(f"prefer_data 개수 : {len(prefer_data)}")
@@ -93,8 +108,19 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 	if(len(pb_data) == 0 or len(prefer_data) == 0):
 		response = bucket_random_recomm(db, user_seq, size, page)
 		return response
-		# raise HTTPException(status_code=400, detail="설문 조사를 하지 않은 유저는 추천이 불가합니다.")
+	
+	if(len(prefer_data) > 3):
+		endpoint = "buckets/" + str(user_seq) + "/" + "over/" + str(search_category_seq)
+	else: 
+		endpoint = "buckets/" + str(user_seq) + "/" + "under/" + str(search_category_seq)
 
+	cache_size = rd.llen(endpoint)
+	if(cache_size != 0):
+		logger.info(f"redis cache O: {endpoint}")
+		response = get_response(endpoint, size, page, cache_size)
+		return response
+
+	logger.info("redis cache X")
 
 	# TODO 유저가 몇명 이상이면 협업 필터링을 해야할까?
 	user_sum = db.query(User).count()
@@ -150,7 +176,9 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 		sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
 
 		# 인덱스 skip부터 skip+limt까지의 가장 유사한 버킷리스트를 받아온다.
-		sim_scores = sim_scores[page:page+size]
+		# sim_scores = sim_scores[page:page+size]
+		# TODO 현재 0개부터 8000개
+		sim_scores = sim_scores[0:8000]
 		# print(sim_scores)
 
 		# 가장 유사한 인덱스 skip부터 skip+limt까지의 버킷리스트의 인덱스를 얻는다.
@@ -203,11 +231,17 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 			temp = Bucket_recoomm_dto(i['title'], i['emoji'], i['added_count'], i['bucket_seq'], is_added, category)
 			temp_result.append(temp)
 
-		# data = {"content": temp_result}
-		data = {"content": temp_result, "last": False, "size": size, "number": page, "empty": len(temp_result) == 0}
+		endpoint = "buckets/" + str(user_seq) + "/" + "over/" + str(search_category_seq)
+		logger.info(f"redis endpoint: {endpoint}")
+
+		for i in temp_result:
+			rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8'))
+		rd.expire(endpoint, 300)
+
+		# data = {"content": temp_result[skip:limit]}
+		data = {"content": temp_result[skip:limit], "last": len(temp_result) <= limit, "size": size, "number": page, "empty": len(temp_result) == 0}
 		response = {"data": data, "success": True}
 
-		# TODO 페이징
 		return response
 
 
@@ -241,16 +275,19 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 			category = Category_dto(i['category_seq'], i['item'])
 			temp = Bucket_recoomm_dto(i['title'], i['emoji'], i['added_count'], i['bucket_seq'], is_added, category)
 			temp_result.append(temp)
-			logger.info(temp)
 
-		# logger.info(temp_result)
+		endpoint = "buckets/" + str(user_seq) + "/" + "under/" + str(search_category_seq)
+		logger.info(f"redis endpoint: {endpoint}")
 
-		# data = {"content": temp_result}
-		data = {"content": temp_result, "last": False, "size": size, "number": page, "empty": len(temp_result) == 0}
+		for i in result:
+			rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8'))
+		rd.expire(endpoint, 300)
+
+		
+		data = {"content": temp_result[skip:limit], "last": len(temp_result) <= limit, "size": size, "number": page, "empty": len(temp_result) == 0}
 
 		response = {"data": data, "success": True}
 
-		# TODO 페이징
 		return response
 
 
@@ -260,6 +297,8 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 		    db: Session = Depends(engine.get_session), 
 	      	credentials: HTTPAuthorizationCredentials= Depends(security)):
 	
+	rd = redis_config()
+
 	skip = size*page
 	limit = size*page+size
 	logger.info(f"page: {page}, size: {size}")
@@ -519,6 +558,19 @@ def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 
 def bucket_random_recomm(db: Session, userSeq: int, size: int, page: int, search_category_seq: int):
 
+	rd = redis_config()
+
+	skip = page*size
+	limit = page*size+size
+
+	endpoint = "buckets/" + str(userSeq) + "/" + "random/" + str(search_category_seq)
+
+	cache_size = rd.llen(endpoint)
+	if(cache_size != 0):
+		logger.info(f"redis cache O: {endpoint}")
+		response = get_response(endpoint, size, page, cache_size)
+		return response
+
 	if(search_category_seq == 0):
 		pb_data = db.query(PublicBucket.emoji, PublicBucket.title, PublicBucket.added_count, PublicBucket.seq.label("bucket_seq"), Category.seq.label("category_seq"), Category.item)\
 				.filter(PublicBucket.is_public == 1)\
@@ -549,24 +601,49 @@ def bucket_random_recomm(db: Session, userSeq: int, size: int, page: int, search
 	for i in prefer_data:
 		list_prefer_data.append(i.title)
 
-	random_pb_data= random.sample(pb_data, size)
+	random_pb_data= random.sample(pb_data, len(pb_data))
 
 	temp_result = []
 
-
 	for i in random_pb_data:
-		pb_data.remove(i)
+		# pb_data.remove(i)
 
 		is_added = i["title"] in list_prefer_data
 		category = Category_dto(i.category_seq, i.item)
 		temp = Bucket_recoomm_dto(i.title, i.emoji, i.added_count, i.bucket_seq, is_added, category)
 		temp_result.append(temp)
-		logger.info(temp)
+
+	
+	logger.info(f"redis endpoint: {endpoint}")
+
+	for i in temp_result:
+		rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8') )
+	rd.expire(endpoint, 300)
 
 
-	data = {"content": temp_result, "last": len(pb_data) == 0, "size": size, "number": page, "empty": len(temp_result) == 0}
+	data = {"content": temp_result[skip:limit], "last": len(pb_data) < limit, "size": size, "number": page, "empty": len(temp_result) == 0}
 	response = {"data": data, "success": True}
 
-	# TODO 페이징
+	return response
+
+
+# redis 읽어오기
+def get_response(endpoint, size, page, cache_size):
+	rd = redis_config()
+
+	skip = size*page
+	limit = size*page+size-1
+
+	logger.info(f"size, page, skip, limit: {size}, {page}, {skip}, {limit}")
+
+	result = rd.lrange(endpoint, skip, limit)
+	ret = []
+	for r in result:
+		ret.append(json.loads(r))
+		# ret.append(Bucket_recoomm_dto(temp['title'], temp['emoji'], temp['added_count'], temp['bucket_seq'], temp['isAdded'], Category_dto(temp['category_seq'], ['item'])))
+
+	data = {"content": ret, "last": limit >= cache_size, "size": size, "number": page, "empty": len(result) == 0}
+	response = {"data": data, "success": True}
+
 	return response
 
