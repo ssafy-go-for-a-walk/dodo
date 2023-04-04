@@ -32,11 +32,10 @@ const Div = styled.div`
 
 const Header = styled.div`
   width: 580px;
-  height: 124px;
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid #acabab;
   position: relative;
+  margin-bottom: 8px;
 `;
 
 const Head = styled.div`
@@ -93,6 +92,10 @@ const SDatePicker = styled(DatePicker)`
   padding-top: 8px;
   cursor: pointer;
   border: none;
+  &:hover {
+    border: 1px solid black;
+    border-radius: 8px;
+  }
 `;
 
 const Map = styled.div`
@@ -108,7 +111,7 @@ const Place = styled.input`
   min-width: 300px;
   font-size: 16px;
   border: none;
-
+  padding-top: 8px;
   &:focus {
     outline: none;
     border-bottom: 1px solid #acabab;
@@ -117,10 +120,10 @@ const Place = styled.input`
 
 const Content = styled.textarea`
   width: 580px;
-  height: 184px;
+  height: 156px;
   overflow: auto;
   border: none;
-  border-bottom: 1px solid #acabab;
+  border: 1px solid #acabab;
   text-align: center;
   font-size: 16px;
   margin-bottom: 8px;
@@ -129,7 +132,7 @@ const Content = styled.textarea`
 
 const Diaries = styled.div`
   width: 580px;
-  height: 280px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -267,10 +270,10 @@ export default function GroupModal(props) {
             <Map>
               <BsFlag />
             </Map>
-            <Place value={location} onChange={locationChange} />
+            <Place value={location} onChange={locationChange} placeholder="어디서 할까요?" />
           </Detail>
         </Header>
-        <Content defaultValue={content} onChange={contentChange} />
+        <Content defaultValue={content} onChange={contentChange} placeholder="버킷에 대한 상세 내용을 입력해주세요." />
         <Diaries>
           {Array.isArray(diaries) && diaries.map(diary => <Diary diary={diary} key={diary.seq} />)}
           {!paging.last && !loading && <RefreshIcon sx={{ marginTop: "8px" }} ref={ref} />}

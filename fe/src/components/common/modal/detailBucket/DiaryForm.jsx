@@ -1,16 +1,19 @@
 import axios from "axios";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const Form = styled.div`
-  width: 580px;
+  width: 100%;
+  height: 80px;
   position: sticky;
   bottom: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 8px;
+  padding: 8px 16px;
+  background: #e9f5ff;
+  border-radius: 8px;
 `;
 
 const UploadBtn = styled.div`
@@ -20,7 +23,9 @@ const UploadBtn = styled.div`
   background: #acabab;
   color: #ffffff;
   font-size: 18px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
 `;
 
@@ -31,9 +36,9 @@ const UploadImg = styled.img`
 `;
 
 const DiaryContent = styled.textarea`
-  width: 420px;
-  min-height: 32px;
-  max-height: 64px;
+  width: 480px;
+  height: 100%;
+
   font-size: 16px;
   border: none;
   border-bottom: 1px solid #acabab;
@@ -46,14 +51,20 @@ const DiaryContent = styled.textarea`
 
 const CreateBtn = styled.button`
   width: 64px;
-  height: 32px;
-  background: none;
-  border: none;
-  font-size: 24px;
+  height: 40px;
+  background: #1c9bff;
+  color: #ffffff;
+  font-size: 18px;
   font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
   &:hover {
     color: #acabab;
+    background: #e9f5ff;
   }
 `;
 
@@ -64,20 +75,12 @@ export default function DiaryForm(props) {
   const photoInput = useRef();
   const { user } = useSelector(state => state);
   const userToken = user.value.token;
-  const textRef = useRef();
-  const handleResizeHeight = useCallback(() => {
-    textRef.current.style.height = textRef.current.scrollHeight + "px";
-  }, []);
+
   const changeImage = event => {
     setDiaryImg({ image: URL.createObjectURL(event.target.files[0]), imageConfirm: event.target.files[0] });
   };
   const changeContent = event => {
     setDiaryContent(event.target.value);
-  };
-  const onKeyPress = event => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      createDiary();
-    }
   };
   const createDiary = () => {
     if (diaryContent !== "") {
@@ -121,7 +124,7 @@ export default function DiaryForm(props) {
           }}
         />
       )}
-      <DiaryContent value={diaryContent} onChange={changeContent} onKeyPress={onKeyPress} ref={textRef} onInput={handleResizeHeight} />
+      <DiaryContent value={diaryContent} onChange={changeContent} placeholder="경험한 내용을 작성해보세요." />
       <CreateBtn onClick={createDiary}>작성</CreateBtn>
     </Form>
   );
