@@ -27,8 +27,9 @@ const Div = styled.div`
 
 const Title = styled.h3`
   width: 100%;
+  font-size: 24px;
   text-align: center;
-  margin: 0;
+  margin: 0 0 8px 0;
 `;
 
 const NextButton = styled.button`
@@ -65,7 +66,7 @@ const ChoseMore = styled.button`
   margin-top: 20px;
 `;
 
-const brTag = <div style={{lineHeight: "500%"}}><br/></div>
+const brTag = <div style={{lineHeight: "400%"}}><br/></div>
 
 export default function SurveyPage() {
   const [items, setItems] = useState([])
@@ -121,7 +122,7 @@ export default function SurveyPage() {
             <Title>
                 {selected.length !== 0 ? selected.length : null}
             </Title>
-            <Div style={{ minHeight: "400px", height: "34vw", overflow: "auto"}}>
+            <Div style={{ minHeight: "400px", height: "60vh", overflow: "auto"}}>
               {items.map((data, index) => (
                 <Survey
                 select={selected.includes(data.seq)}

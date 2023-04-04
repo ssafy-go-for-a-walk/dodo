@@ -10,6 +10,9 @@ import ModalStyle from "./TopbarModalStyle";
 import TopbarModal from "./TopbarModal";
 import ProfileModalStyle from "./ProfileModalStyle";
 import SettingProfile from "./modal/SettingProfile";
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import logo from "../../../assets/images/TopbarLogo.png"
+import { useNavigate } from "react-router-dom";
 
 const TopDiv = styled.div`
   display: flex;
@@ -26,17 +29,17 @@ const Div = styled.div`
   }
 `;
 
-const UserImg = styled.img`
+const Img = styled.img`
   margin-right: 8px;
   height: 40px;
-  width: 40px;
-  border-radius: 100px;
 `;
 
 export default function Topbar(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenProfile, setIsOpenProfile] = useState(false);
   const { user } = useSelector(state => state);
+	const navigate = useNavigate();
+  const open = props.isOpen
   const userImg = user.value.loginUserImg;
   const userNickname = user.value.loginUserNickname;
   console.log(user);
@@ -62,18 +65,34 @@ export default function Topbar(props) {
     >
       <Toolbar>
         <TopDiv>
-          <ReorderIcon
-            sx={{
-              "&: hover": {
-                cursor: "pointer",
-              },
-            }}
-            onClick={() => {
-              props.open();
-            }}
-          />
+          <Div>
+            {open
+            ? <ArrowBackIosNewIcon
+              sx={{
+                "&: hover": {
+                  cursor: "pointer",
+                },
+              }}
+              onClick={() => {
+                props.open();
+              }}/> :<ReorderIcon
+              sx={{
+                "&: hover": {
+                  cursor: "pointer",
+                },
+              }}
+              onClick={() => {
+                props.open();
+              }}
+              />}
+              <Img
+                onClick={() => {navigate("/")}}
+                style={{ marginLeft: "8px", borderRadius: "8px"}}
+                src={logo} alt="#"
+              />
+          </Div>
           <Div onClick={openSetup}>
-            <UserImg src={userImg} alt="#" />
+            <Img style={{borderRadius: "100px"}} src={userImg} alt="#"/>
             {userNickname}
             <ExpandMoreOutlinedIcon />
           </Div>

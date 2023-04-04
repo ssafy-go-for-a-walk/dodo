@@ -8,7 +8,7 @@ const TopDiv = styled.div`
   background-color: white;
   width: 480px;
   border-radius: 8px;
-  margin-bottom: 40px;
+  margin: 20px 0 20px 0;
   box-shadow: 0px 4px 4px 0px #00000040;
 `;
 

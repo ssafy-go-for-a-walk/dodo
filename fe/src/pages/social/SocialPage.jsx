@@ -53,8 +53,8 @@ export default function SocialPage() {
 
   return (
     <Div>
-      {items.length !== 0 ? items.map((data, index) => <SocialItem data={data} key={index} />) : null}
-      {last ? <NoItem/> :  loading ? null: <RefreshIcon ref={ref} />}
+      {items.length !== 0 ? items.map((data, index) => <SocialItem data={data} key={index} />) : last && <NoItem/>}
+      {last ? null : loading ? null: <RefreshIcon ref={ref} />}
       <SlideUp />
     </Div>
   );
