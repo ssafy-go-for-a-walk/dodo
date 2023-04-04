@@ -24,8 +24,6 @@ public class BucketListServiceImpl implements BucketListService {
 
     private static final String DEFAULT_BUCKETLIST_IMAGE = "https://dodo-walk-bucket.s3.ap-northeast-2.amazonaws.com/default-bucklist-image.jpg";
     private static final String DEFAULT_BUCKETLIST_NAME = "새로운 버킷리스트";
-    public static final String INVITE_BUCKETLIST_CLAIM_KEY = "buckletlist";
-    public static final String INVITER_CLAIM_KEY = "inviter";
 
     private final AddedBucketRepository addedBucketRepository;
     private final UserRepository userRepository;
@@ -35,6 +33,7 @@ public class BucketListServiceImpl implements BucketListService {
     private final S3FileService s3FileService;
     private final BucketListMemberRepository bucketListMemberRepository;
     private final InviteTokenRepository inviteTokenRepository;
+    private final ShareTokenRepository shareTokenRepository;
 
     @Override
     public Map<String, Object> getBucketListInfo(UserDetails userDetails, Long bucketListSeq) {
@@ -271,14 +270,14 @@ public class BucketListServiceImpl implements BucketListService {
 
     @Override
     public String createInviteToken(Long bucketListSeq, Long inviterSeq) {
-        String inviteTokenKey = createInviteTokenKey();
+        String inviteTokenKey = createRandomStringToken();
         InviteToken inviteToken = new InviteToken(inviteTokenKey, bucketListSeq, inviterSeq);
         inviteTokenRepository.save(inviteToken);
 
         return inviteTokenKey;
     }
 
-    private String createInviteTokenKey() {
+    private String createRandomStringToken() {
         int leftLimit = 48; // numeral '0'
         int rightLimit = 122; // letter 'z'
         int targetStringLength = 10;
@@ -315,5 +314,29 @@ public class BucketListServiceImpl implements BucketListService {
 
         // 새로운 멤버 추가
         bucketListMemberRepository.save(newMember);
+    }
+
+    @Override
+    public String createShareLink(String domain, Long userSeq, Long bucketListSeq) {
+        if (userSeq == null) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        // 버킷리스트의 주인인지 확인
+        BucketList bucketList = bucketListRepository.findByUserSeqAndBucketListSeq(userSeq, bucketListSeq)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_BUCKET_LIST_OWNER));
+
+        // 공유토큰 생성
+        ShareToken shareToken = ShareToken.builder()
+                .id(createRandomStringToken())
+                .sharerSeq(userSeq)
+                .bucketListSeq(bucketList.getSeq())
+                .bucketListTitle(bucketList.getTitle())
+                .build();
+
+        // 공유토큰 저장
+        shareTokenRepository.save(shareToken);
+
+        return domain + "/share/" + shareToken.getId();
     }
 }

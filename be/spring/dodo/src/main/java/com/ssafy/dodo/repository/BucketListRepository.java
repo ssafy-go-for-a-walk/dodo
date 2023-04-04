@@ -37,4 +37,10 @@ public interface BucketListRepository extends JpaRepository<BucketList, Long> {
             "join BucketListMember bm on bm.bucketList = bl " +
             "where bm.user = :user and bl.isDefault = true")
     Optional<BucketList> findDefaultBucketListByUser(@Param("user") User user);
+
+    @Query("select bl from BucketList bl " +
+            "join BucketListMember bm on bm.bucketList = bl " +
+            "where bm.user.seq = :userSeq and bm.bucketList.seq = :bucketListSeq")
+    Optional<BucketList> findByUserSeqAndBucketListSeq(@Param("userSeq") Long userSeq,
+                                                       @Param("bucketListSeq") Long bucketListSeq);
 }
