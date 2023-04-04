@@ -1,6 +1,7 @@
 package com.ssafy.dodo.service.impl;
 
 import com.ssafy.dodo.dto.AddedBucketDto;
+import com.ssafy.dodo.dto.BucketListInfoDto;
 import com.ssafy.dodo.dto.CategoryInfoDto;
 import com.ssafy.dodo.dto.CustomBucketDto;
 import com.ssafy.dodo.entity.*;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,7 +35,7 @@ public class PublicBucketServiceImpl implements PublicBucketService {
     private final PreferenceRepository preferenceRepository;
 
     @Override
-    public List<AddedBucketDto> addCustomBucket(Long bucketListSeq, CustomBucketDto customBucketDto, UserDetails userDetails) {
+    public Map<String, Object> addCustomBucket(Long bucketListSeq, CustomBucketDto customBucketDto, UserDetails userDetails) {
 
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -77,6 +80,16 @@ public class PublicBucketServiceImpl implements PublicBucketService {
                         .build())
                 .collect(Collectors.toList());
 
-        return addedBucketDtos;
+        double part = allByBucketList.stream().filter(bl -> bl.isComplete()).collect(Collectors.toList()).size();
+        double total = allByBucketList.size();
+
+        double completeRate = (double) Math.round(part / total * 100 * 10) / 10;
+
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("bucketListInfo", new BucketListInfoDto(bucketList));
+        ret.put("buckets", addedBucketDtos);
+        ret.put("completeRate", completeRate);
+
+        return ret;
     }
 }

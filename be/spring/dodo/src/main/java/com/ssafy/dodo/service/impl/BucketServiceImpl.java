@@ -88,7 +88,7 @@ public class BucketServiceImpl implements BucketService {
         publicBucketRepository.minusAddedCount(Arrays.asList(publicBucket));
 
         // added_buckets에서 담은 버킷 삭제
-//        addedBucketRepository.deleteById(bucketSeq);
+        addedBucketRepository.deleteById(bucketSeq);
         addedBucket.delete();
 
         BucketList bucketList = addedBucket.getBucketList();
@@ -99,13 +99,18 @@ public class BucketServiceImpl implements BucketService {
                 .map(AddedBucketDto::of)
                 .collect(Collectors.toList());
 
-        Double completeRate = bucketListRepository.getBucketListCompleteRate(bucketList);
-        completeRate = completeRate == null ? 0.0 : Math.round(completeRate * 10) / 10.0;
+        double part = allByBucketList.stream().filter(bl -> bl.isComplete()).collect(Collectors.toList()).size();
+        double total = allByBucketList.size();
+
+        double completeRate = (double) Math.round(part / total * 100 * 10) / 10;
+
+//        Double completeRate = bucketListRepository.getBucketListCompleteRate(bucketList);
+//        completeRate = completeRate == null ? 0.0 : Math.round(completeRate * 10) / 10.0;
 
         log.info("달성률 : " + completeRate);
         Map<String, Object> ret = new HashMap<>();
         ret.put("completeRate", completeRate);
-        ret.put("addedBuckets", addedBucketDtos);
+        ret.put("buckets", addedBucketDtos);
 
         return ret;
     }

@@ -5,7 +5,8 @@ import com.ssafy.dodo.dto.CustomBucketDto;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PublicBucketService {
-    List<AddedBucketDto> addCustomBucket(Long bucketListSeq, CustomBucketDto customBucketDto, UserDetails userDetails);
+    Map<String, Object> addCustomBucket(Long bucketListSeq, CustomBucketDto customBucketDto, UserDetails userDetails);
 }
