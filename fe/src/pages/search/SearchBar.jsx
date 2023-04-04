@@ -124,10 +124,15 @@ export default function SearchBar(props) {
   };
 
   const search = () => {
-    const data = { buckets: buckets, value: value, paging: paging };
-    props.search(data);
-    resetValue();
+    if (value !== "") {
+      const data = { buckets: buckets, value: value, paging: paging };
+      props.search(data);
+      resetValue();
+    } else {
+      document.getElementById("searchInput").focus();
+    }
   };
+  const handleMouseDown = e => e.preventDefault();
 
   const resetValue = () => {
     setValue("");
@@ -145,8 +150,8 @@ export default function SearchBar(props) {
   return (
     <SearchBox>
       <InputBox>
-        <SearchInput onChange={getSearch} value={value} onKeyPress={onKeyPress} onBlur={resetValue} />
-        <SearchIcon onClick={search}>
+        <SearchInput onChange={getSearch} value={value} onKeyPress={onKeyPress} onBlur={resetValue} id="searchInput" />
+        <SearchIcon onClick={search} onMouseDown={handleMouseDown}>
           <MdSearch className="searchIcon" />
         </SearchIcon>
       </InputBox>
