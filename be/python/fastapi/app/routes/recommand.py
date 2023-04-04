@@ -101,7 +101,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 			.filter(PublicBucket.category_seq == Category.seq)\
 			.filter(PublicBucket.category_seq != 'null')\
 			.all()
-	
+
 	logger.info(f"prefer_data 개수 : {len(prefer_data)}")
 	logger.info(f"public bucket data 개수 : {len(pb_data)}")
 
@@ -691,6 +691,7 @@ def get_response(endpoint, size, page, cache_size):
 	for r in result:
 		ret.append(json.loads(r))
 		# ret.append(Bucket_recoomm_dto(temp['title'], temp['emoji'], temp['added_count'], temp['bucket_seq'], temp['isAdded'], Category_dto(temp['category_seq'], ['item'])))
+		print(r)
 
 	data = {"content": ret, "last": limit+1 >= cache_size, "size": size, "number": page, "empty": len(ret) == 0}
 	response = {"data": data, "success": True}
