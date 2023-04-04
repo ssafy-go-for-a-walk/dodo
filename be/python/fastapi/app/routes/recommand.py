@@ -226,7 +226,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 		temp_result = []
 		
 		for i in result:
-			is_added = i["title"] in list_prefer_data
+			is_added = i['title'] in list_prefer_data
 			category = Category_dto(i['category_seq'], i['item'])
 			temp = Bucket_recoomm_dto(i['title'], i['emoji'], i['added_count'], i['bucket_seq'], is_added, category)
 			temp_result.append(temp)
@@ -271,7 +271,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 		temp_result = []
 
 		for i in result:
-			is_added = i["title"] in list_prefer_data
+			is_added = i['title'] in list_prefer_data
 			category = Category_dto(i['category_seq'], i['item'])
 			temp = Bucket_recoomm_dto(i['title'], i['emoji'], i['added_count'], i['bucket_seq'], is_added, category)
 			temp_result.append(temp)
@@ -641,7 +641,7 @@ def bucket_random_recomm(db: Session, userSeq: int, size: int, page: int, search
 	for i in random_pb_data:
 		# pb_data.remove(i)
 
-		is_added = i["title"] in list_prefer_data
+		is_added = i.title in list_prefer_data
 		category = Category_dto(i.category_seq, i.item)
 		temp = Bucket_recoomm_dto(i.title, i.emoji, i.added_count, i.bucket_seq, is_added, category)
 		temp_result.append(temp)
