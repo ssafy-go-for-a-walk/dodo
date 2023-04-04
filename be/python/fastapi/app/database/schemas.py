@@ -1,3 +1,4 @@
+import json
 
 class Test_dto:
     seq: int
