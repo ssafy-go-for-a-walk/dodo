@@ -6,7 +6,6 @@ const BannerBox = styled.div`
   width: 80%;
   max-width: 800px;
   height: 114px;
-  margin-top: 32px;
   margin-bottom: 24px;
   display: flex;
   justify-content: space-between;
