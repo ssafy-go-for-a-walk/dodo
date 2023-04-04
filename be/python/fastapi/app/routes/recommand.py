@@ -213,7 +213,8 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 		result = result.drop_duplicates(['title'])
 		
 		# temp = result.drop_duplicates(subset=['등산하고 경치 구경하기'])
-		result = result.sort_index()
+		# TODO 정렬 넣을지 말지
+		# result = result.sort_index()
 		# print(search_category_seq)
 		# print(result)
 		
@@ -261,7 +262,8 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 		result = result.drop_duplicates(['title'])
 		# print(result)
 
-		result = result.sort_index()
+		# TODO 정렬 넣을지 말지
+		# result = result.sort_index()
 
 		# 카테고리 별 검색
 		if(search_category_seq != 0):
