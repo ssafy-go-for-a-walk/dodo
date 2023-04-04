@@ -2,6 +2,7 @@ import { AppBar } from "@mui/material";
 import styled from "styled-components";
 import colorConfigs from "../../configs/colorConfigs";
 import logo from "../../assets/images/logo.png";
+import { useNavigate } from "react-router";
 
 const LogInButton = styled.button`
   border: none;
@@ -17,9 +18,14 @@ const LogInButton = styled.button`
 
 const LogoImg = styled.img`
   height: 100%;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.95;
+  }
 `;
 
 export default function ShareTopbar() {
+  const navigate = useNavigate();
   return (
     <AppBar
       position="fixed"
@@ -35,7 +41,7 @@ export default function ShareTopbar() {
         justifyContent: "space-between",
       }}
     >
-      <LogoImg src={logo} />
+      <LogoImg src={logo} onClick={() => navigate("/")} />
       <LogInButton onClick={() => window.location.replace("https://j8b104.p.ssafy.io/api/oauth2/authorization/kakao", "_blank")}>로그인</LogInButton>
     </AppBar>
   );

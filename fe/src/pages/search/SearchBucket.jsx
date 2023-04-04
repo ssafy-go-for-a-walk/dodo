@@ -12,7 +12,7 @@ const BucketBox = styled.div`
   padding: 0 16px;
 `;
 
-const BucketEmoji = styled.div`
+const BucketEmoji = styled.span`
   font-size: 24px;
   margin: 0 8px;
 `;
@@ -31,7 +31,7 @@ export default function SearchBucket(props) {
 
   return (
     <BucketBox>
-      <Tag category={bucket.category.item} />
+      <Tag category={bucket.category !== null ? bucket.category.item : null} />
       <BucketEmoji role="img">{bucket.emoji}</BucketEmoji>
       <BucketTitle>{bucket.title}</BucketTitle>
     </BucketBox>

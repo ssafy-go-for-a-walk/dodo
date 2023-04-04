@@ -82,7 +82,7 @@ export default function ManageSetting() {
     isPublic: info.isPublic,
   });
   const [isOpen, setIsOpen] = useState(false);
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState({ title: "", code: "" });
   const photoInput = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -137,7 +137,24 @@ export default function ManageSetting() {
         },
       )
       .then(res => {
-        setCode(res.data.data.inviteToken);
+        setCode({ title: "참여코드", code: res.data.data.inviteToken });
+        setIsOpen(true);
+      })
+      .catch(err => console.log(err));
+  };
+  const shareLink = () => {
+    axios
+      .post(
+        `https://j8b104.p.ssafy.io/api/bucketlists/${listId}/share`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        },
+      )
+      .then(res => {
+        setCode({ title: "공유링크", code: res.data.data.shareLink });
         setIsOpen(true);
       })
       .catch(err => console.log(err));
@@ -185,7 +202,7 @@ export default function ManageSetting() {
       <FullButton isPublic={info.isPublic} content="Private / Public" propFunction={() => saveSetting(!info.isPublic)} />
       {info.type === "GROUP" && <FullButton propFunction={createCode} content="참여코드 생성하기" />}
       <HalfButtons>
-        <HalfButton>공유하기</HalfButton>
+        <HalfButton onClick={shareLink}>공유하기</HalfButton>
         <HalfButton onClick={saveImage}>내보내기</HalfButton>
       </HalfButtons>
       <DeleteButton onClick={deleteList} />
