@@ -14,5 +14,5 @@ def decodeJWT(token: str) -> dict:
         # return {"userSeq" : 2}
         return decoded_token
     except:
-        return {"userSeq" : 2}
-        # return {"message": "token decode error"}
+        # return {"userSeq" : 2}
+        return {"message": "token decode error"}
