@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +31,7 @@ public class ExpDiaryServiceImpl implements ExpDiaryService {
     private final BucketListMemberRepository bucketListMemberRepository;
     private final AddedBucketRepository addedBucketRepository;
     private final S3FileService s3FileService;
+    private final ShareTokenRepository shareTokenRepository;
 
     @Override
     public ExpDiary write(Long userSeq, Long bucketSeq, WriteExpDiaryDto dto, MultipartFile[] files) {
@@ -106,6 +108,17 @@ public class ExpDiaryServiceImpl implements ExpDiaryService {
             throw new CustomException(ErrorCode.NOT_BUCKET_LIST_MEMBER);
         }
 
+
+        return expDiaryRepository.findAllByBucketList(bucketList, pageable);
+    }
+
+    @Override
+    public Page<ExpDiary> getExpDiaryBySharedBucketList(String shareToken, Pageable pageable) {
+        ShareToken token = shareTokenRepository.findById(shareToken)
+                .orElseThrow(() -> new CustomException(ErrorCode.EXPIRE_OR_NOT_EXIST_TOKEN));
+
+        BucketList bucketList = bucketListRepository.findById(token.getBucketListSeq())
+                .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
 
         return expDiaryRepository.findAllByBucketList(bucketList, pageable);
     }

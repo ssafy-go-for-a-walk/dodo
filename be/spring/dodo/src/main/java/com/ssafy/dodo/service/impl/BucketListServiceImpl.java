@@ -339,4 +339,24 @@ public class BucketListServiceImpl implements BucketListService {
 
         return domain + "/share/" + shareToken.getId();
     }
+
+    @Override
+    public Map<String, Object> getSharedBucketListInfo(String shareToken) {
+        ShareToken token = shareTokenRepository.findById(shareToken)
+                .orElseThrow(() -> new CustomException(ErrorCode.EXPIRE_OR_NOT_EXIST_TOKEN));
+
+        BucketList bucketList = bucketListRepository.findById(token.getBucketListSeq())
+                .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
+
+        List<AddedBucket> addedBuckets = addedBucketRepository.findAllByBucketList(bucketList);
+        List<AddedBucketDto> addedBucketDtos = addedBuckets.stream()
+                .map(AddedBucketDto::of)
+                .collect(Collectors.toList());
+
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("bucketListInfo", new BucketListInfoDto(bucketList));
+        ret.put("addedBuckets", addedBucketDtos);
+
+        return ret;
+    }
 }

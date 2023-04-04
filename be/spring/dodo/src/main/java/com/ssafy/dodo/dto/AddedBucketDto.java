@@ -1,5 +1,6 @@
 package com.ssafy.dodo.dto;
 
+import com.ssafy.dodo.entity.AddedBucket;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,4 +39,17 @@ public class AddedBucketDto {
 //        this.location = location;
 //        this.desc = desc;
 //    }
+
+    public static AddedBucketDto of(AddedBucket addedBucket) {
+        return AddedBucketDto.builder()
+                .seq(addedBucket.getSeq())
+                .title(addedBucket.getPublicBucket().getTitle())
+                .category(addedBucket.getPublicBucket().getCategory() == null ? null : CategoryInfoDto.of(addedBucket.getPublicBucket().getCategory()))
+                .isComplete(addedBucket.isComplete())
+                .emoji(addedBucket.getEmoji())
+                .dDay(addedBucket.getDDay())
+                .location(addedBucket.getLocation())
+                .desc(addedBucket.getDesc())
+                .build();
+    }
 }
