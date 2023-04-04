@@ -299,6 +299,8 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 	
 	rd = redis_config()
 
+	endpoint = "social/" + str(userSeq) + "/recomm"
+
 	skip = size*page
 	limit = size*page+size
 	logger.info(f"page: {page}, size: {size}")
@@ -473,16 +475,41 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 		
 		temp = User_recoomm_dto(user, bucketlist, buckets)
 		result.append(temp)
+
+	logger.info(f"cache endpoint: {endpoint}")
+
+	for i in result:
+		rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8') )
+	rd.expire(endpoint, 300)
+
 	
-	data = {"content": result, "last": is_end, "size": size, "number": page, "empty": len(result) == 0}
+	# data = {"content": result, "last": is_end, "size": size, "number": page, "empty": len(result) == 0}
+	data = {"content": result[skip:limit], "last": limit >= len(result), "size": size, "number": page, "empty": len(result[skip:limit]) == 0}
 	response = {"data": data, "success": True}
 	
 	logger.info(f"response size: {len(response['data'])}")
+
+
+	
+
 		
 	return response
 
 
 def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
+	rd = redis_config()
+	
+	skip = size*page
+	limit = size*page+size
+
+	endpoint = "social/" + str(userSeq) + "/random"
+
+	cache_size = rd.llen(endpoint)
+	if(cache_size != 0):
+		logger.info(f"redis cache O: {endpoint}")
+		response = get_response(endpoint, size, page, cache_size)
+		return response
+
 	user_list_data_temp = db.query(User.seq).filter(User.seq != userSeq).filter(User.is_delete == 0).all()
 
 	logger.info(f"user list data: {user_list_data_temp}")
@@ -500,7 +527,7 @@ def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 
 	logger.info(f"size: {size}")
 
-	random_user = random.sample(user_list_data, size)
+	random_user = random.sample(user_list_data, len(user_list_data))
 
 	logger.info(f"random user list: {random_user}")
 
@@ -549,10 +576,14 @@ def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 
 			logger.info(f"result: {result.__str__}")
 
-	
+	logger.info(f"cache endpoint: {endpoint}")
+
+	for i in result:
+		rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8') )
+	rd.expire(endpoint, 300)
 
 	# data = {"content": result, "last": ie_end, "size": size, "number": page, "empty": len(result) == 0}
-	data = {"content": result, "last": "페이징 하는중", "size": size, "number": page, "empty": "페이징 하는중"}
+	data = {"content": result[skip:limit], "last": limit >= len(result), "size": size, "number": page, "empty": len(result[skip:limit]) == 0}
 	response = {"data": data, "success": True}
 		
 	return response
@@ -644,8 +675,9 @@ def get_response(endpoint, size, page, cache_size):
 		ret.append(json.loads(r))
 		# ret.append(Bucket_recoomm_dto(temp['title'], temp['emoji'], temp['added_count'], temp['bucket_seq'], temp['isAdded'], Category_dto(temp['category_seq'], ['item'])))
 
-	data = {"content": ret, "last": limit >= cache_size, "size": size, "number": page, "empty": len(result) == 0}
+	data = {"content": ret, "last": limit >= cache_size, "size": size, "number": page, "empty": len(ret) == 0}
 	response = {"data": data, "success": True}
 
 	return response
+
 
