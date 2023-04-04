@@ -71,6 +71,8 @@ export default function SurveyPage() {
   const [items, setItems] = useState([])
   const [selected, setSelected] = useState([])
   const [pages, setPages] = useState(0)
+  const [last, setLast] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [ref, inView] = useInView();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -83,9 +85,9 @@ export default function SurveyPage() {
   }
 
   const getItems = useCallback(async () => {
+    setLoading(true)
     await axios
-    .get(`https://j8b104.p.ssafy.io/api/recomm/survey/buckets`, {
-    // .get(`https://j8b104.p.ssafy.io/api/survey/buckets`, {
+    .get(`https://j8b104.p.ssafy.io/api/survey/buckets`, {
       params: {
         page: pages,
         size: 10,
@@ -93,19 +95,18 @@ export default function SurveyPage() {
     })
     .then(res => {
       setItems(pre => [...pre, ...res.data.data.content])
+      setLast(res.data.data.last)
+      setPages(pre => pre + 1)
     })
+    setLoading(false)
   }, [pages])
 
   useEffect(() => {
-    getItems()
-  }, [getItems])
-
-  useEffect(() => {
     if (inView) {
-      setPages(pre => pre + 1)
+      getItems();
     }
-  }, [inView, setPages])
-
+  }, [inView, setPages, getItems])
+  
   const goToSignUp = () => {
     dispatch(setSurvey(selected))
     navigate("/survey/signup")
@@ -131,7 +132,7 @@ export default function SurveyPage() {
                 propFunction={changeData}
                 />
               ))}
-              <RefreshIcon sx={{marginTop: "8px"}} ref={ref}/>
+              {last ? null : loading ? null : <RefreshIcon sx={{marginTop: "8px"}} ref={ref}/>}
             </Div>
             <Div>
               {selected.length < 3 

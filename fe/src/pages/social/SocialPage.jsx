@@ -6,6 +6,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import SlideUp from "../../components/common/button/SlideUp";
+import NoItem from "./NoItem";
 
 const Div = styled.div`
   display: flex;
@@ -17,43 +18,43 @@ const Div = styled.div`
 export default function SocialPage() {
   const [items, setItems] = useState([]);
   const [pages, setPages] = useState(0)
+  const [loading, setLoading] = useState(false)
   const [last, setLast] = useState(false)
   const { user } = useSelector((state) => state);
   const [ref, inView] = useInView();
 
   const getItems = useCallback(async () => {
+    setLoading(true)
     await axios
-    .get("https://j8b104.p.ssafy.io/api/social/bucketlists", {
+    .get("https://j8b104.p.ssafy.io/api/recomm/social/bucketlists", {
       headers: {
         Authorization: `Bearer ${user.value.token}`,
       },
       params: {
         page: pages,
-        size: 2,
+        size: 1,
       },
     })
     .then(res => {
       setItems(pre => [...pre, ...res.data.data.content]);
+      setPages(pre => pre + 1)
       if (res.data.data.last) {
         setLast(true)
       }
     })
-  }, [user, pages]);
-
-  useEffect(() => {
-    getItems();
-  }, [getItems]);
-
+    setLoading(false)
+  }, [user, pages, setLoading]);
+  
   useEffect(() => {
     if (inView) { 
-      setPages(pre => pre + 1)
+      getItems();
     }
-  }, [inView, setPages]);
+  }, [inView, getItems]);
 
   return (
     <Div>
       {items.length !== 0 ? items.map((data, index) => <SocialItem data={data} key={index} />) : null}
-      {last ? null: <RefreshIcon ref={ref} />}
+      {last ? <NoItem/> :  loading ? null: <RefreshIcon ref={ref} />}
       <SlideUp />
     </Div>
   );
