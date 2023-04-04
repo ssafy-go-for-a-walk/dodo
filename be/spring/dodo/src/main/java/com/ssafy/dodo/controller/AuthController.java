@@ -21,24 +21,10 @@ import java.nio.file.attribute.UserPrincipal;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
-
-    @GetMapping("/hello")
-    public String hello(@AuthenticationPrincipal UserDetails userDetails){
-        /*
-        log.info(userDetails.getUsername()); // 3
-        log.info(userDetails.toString()); // org.springframework.security.core.userdetails.User [Username=3, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, credentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_USER]]
-         */
-        return "hello";
-    }
-
-    @GetMapping("/bye")
-    public String bye(){
-        return "bye";
-    }
 
     @GetMapping("/reissue")
     public String reissueAccessToken(HttpServletRequest request,

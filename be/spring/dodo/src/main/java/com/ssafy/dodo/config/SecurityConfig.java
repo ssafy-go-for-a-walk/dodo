@@ -46,7 +46,7 @@ public class SecurityConfig {
 
                 // URL 권한 설정
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/auth/hello").authenticated()
+                .antMatchers("/auth/**", "/bucketlists/**", "/buckets/**", "/users/**").authenticated()
                 .anyRequest().permitAll()
 
                 // JWT 설정
