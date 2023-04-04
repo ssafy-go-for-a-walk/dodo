@@ -46,6 +46,7 @@ public class SecurityConfig {
 
                 // URL 권한 설정
                 .authorizeRequests()
+                .antMatchers("/bucketlists/share/**").permitAll()
                 .antMatchers("/auth/**", "/bucketlists/**", "/buckets/**", "/users/**").authenticated()
                 .anyRequest().permitAll()
 
