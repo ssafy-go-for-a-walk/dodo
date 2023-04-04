@@ -280,7 +280,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 		endpoint = "buckets/" + str(user_seq) + "/" + "under/" + str(search_category_seq)
 		logger.info(f"redis endpoint: {endpoint}")
 
-		for i in result:
+		for i in temp_result:
 			rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8'))
 		rd.expire(endpoint, 300)
 		logger.info(f"response data size: {len(temp_result[skip:limit])}")
@@ -690,11 +690,11 @@ def get_response(endpoint, size, page, cache_size):
 	ret = []
 	for r in result:
 		ret.append(json.loads(r))
-		# ret.append(Bucket_recoomm_dto(temp['title'], temp['emoji'], temp['added_count'], temp['bucket_seq'], temp['isAdded'], Category_dto(temp['category_seq'], ['item'])))
-		print(json.loads(r))
-
+		
 	data = {"content": ret, "last": limit+1 >= cache_size, "size": size, "number": page, "empty": len(ret) == 0}
 	response = {"data": data, "success": True}
+
+	print(response)
 
 	return response
 
