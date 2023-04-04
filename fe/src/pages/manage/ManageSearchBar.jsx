@@ -139,9 +139,15 @@ export default function ManageSearchBar() {
         )
         .then(res => dispatch(reBucketList(res.data.data)))
         .catch(err => console.log(err));
-      setValue("");
-      setBuckets([]);
+      resetValue();
     }
+  };
+
+  const handleMouseDown = e => e.preventDefault();
+
+  const resetValue = () => {
+    setValue("");
+    setBuckets([]);
   };
 
   useEffect(() => {
@@ -155,8 +161,8 @@ export default function ManageSearchBar() {
   return (
     <SearchBox>
       <InputBox>
-        <SearchInput onChange={searchBucket} value={value} onKeyPress={onKeyPress} />
-        <SearchIcon onClick={addBucket}>
+        <SearchInput onChange={searchBucket} onBlur value={value} onKeyPress={onKeyPress} />
+        <SearchIcon onClick={addBucket} onMouseDown={handleMouseDown}>
           <HiPlus className="searchIcon" />
         </SearchIcon>
       </InputBox>
