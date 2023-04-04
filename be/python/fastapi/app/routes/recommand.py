@@ -691,7 +691,7 @@ def get_response(endpoint, size, page, cache_size):
 	for r in result:
 		ret.append(json.loads(r))
 		# ret.append(Bucket_recoomm_dto(temp['title'], temp['emoji'], temp['added_count'], temp['bucket_seq'], temp['isAdded'], Category_dto(temp['category_seq'], ['item'])))
-		print(r)
+		print(json.loads(r))
 
 	data = {"content": ret, "last": limit+1 >= cache_size, "size": size, "number": page, "empty": len(ret) == 0}
 	response = {"data": data, "success": True}
