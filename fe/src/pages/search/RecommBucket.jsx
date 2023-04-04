@@ -58,11 +58,11 @@ export default function RecommBucket(props) {
     <BucketBox>
       <BucketInfo>
         <BucketHeader>
-          <Tag category={bucket.category.item} />
+          <Tag category={bucket.category.item} disabled="disabled" />
           <BucketEmoji role="img">{bucket.emoji}</BucketEmoji>
-          <BucketTitle>{bucket.title}</BucketTitle>
+          <BucketTitle disabled="disabled">{bucket.title}</BucketTitle>
         </BucketHeader>
-        <BucketChallenger>현재 {bucket.addedCount}명이 도전중</BucketChallenger>
+        <BucketChallenger disabled="disabled">현재 {bucket.addedCount}명이 도전중</BucketChallenger>
       </BucketInfo>
       <AddButton bucket={bucket} />
     </BucketBox>

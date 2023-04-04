@@ -32,7 +32,7 @@ export default function Banner(props) {
   const { category } = props;
   const bannerData = bannerInfo[`${category}`];
   return (
-    <BannerBox style={{ backgroundColor: `${bannerData.color}` }}>
+    <BannerBox style={{ backgroundColor: `${bannerData.color}` }} disabled="disabled">
       <div>
         <BannerTitle>{category}</BannerTitle>
         <BannerContent>{bannerData.content}</BannerContent>
