@@ -21,7 +21,7 @@ const MainLayout = () => {
   };
   return (
     <Box sx={{ display: "flex" }}>
-      <Topbar open={controlSidevar} />
+      <Topbar open={controlSidevar} isOpen={open}/>
       <Div component="nav" open={open}>
         <Sidebar open={open} />
       </Div>
