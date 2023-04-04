@@ -299,8 +299,6 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 	
 	rd = redis_config()
 
-	endpoint = "social/" + str(userSeq) + "/recomm"
-
 	skip = size*page
 	limit = size*page+size
 	logger.info(f"page: {page}, size: {size}")
@@ -316,6 +314,14 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 	
 	userSeq=token['userSeq']
 	logger.info(f"LOGIN 정보: {userSeq}")
+
+	endpoint = "social/" + str(userSeq) + "/recomm"
+	cache_size = rd.llen(endpoint)
+
+	if(cache_size != 0):
+		logger.info(f"redis cache O: {endpoint}")
+		response = get_response(endpoint, size, page, cache_size)
+		return response
 
 	prefer_data = db.query(Preference)\
 		.filter(Preference.is_delete == 0)\
@@ -441,7 +447,13 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 
 	result = []
 
-	for i in range(start, end):
+	if(len(user_list) > 100): user_sim_size = 100
+	else: user_sim_size = len(user_list)-1
+
+	logger.info(user_sim_size)
+
+	# 유저 100명까지의 유사도
+	for i in range(0, user_sim_size):
 		now_user_seq = user_list.index[i+1] 
 		logger.info(f"now_user_seq: {now_user_seq}")
 
@@ -467,6 +479,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 			for j in user_data:
 				temp = Bucket_dto(j.BucketTitle, j.BucketEmoji, j.CategoryItem)
 				buckets.append(temp)
+				print(temp)
 		
 			
 			user = User_dto(user_data[0].UserProfileNickname, user_data[0].UserProfileImage)
@@ -474,6 +487,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 			
 		
 		temp = User_recoomm_dto(user, bucketlist, buckets)
+		print(temp)
 		result.append(temp)
 
 	logger.info(f"cache endpoint: {endpoint}")
@@ -488,10 +502,6 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 	response = {"data": data, "success": True}
 	
 	logger.info(f"response size: {len(response['data'])}")
-
-
-	
-
 		
 	return response
 
@@ -566,15 +576,15 @@ def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 				print(temp)
 			
 			user = User_dto(user_data[0].UserProfileNickname, user_data[0].UserProfileImage)
-			logger.info(f"user: {user.__str__}")
+			# logger.info(f"user: {user.__str__}")
 
 			bucketlist = Bucketlist_dto(user_data[0].bucketListTitle, user_data[0].bucketListImage)
-			logger.info(f"bucketlist: {bucketlist.__str__}")
+			# logger.info(f"bucketlist: {bucketlist.__str__}")
 			
 			temp = User_recoomm_dto(user, bucketlist, buckets)
 			result.append(temp)
 
-			logger.info(f"result: {result.__str__}")
+			# logger.info(f"result: {result.__str__}")
 
 	logger.info(f"cache endpoint: {endpoint}")
 
@@ -668,6 +678,7 @@ def get_response(endpoint, size, page, cache_size):
 	limit = size*page+size-1
 
 	logger.info(f"size, page, skip, limit: {size}, {page}, {skip}, {limit}")
+	logger.info(f"cache size: {cache_size}")
 
 	result = rd.lrange(endpoint, skip, limit)
 	ret = []
@@ -675,7 +686,7 @@ def get_response(endpoint, size, page, cache_size):
 		ret.append(json.loads(r))
 		# ret.append(Bucket_recoomm_dto(temp['title'], temp['emoji'], temp['added_count'], temp['bucket_seq'], temp['isAdded'], Category_dto(temp['category_seq'], ['item'])))
 
-	data = {"content": ret, "last": limit >= cache_size, "size": size, "number": page, "empty": len(ret) == 0}
+	data = {"content": ret, "last": limit+1 >= cache_size, "size": size, "number": page, "empty": len(ret) == 0}
 	response = {"data": data, "success": True}
 
 	return response
