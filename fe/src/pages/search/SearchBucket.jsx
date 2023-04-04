@@ -10,6 +10,7 @@ const BucketBox = styled.div`
   display: flex;
   align-items: center;
   padding: 0 16px;
+  cursor: default;
 `;
 
 const BucketEmoji = styled.span`

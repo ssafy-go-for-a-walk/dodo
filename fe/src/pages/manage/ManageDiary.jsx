@@ -16,6 +16,7 @@ const Div = styled.div`
 
 const NoDiaries = styled.div`
   font-size: 40px;
+  cursor: default;
 `;
 
 export default function ManageDiary() {

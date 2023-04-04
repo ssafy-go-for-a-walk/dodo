@@ -24,6 +24,7 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: start;
+  cursor: default;
 `;
 
 const Img = styled.img`

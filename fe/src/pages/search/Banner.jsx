@@ -11,6 +11,7 @@ const BannerBox = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 3%;
+  cursor: default;
 `;
 const BannerTitle = styled.div`
   font-size: 18px;
@@ -32,7 +33,7 @@ export default function Banner(props) {
   const { category } = props;
   const bannerData = bannerInfo[`${category}`];
   return (
-    <BannerBox style={{ backgroundColor: `${bannerData.color}` }} disabled="disabled">
+    <BannerBox style={{ backgroundColor: `${bannerData.color}` }}>
       <div>
         <BannerTitle>{category}</BannerTitle>
         <BannerContent>{bannerData.content}</BannerContent>
