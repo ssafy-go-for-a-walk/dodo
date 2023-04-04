@@ -161,6 +161,15 @@ public class BucketServiceImpl implements BucketService {
         AddedBucket addedBucket = addedBucketRepository.findById(bucketSeq)
                 .orElseThrow(() -> new CustomException(ErrorCode.ADDED_BUCKET_NOT_FOUND));
 
+        // 사용자 정의 버킷의 카테고리는 본인이 최초 1회만 바꿀 수 있다.
+        if(addedBucket.getPublicBucket().getCategory() == null && addedBucket.getPublicBucket().getCreatedBy() == user.getSeq()){
+            PublicBucket publicBucket = addedBucket.getPublicBucket();
+            Category category = categoryRepository.findByItem(bucketInfoDto.getCategory())
+                    .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+
+            publicBucket.updateCategory(category);
+        }
+
         addedBucket.updateBucketInfo(bucketInfoDto.getEmoji(), bucketInfoDto.getDDay(), bucketInfoDto.getLocation(), bucketInfoDto.getDesc());
 
         BucketList bucketList = addedBucket.getBucketList();

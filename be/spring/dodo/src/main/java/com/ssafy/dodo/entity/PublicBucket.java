@@ -31,6 +31,10 @@ public class PublicBucket extends BaseEntity {
 
     private boolean isDelete;
 
+    public void updateCategory(Category category){
+        this.category = category;
+    }
+
     @Builder
     public PublicBucket(Long seq, String emoji, String title, boolean isPublic, Long addedCount, Category category, boolean isDelete) {
         this.seq = seq;
