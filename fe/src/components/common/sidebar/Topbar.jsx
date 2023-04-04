@@ -92,7 +92,7 @@ export default function Topbar(props) {
               />
           </Div>
           <Div onClick={openSetup}>
-            <Img style={{borderRadius: "100px"}} src={userImg} alt="#"/>
+            <Img style={{ width: "40px", borderRadius: "100px" }} src={userImg} alt="#"/>
             {userNickname}
             <ExpandMoreOutlinedIcon />
           </Div>
