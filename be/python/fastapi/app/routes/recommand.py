@@ -237,7 +237,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 
 		for i in temp_result:
 			rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8'))
-		rd.expire(endpoint, 300)
+		rd.expire(endpoint, 180)
 		logger.info(f"response data size: {len(temp_result[skip:limit])}")
 
 		# data = {"content": temp_result[skip:limit]}
@@ -284,7 +284,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 
 		for i in temp_result:
 			rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8'))
-		rd.expire(endpoint, 300)
+		rd.expire(endpoint, 180)
 		logger.info(f"response data size: {len(temp_result[skip:limit])}")
 
 		data = {"content": temp_result[skip:limit], "last": len(temp_result) <= limit, "size": size, "number": page, "empty": len(temp_result) == 0}
@@ -498,7 +498,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 
 	for i in result:
 		rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8') )
-	rd.expire(endpoint, 300)
+	rd.expire(endpoint, 180)
 
 	logger.info(f"response data size: {len(result[skip:limit])}")
 	
@@ -595,7 +595,7 @@ def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 
 	for i in result:
 		rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8') )
-	rd.expire(endpoint, 300)
+	rd.expire(endpoint, 180)
 	
 	logger.info(f"response data size: {len(result[skip:limit])}")
 	
@@ -668,7 +668,7 @@ def bucket_random_recomm(db: Session, userSeq: int, size: int, page: int, search
 
 	for i in temp_result:
 		rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8') )
-	rd.expire(endpoint, 300)
+	rd.expire(endpoint, 180)
 
 	logger.info(f"response data size: {len(temp_result[skip:limit])}")
 
