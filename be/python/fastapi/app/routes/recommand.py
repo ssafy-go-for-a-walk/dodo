@@ -99,7 +99,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 	pb_data = db.query(PublicBucket.emoji, PublicBucket.title, PublicBucket.added_count, PublicBucket.seq.label("bucket_seq"), Category.seq.label("category_seq"), Category.item)\
 			.filter(PublicBucket.is_public == 1)\
 			.filter(PublicBucket.category_seq == Category.seq)\
-			.filter(PublicBucket.category_seq != 0)\
+			.filter(PublicBucket.category_seq != 'null')\
 			.all()
 	
 	logger.info(f"prefer_data 개수 : {len(prefer_data)}")
