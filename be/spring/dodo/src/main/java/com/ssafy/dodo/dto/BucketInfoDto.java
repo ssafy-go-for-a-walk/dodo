@@ -14,4 +14,5 @@ public class BucketInfoDto {
     private LocalDate dDay;
     private String location;
     private String desc;
+    private String category;
 }
