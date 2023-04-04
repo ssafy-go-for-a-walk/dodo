@@ -549,6 +549,8 @@ def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 
 			logger.info(f"result: {result.__str__}")
 
+	
+
 	# data = {"content": result, "last": ie_end, "size": size, "number": page, "empty": len(result) == 0}
 	data = {"content": result, "last": "페이징 하는중", "size": size, "number": page, "empty": "페이징 하는중"}
 	response = {"data": data, "success": True}
