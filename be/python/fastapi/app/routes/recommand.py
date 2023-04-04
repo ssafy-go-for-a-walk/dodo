@@ -159,7 +159,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 	for i in prefer_data:
 		list_prefer_data.append(i.title)
 	
-	logger.info(f"prefernce title data list: {list_prefer_data}")
+	# logger.info(f"prefernce title data list: {list_prefer_data}")
 
 	# 추천 함수
 	def get_recommendations(title, cosine_sim = cosine_sim):
@@ -177,7 +177,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 
 		# 인덱스 skip부터 skip+limt까지의 가장 유사한 버킷리스트를 받아온다.
 		# sim_scores = sim_scores[page:page+size]
-		# TODO 현재 0개부터 8000개
+		# TODO 0개부터 8000개의 버킷
 		sim_scores = sim_scores[0:8000]
 		# print(sim_scores)
 
@@ -237,6 +237,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 		for i in temp_result:
 			rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8'))
 		rd.expire(endpoint, 300)
+		logger.info(f"response data size: {len(temp_result[skip:limit])}")
 
 		# data = {"content": temp_result[skip:limit]}
 		data = {"content": temp_result[skip:limit], "last": len(temp_result) <= limit, "size": size, "number": page, "empty": len(temp_result) == 0}
@@ -282,8 +283,8 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 		for i in result:
 			rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8'))
 		rd.expire(endpoint, 300)
+		logger.info(f"response data size: {len(temp_result[skip:limit])}")
 
-		
 		data = {"content": temp_result[skip:limit], "last": len(temp_result) <= limit, "size": size, "number": page, "empty": len(temp_result) == 0}
 
 		response = {"data": data, "success": True}
@@ -447,6 +448,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 
 	result = []
 
+	# TODO 0개부터 100명의 유저
 	if(len(user_list) > 100): user_sim_size = 100
 	else: user_sim_size = len(user_list)-1
 
@@ -496,6 +498,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 		rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8') )
 	rd.expire(endpoint, 300)
 
+	logger.info(f"response data size: {len(result[skip:limit])}")
 	
 	# data = {"content": result, "last": is_end, "size": size, "number": page, "empty": len(result) == 0}
 	data = {"content": result[skip:limit], "last": limit >= len(result), "size": size, "number": page, "empty": len(result[skip:limit]) == 0}
@@ -591,7 +594,9 @@ def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 	for i in result:
 		rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8') )
 	rd.expire(endpoint, 300)
-
+	
+	logger.info(f"response data size: {len(result[skip:limit])}")
+	
 	# data = {"content": result, "last": ie_end, "size": size, "number": page, "empty": len(result) == 0}
 	data = {"content": result[skip:limit], "last": limit >= len(result), "size": size, "number": page, "empty": len(result[skip:limit]) == 0}
 	response = {"data": data, "success": True}
@@ -663,6 +668,7 @@ def bucket_random_recomm(db: Session, userSeq: int, size: int, page: int, search
 		rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8') )
 	rd.expire(endpoint, 300)
 
+	logger.info(f"response data size: {len(temp_result[skip:limit])}")
 
 	data = {"content": temp_result[skip:limit], "last": len(pb_data) < limit, "size": size, "number": page, "empty": len(temp_result) == 0}
 	response = {"data": data, "success": True}
