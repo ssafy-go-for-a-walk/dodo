@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @ToString
-@RedisHash(value = "sharedBl", timeToLive = 60 * 60) // keyspace: invitedBl, 만료시간: 1시간
+@RedisHash(value = "sharedBl") // keyspace: invitedBl
 public class ShareToken {
 
     @Id
