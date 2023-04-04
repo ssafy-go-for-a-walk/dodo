@@ -1,9 +1,6 @@
 package com.ssafy.dodo.service.impl;
 
-import com.ssafy.dodo.dto.AddedBucketDto;
-import com.ssafy.dodo.dto.BucketInfoDto;
-import com.ssafy.dodo.dto.CategoryInfoDto;
-import com.ssafy.dodo.dto.PublicBucketDto;
+import com.ssafy.dodo.dto.*;
 import com.ssafy.dodo.entity.*;
 import com.ssafy.dodo.exception.CustomException;
 import com.ssafy.dodo.exception.ErrorCode;
@@ -75,7 +72,7 @@ public class BucketServiceImpl implements BucketService {
     }
 
     @Override
-    public List<AddedBucketDto> deleteBucket(Long bucketSeq, UserDetails userDetails) {
+    public Map<String, Object> deleteBucket(Long bucketSeq, UserDetails userDetails) {
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -91,26 +88,26 @@ public class BucketServiceImpl implements BucketService {
         publicBucketRepository.minusAddedCount(Arrays.asList(publicBucket));
 
         // added_buckets에서 담은 버킷 삭제
-        addedBucketRepository.deleteById(bucketSeq);
+//        addedBucketRepository.deleteById(bucketSeq);
+        addedBucket.delete();
 
         BucketList bucketList = addedBucket.getBucketList();
 
         List<AddedBucket> allByBucketList = addedBucketRepository.findAllByBucketList(bucketList);
 
         List<AddedBucketDto> addedBucketDtos = allByBucketList.stream()
-                .map(a -> AddedBucketDto.builder()
-                        .seq(a.getSeq())
-                        .title(a.getPublicBucket().getTitle())
-                        .category(a.getPublicBucket().getCategory() != null ? CategoryInfoDto.of(a.getPublicBucket().getCategory()) : null)
-                        .isComplete(a.isComplete())
-                        .emoji(a.getEmoji())
-                        .dDay(a.getDDay())
-                        .location(a.getLocation())
-                        .desc(a.getDesc())
-                        .build())
+                .map(AddedBucketDto::of)
                 .collect(Collectors.toList());
 
-        return addedBucketDtos;
+        Double completeRate = bucketListRepository.getBucketListCompleteRate(bucketList);
+        completeRate = completeRate == null ? 0.0 : Math.round(completeRate * 10) / 10.0;
+
+        log.info("달성률 : " + completeRate);
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("completeRate", completeRate);
+        ret.put("addedBuckets", addedBucketDtos);
+
+        return ret;
     }
 
     @Override

@@ -98,7 +98,7 @@ public class BucketListServiceImpl implements BucketListService {
     }
 
     @Override
-    public List<AddedBucketDto> addSearchedBucket(Long bucketListSeq, Long publicBucketSeq, UserDetails userDetails) {
+    public Map<String, Object> addSearchedBucket(Long bucketListSeq, Long publicBucketSeq, UserDetails userDetails) {
 
         User user = userRepository.findById(Long.parseLong(userDetails.getUsername()))
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -135,19 +135,14 @@ public class BucketListServiceImpl implements BucketListService {
         List<AddedBucket> allByBucketList = addedBucketRepository.findAllByBucketList(bucketList);
 
         List<AddedBucketDto> addedBucketDtos = allByBucketList.stream()
-                .map(a -> AddedBucketDto.builder()
-                        .seq(a.getSeq())
-                        .title(a.getPublicBucket().getTitle())
-                        .category(a.getPublicBucket().getCategory() == null ? null : CategoryInfoDto.of(a.getPublicBucket().getCategory()))
-                        .isComplete(a.isComplete())
-                        .emoji(a.getEmoji())
-                        .dDay(a.getDDay())
-                        .location(a.getLocation())
-                        .desc(a.getDesc())
-                        .build())
+                .map(AddedBucketDto::of)
                 .collect(Collectors.toList());
 
-        return addedBucketDtos;
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("bucketListInfo", new BucketListInfoDto(bucketList));
+        ret.put("addedBuckets", addedBucketDtos);
+
+        return ret;
     }
 
     @Override
