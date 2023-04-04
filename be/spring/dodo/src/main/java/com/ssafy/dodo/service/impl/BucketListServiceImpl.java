@@ -270,6 +270,13 @@ public class BucketListServiceImpl implements BucketListService {
 
     @Override
     public String createInviteToken(Long bucketListSeq, Long inviterSeq) {
+        BucketList bucketList = bucketListRepository.findById(bucketListSeq)
+                .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
+
+        if (bucketList.getType() == BucketListType.SINGLE) {
+            throw new CustomException(ErrorCode.SINGLE_TYPE_CAN_NOT_INVITE);
+        }
+
         String inviteTokenKey = createRandomStringToken();
         InviteToken inviteToken = new InviteToken(inviteTokenKey, bucketListSeq, inviterSeq);
         inviteTokenRepository.save(inviteToken);
