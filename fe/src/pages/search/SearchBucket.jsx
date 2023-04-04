@@ -31,9 +31,9 @@ export default function SearchBucket(props) {
 
   return (
     <BucketBox>
-      <Tag category={bucket.category !== null ? bucket.category.item : null} />
+      <Tag category={bucket.category !== null ? bucket.category.item : null} disabled="disabled" />
       <BucketEmoji role="img">{bucket.emoji}</BucketEmoji>
-      <BucketTitle>{bucket.title}</BucketTitle>
+      <BucketTitle disabled="disabled">{bucket.title}</BucketTitle>
     </BucketBox>
   );
 }
