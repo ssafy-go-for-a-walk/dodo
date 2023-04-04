@@ -24,6 +24,7 @@ const BucketImg = styled.img`
   width: 200px;
   height: 200px;
   border-radius: 50px;
+  margin-left: 56px;
 `;
 
 const BucketTitle = styled.div`
@@ -119,7 +120,6 @@ export default function ManageSetting() {
           },
         })
         .then(res => {
-          console.log(res.data.data);
           dispatch(changeListInfo(res.data.data));
         })
         .catch(err => console.log(err));

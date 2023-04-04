@@ -25,6 +25,7 @@ const Categorys = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 40px;
+  margin-bottom: 32px;
 `;
 
 export default function SearchPage() {
@@ -37,9 +38,6 @@ export default function SearchPage() {
   const { user } = useSelector(state => state);
   const userToken = user.value.token;
   const listId = user.value.selectedBucketlist.pk;
-  console.log(buckets);
-  console.log(searchValue);
-  console.log(paging);
 
   const changeCate = useCallback(
     async categoryName => {
@@ -135,7 +133,7 @@ export default function SearchPage() {
           />
         ))}
       </Categorys>
-      <Banner category={selectCate} />
+      {selectCate !== null && <Banner category={selectCate} />}
       {Array.isArray(buckets) && buckets.map(bucket => <RecommBucket bucket={bucket} key={bucket.publicBucketSeq} />)}
       {!paging.last && !loading && <RefreshIcon ref={ref} />}
       {loading && <CircularProgress sx={{ color: lightBlue[500] }} />}

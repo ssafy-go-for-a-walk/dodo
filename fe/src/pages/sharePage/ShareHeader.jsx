@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const Div = styled.div`
@@ -13,12 +12,14 @@ const Div = styled.div`
   align-items: center;
   z-index: 3;
   background: #ffffff;
+  margin-top: 64px;
   margin-bottom: 24px;
 `;
 
 const Header = styled.div`
   height: 64px;
-  width: 100%;
+  width: 80%;
+  max-width: 800px;
   margin-top: 16px;
   padding: 0 24px;
   display: flex;
@@ -45,9 +46,9 @@ const Filter = styled.div`
 const FilterDiv = styled.div`
   height: 24px;
   font-size: 16px;
-  font-weight: ${props => props.select && "bold"};
-  color: ${props => (props.select ? "#424242" : "#757575")};
-  border-bottom: ${props => (props.select ? "3px solid #424242" : "none")};
+  font-weight: ${props => props.selected && "bold"};
+  color: ${props => (props.selected ? "#424242" : "#757575")};
+  border-bottom: ${props => (props.selected ? "3px solid #424242" : "none")};
   margin: 0 48px;
   cursor: pointer;
   &:hover {
@@ -57,12 +58,8 @@ const FilterDiv = styled.div`
   }
 `;
 
-export default function ManageHeader(props) {
-  const { pageFilter } = props;
-  const { user } = useSelector(state => state);
-  const info = user.bucketList.info;
-  console.log(info);
-  console.log(user.value.token);
+export default function ShareHeader(props) {
+  const { pageFilter, info } = props;
   const changePageFilter = fil => {
     props.propFunction(fil);
   };
@@ -73,14 +70,11 @@ export default function ManageHeader(props) {
         <Title>{info.title}</Title>
       </Header>
       <Filter>
-        <FilterDiv select={pageFilter === "bucketList"} onClick={() => changePageFilter("bucketList")}>
+        <FilterDiv selected={pageFilter === "bucketList"} onClick={() => changePageFilter("bucketList")}>
           버킷리스트
         </FilterDiv>
-        <FilterDiv select={pageFilter === "diary"} onClick={() => changePageFilter("diary")}>
+        <FilterDiv selected={pageFilter === "diary"} onClick={() => changePageFilter("diary")}>
           경험일기
-        </FilterDiv>
-        <FilterDiv select={pageFilter === "setting"} onClick={() => changePageFilter("setting")}>
-          설정
         </FilterDiv>
       </Filter>
     </Div>
