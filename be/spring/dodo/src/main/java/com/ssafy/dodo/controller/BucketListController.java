@@ -143,8 +143,10 @@ public class BucketListController {
                 ":" +
                 request.getServerPort();
 
+        log.info("request domain: {}", domain);
+
         String shareLink = bucketListService.createShareLink(
-                domain, Long.valueOf(userDetails.getUsername()), bucketListSeq);
+                "https://j8b104.p.ssafy.io", Long.valueOf(userDetails.getUsername()), bucketListSeq);
 
         Map<String, String> data = new HashMap<>();
         data.put("shareLink", shareLink);

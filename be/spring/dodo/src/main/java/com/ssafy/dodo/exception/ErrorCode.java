@@ -41,6 +41,7 @@ public enum ErrorCode {
 
     // BucketList 참여 및 공유
     EXPIRE_OR_NOT_EXIST_TOKEN(HttpStatus.BAD_REQUEST, "만료되거나 존재하지 않는 토큰입니다."),
+    SINGLE_TYPE_CAN_NOT_INVITE(HttpStatus.BAD_REQUEST, "개인 버킷리스트에는 다른 사용자를 초대할 수 없습니다."),
 
 
     ;
