@@ -70,10 +70,10 @@ export default function CodeModal(props) {
         </IconButton>
       </div>
       <Div>
-        <Title>참여코드</Title>
-        <Content>참여코드는 30분간 유효합니다.</Content>
+        <Title>{code.title}</Title>
+        <Content>{code.title === "참여코드" && "참여코드는 30분간 유효합니다."}</Content>
         <Code>
-          {code}
+          {code.code}
           <MdContentCopy
             className="copy"
             onClick={() => {

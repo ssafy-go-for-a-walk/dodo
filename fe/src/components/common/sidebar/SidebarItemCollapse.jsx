@@ -7,10 +7,10 @@ import SidebarBuckitlists from "./SidebarBuckitlists";
 
 export default function SidebarItemCollapse(props) {
   const [open, setOpen] = useState(false);
-  const item = props.item;
   const type = props.type;
+  const item = props.item;
 
-  return item !== [] ? (
+  return Array.isArray(item) ? (
     <>
       <ListItemButton
         onClick={() => setOpen(!open)}

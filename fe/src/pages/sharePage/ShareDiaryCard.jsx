@@ -58,7 +58,7 @@ const DiaryContent = styled.div`
   word-break: break-all;
 `;
 
-export default function DiaryCard(props) {
+export default function ShareDiaryCard(props) {
   const { diary } = props;
   return (
     <Card images={diary.images}>

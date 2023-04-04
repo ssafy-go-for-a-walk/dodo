@@ -61,8 +61,6 @@ export default function ManageHeader(props) {
   const { pageFilter } = props;
   const { user } = useSelector(state => state);
   const info = user.bucketList.info;
-  console.log(info);
-  console.log(user.value.token);
   const changePageFilter = fil => {
     props.propFunction(fil);
   };

@@ -31,7 +31,7 @@ const BucketHeader = styled.div`
   }
 `;
 
-const BucketEmoji = styled.div`
+const BucketEmoji = styled.span`
   font-size: 24px;
   margin: 0 8px;
 `;
@@ -58,11 +58,10 @@ const BucketComplete = styled.div`
 
 export default function ShareBucket(props) {
   const bucket = props.bucket;
-
   return (
     <BucketBox complete={bucket.complete}>
       <BucketHeader>
-        <Tag category={bucket.category.item} />
+        <Tag category={bucket.category !== null ? bucket.category.item : null} />
         <BucketEmoji role="img">{bucket.emoji}</BucketEmoji>
         <BucketTitle>{bucket.title}</BucketTitle>
       </BucketHeader>

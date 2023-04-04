@@ -23,7 +23,7 @@ function App() {
         <Route path="/survey" element={<SurveyPage />} />
         <Route path="/survey/signup" element={<SignUpPage />} />
         <Route path="/login/:token" element={<LoginPage />} />
-        <Route path="/share" element={<SharePage />} />
+        <Route path="/share/:token" element={<SharePage />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
     </div>

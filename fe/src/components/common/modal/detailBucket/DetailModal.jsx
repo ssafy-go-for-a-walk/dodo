@@ -188,7 +188,9 @@ export default function GroupModal(props) {
             Authorization: `Bearer ${userToken}`,
           },
         })
-        .then(res => dispatch(reBucketList(res.data.data)))
+        .then(res => {
+          dispatch(reBucketList(res.data.data));
+        })
         .catch(err => console.log(err));
     }
     props.closeModal();

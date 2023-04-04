@@ -1,78 +1,58 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import Tag from "../../components/common/bucket/Tag";
-import { FcCalendar } from "react-icons/fc";
+import ShareDiaryCard from "./ShareDiaryCard";
+import Masonry from "@mui/lab/Masonry";
+import axios from "axios";
+import { useInView } from "react-intersection-observer";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
-const Card = styled.div`
+const Div = styled.div`
+  width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px 28px;
-  box-shadow: 0px 4px 4px rgba(182, 86, 86, 0.25);
-  border-radius: 8px;
-  margin: 0 16px 16px 16px;
-  background: ${props => (props.images.length !== 0 ? "#ffffff" : "#E9F5FF")};
+  padding: 0 16px;
 `;
 
-const CardHeader = styled.div`
-  display: flex;
-  width: 100%;
-  height: 32px;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 24px;
-`;
+export default function ManageDiary(props) {
+  const [diaries, setDiaries] = useState([]);
+  const [paging, setPaging] = useState({ page: 0, last: false });
+  const [loading, setLoading] = useState(false);
+  const [ref, inView] = useInView();
+  const { token } = props;
 
-const BucketImoge = styled.span`
-  font-size: 24px;
-`;
+  const getDiaries = useCallback(async () => {
+    setLoading(true);
+    const params = { page: paging.page };
+    await axios
+      .get(`https://j8b104.p.ssafy.io/api/bucketlists/share/${token}/diaries`, {
+        params: params,
+      })
+      .then(res => {
+        const resData = res.data.data;
+        setDiaries(pre => [...pre, ...resData.content]);
+        setPaging({ page: resData.number + 1, last: resData.last });
+      })
+      .catch(err => console.log(err));
+    setLoading(false);
+  }, [token, paging.page]);
 
-const BucketTitle = styled.div`
-  width: 200px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
+  useEffect(() => {
+    if (inView && !paging.last && !loading) {
+      getDiaries();
+    }
+  }, [inView, paging, loading, getDiaries]);
 
-const CreateDate = styled.div`
-  display: flex;
-  width: 100%;
-  height: 32px;
-  align-items: center;
-  margin-bottom: 16px;
-  font-size: 16px;
-
-  .calendar {
-    margin-right: 8px;
-  }
-`;
-
-const DiaryImg = styled.img`
-  width: 100%;
-  margin-bottom: 16px;
-`;
-
-const DiaryContent = styled.div`
-  width: 100%;
-  font-size: 16px;
-  word-break: break-all;
-`;
-
-export default function ShareDiary(props) {
-  const { diary } = props;
   return (
-    <Card images={diary.images}>
-      <CardHeader>
-        <BucketImoge role="img">{diary.emoji}</BucketImoge>
-        <BucketTitle>{diary.title}</BucketTitle>
-        <Tag category={diary.category.item} />
-      </CardHeader>
-      <CreateDate>
-        <FcCalendar className="calendar" />
-        {diary.createdAt.substring(0, 10)}
-      </CreateDate>
-      {diary.images.length !== 0 && <DiaryImg src={diary.images} />}
-      <DiaryContent>{diary.content}</DiaryContent>
-    </Card>
+    <Div>
+      {Array.isArray(diaries) && (
+        <Masonry columns={{ xs: 1, md: 2, lg: 3, xl: 4 }} spacing={2}>
+          {diaries.map(diary => (
+            <ShareDiaryCard diary={diary} key={diary.seq} loading="lazy" />
+          ))}
+        </Masonry>
+      )}
+      {!paging.last && !loading && <RefreshIcon ref={ref} />}
+    </Div>
   );
 }

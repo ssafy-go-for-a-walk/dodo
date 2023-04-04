@@ -14,6 +14,10 @@ const Div = styled.div`
   padding: 0 16px;
 `;
 
+const NoDiaries = styled.div`
+  font-size: 40px;
+`;
+
 export default function ManageDiary() {
   const [diaries, setDiaries] = useState([]);
   const [paging, setPaging] = useState({ page: 0, last: false });
@@ -50,6 +54,7 @@ export default function ManageDiary() {
 
   return (
     <Div>
+      {diaries.length === 0 && <NoDiaries>경험일기를 작성해주세요.</NoDiaries>}
       {Array.isArray(diaries) && (
         <Masonry columns={{ xs: 1, md: 2, lg: 3, xl: 4 }} spacing={2}>
           {diaries.map(diary => (

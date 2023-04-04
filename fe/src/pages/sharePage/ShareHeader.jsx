@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Div = styled.div`
   position: sticky;
-  top: 0;
+  top: 64px;
   width: 100%;
   height: 128px;
   border-bottom: 1px solid #757575;
@@ -12,7 +12,6 @@ const Div = styled.div`
   align-items: center;
   z-index: 3;
   background: #ffffff;
-  margin-top: 64px;
   margin-bottom: 24px;
 `;
 

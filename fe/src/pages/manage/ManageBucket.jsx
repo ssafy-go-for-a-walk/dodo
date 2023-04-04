@@ -48,7 +48,7 @@ const BucketHeader = styled.div`
   }
 `;
 
-const BucketEmoji = styled.div`
+const BucketEmoji = styled.span`
   font-size: 24px;
   margin: 0 8px;
 `;
