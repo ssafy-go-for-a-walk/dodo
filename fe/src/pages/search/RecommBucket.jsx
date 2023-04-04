@@ -19,6 +19,7 @@ const BucketBox = styled.div`
 
 const BucketInfo = styled.div`
   width: 90%;
+  cursor: default;
 
   @media screen and (max-width: 856px) {
     width: 85%;
@@ -58,11 +59,11 @@ export default function RecommBucket(props) {
     <BucketBox>
       <BucketInfo>
         <BucketHeader>
-          <Tag category={bucket.category.item} disabled="disabled" />
+          <Tag category={bucket.category.item} />
           <BucketEmoji role="img">{bucket.emoji}</BucketEmoji>
-          <BucketTitle disabled="disabled">{bucket.title}</BucketTitle>
+          <BucketTitle>{bucket.title}</BucketTitle>
         </BucketHeader>
-        <BucketChallenger disabled="disabled">현재 {bucket.addedCount}명이 도전중</BucketChallenger>
+        <BucketChallenger>현재 {bucket.addedCount}명이 도전중</BucketChallenger>
       </BucketInfo>
       <AddButton bucket={bucket} />
     </BucketBox>

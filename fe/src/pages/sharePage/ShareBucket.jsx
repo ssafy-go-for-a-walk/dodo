@@ -15,6 +15,7 @@ const BucketBox = styled.div`
   padding: 8px 16px;
   position: relative;
   margin-bottom: 24px;
+  cursor: default;
 `;
 
 const BucketHeader = styled.div`

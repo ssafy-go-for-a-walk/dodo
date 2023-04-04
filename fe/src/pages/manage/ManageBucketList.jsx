@@ -34,6 +34,7 @@ const FilterSearch = styled.div`
 const NoBuckets = styled.div`
   margin-top: 40px;
   font-size: 40px;
+  cursor: default;
 `;
 
 export default function ManageBucketList() {

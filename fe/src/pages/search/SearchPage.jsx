@@ -52,6 +52,7 @@ export default function SearchPage() {
         })
         .then(res => {
           const resData = res.data.data;
+          console.log(resData);
           setBuckets(resData.content);
           setPaging({ page: resData.number + 1, last: resData.last });
         })

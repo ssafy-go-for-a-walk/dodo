@@ -12,6 +12,7 @@ const Div = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 0 16px;
+  cursor: default;
 `;
 
 export default function ManageDiary(props) {

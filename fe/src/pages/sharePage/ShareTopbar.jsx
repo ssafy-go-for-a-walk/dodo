@@ -1,7 +1,7 @@
 import { AppBar } from "@mui/material";
 import styled from "styled-components";
 import colorConfigs from "../../configs/colorConfigs";
-import logo from "../../assets/images/logo.png";
+import logo from "../../assets/images/TopbarLogo.png";
 import { useNavigate } from "react-router";
 
 const LogInButton = styled.button`
