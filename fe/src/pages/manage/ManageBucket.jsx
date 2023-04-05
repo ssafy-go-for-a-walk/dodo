@@ -106,7 +106,7 @@ export default function Bucket(props) {
   let scrollPosition = 0;
   const lockScroll = useCallback(() => {
     scrollPosition = window.pageYOffset;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = "scroll";
     document.body.style.position = "fixed";
     document.body.style.top = `-${scrollPosition}px`;
     document.body.style.width = "100%";
@@ -157,7 +157,7 @@ export default function Bucket(props) {
       <DeleteBox onClick={deleteBucket}>
         <DeleteBtn>삭제</DeleteBtn>
       </DeleteBox>
-      <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)} style={DetailModalStyle} ariaHideApp={false}>
+      <Modal isOpen={isOpen} onRequestClose={closeModal} style={DetailModalStyle} ariaHideApp={false}>
         <DetailModal closeModal={closeModal} bucket={bucket} />
       </Modal>
     </BucketBox>
