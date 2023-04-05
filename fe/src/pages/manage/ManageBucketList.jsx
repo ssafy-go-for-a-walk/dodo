@@ -56,17 +56,21 @@ export default function ManageBucketList() {
         <Filter bucketFilter={bucketFilter} propFunction={changeBucketFilter} />
         <ManageSearchBar />
       </FilterSearch>
-      {Array.isArray(myBuckets) && myBuckets.length === 0 && <NoBuckets>버킷리스트를 추가해주세요.</NoBuckets>}
-      <ImageBox id="bucketlist">
-        {bucketFilter === "전체" &&
-          myBuckets.map((bucket, index) => (
-            <ManageBucket bucket={bucket} sendSignal={saveImgUrl} signal={bucketFilter.length === index - 1} key={bucket.seq} />
-          ))}
-        {bucketFilter === "완료" &&
-          myBuckets.filter(bucket => bucket.complete === true).map(bucket => <ManageBucket signal={false} bucket={bucket} key={bucket.seq} />)}
-        {bucketFilter === "미완" &&
-          myBuckets.filter(bucket => bucket.complete === false).map(bucket => <ManageBucket signal={false} bucket={bucket} key={bucket.seq} />)}
-      </ImageBox>
+      {Array.isArray(myBuckets) &&
+        (myBuckets.length === 0 ? (
+          <NoBuckets>버킷리스트를 추가해주세요.</NoBuckets>
+        ) : (
+          <ImageBox id="bucketlist">
+            {bucketFilter === "전체" &&
+              myBuckets.map((bucket, index) => (
+                <ManageBucket bucket={bucket} sendSignal={saveImgUrl} signal={bucketFilter.length === index - 1} key={bucket.seq} />
+              ))}
+            {bucketFilter === "완료" &&
+              myBuckets.filter(bucket => bucket.complete === true).map(bucket => <ManageBucket signal={false} bucket={bucket} key={bucket.seq} />)}
+            {bucketFilter === "미완" &&
+              myBuckets.filter(bucket => bucket.complete === false).map(bucket => <ManageBucket signal={false} bucket={bucket} key={bucket.seq} />)}
+          </ImageBox>
+        ))}
     </BucketList>
   );
 }
