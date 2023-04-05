@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { changeListInfo, deleteBucketlist } from "../../redux/user";
@@ -138,6 +138,7 @@ export default function ManageSetting() {
       .then(res => {
         setCode({ title: "참여코드", code: res.data.data.inviteToken });
         setIsOpen(true);
+        lockScroll();
       });
   };
   const shareLink = () => {
@@ -154,7 +155,12 @@ export default function ManageSetting() {
       .then(res => {
         setCode({ title: "공유링크", code: res.data.data.shareLink });
         setIsOpen(true);
+        lockScroll();
       });
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+    openScroll();
   };
   const deleteList = () => {
     axios
@@ -178,6 +184,22 @@ export default function ManageSetting() {
     link.href = imageUrl;
     link.click();
   };
+  let scrollPosition = 0;
+  const lockScroll = useCallback(() => {
+    scrollPosition = window.pageYOffset;
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollPosition}px`;
+    document.body.style.width = "100%";
+  }, []);
+
+  const openScroll = useCallback(() => {
+    document.body.style.removeProperty("overflow");
+    document.body.style.removeProperty("position");
+    document.body.style.removeProperty("top");
+    document.body.style.removeProperty("width");
+    window.scrollTo(0, scrollPosition);
+  }, []);
   return (
     <Settings>
       <div>
@@ -202,8 +224,8 @@ export default function ManageSetting() {
         <HalfButton onClick={saveImage}>내보내기</HalfButton>
       </HalfButtons>
       <DeleteButton onClick={deleteList} />
-      <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)} style={CodeModalStyle} ariaHideApp={false}>
-        <CodeModal closeModal={() => setIsOpen(false)} code={code} />
+      <Modal isOpen={isOpen} onRequestClose={closeModal} style={CodeModalStyle} ariaHideApp={false}>
+        <CodeModal closeModal={closeModal} code={code} />
       </Modal>
     </Settings>
   );
