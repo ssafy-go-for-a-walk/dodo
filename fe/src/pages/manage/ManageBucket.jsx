@@ -7,7 +7,7 @@ import DetailModalStyle from "../../components/common/modal/detailBucket/DetailM
 import DetailModal from "../../components/common/modal/detailBucket/DetailModal";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { reBucketList } from "../../redux/user";
+import { reBucketList, changeCompleteRate } from "../../redux/user";
 import { useEffect } from "react";
 
 const BucketBox = styled.div`
@@ -109,7 +109,11 @@ export default function Bucket(props) {
             Authorization: `Bearer ${userToken}`,
           },
         })
-        .then(res => dispatch(reBucketList(res.data.data)))
+        .then(res => {
+          const resData = res.data.data;
+          dispatch(reBucketList(resData.bucekts));
+          dispatch(changeCompleteRate(resData.completeRate));
+        })
         .catch(err => console.log(err));
     } else {
       setActivateDelete(true);

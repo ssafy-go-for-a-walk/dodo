@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { MdCheck } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { reBucketList } from "../../../redux/user";
+import { reBucketList, changeCompleteRate } from "../../../redux/user";
 
 const ButtonBox = styled.button`
   min-width: 64px;
@@ -43,7 +43,9 @@ export default function SearchAddButton(props) {
         },
       )
       .then(res => {
-        dispatch(reBucketList(res.data.data));
+        const resData = res.data.data;
+        dispatch(reBucketList(resData.buckets));
+        dispatch(changeCompleteRate(resData.completeRate));
         setSelected(true);
       })
       .catch(err => console.log(err));

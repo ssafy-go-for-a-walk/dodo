@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { MdCheck } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { changeCompleteRate } from "../../../redux/user";
 import axios from "axios";
 
 const ButtonBox = styled.button`
@@ -27,6 +28,7 @@ export default function AddButton(props) {
   const [selected, setSelected] = useState(bucket.isAdded);
   const { user } = useSelector(state => state);
   const bucketListId = user.value.selectedBucketlist.pk;
+  const dispatch = useDispatch();
   const addBucket = event => {
     event.preventDefault();
     axios
@@ -39,7 +41,11 @@ export default function AddButton(props) {
           },
         },
       )
-      .then(() => setSelected(true))
+      .then(res => {
+        const resData = res.data.data;
+        dispatch(changeCompleteRate(resData.completeRate));
+        setSelected(true);
+      })
       .catch(err => console.log(err));
   };
 

@@ -77,7 +77,7 @@ export default function CodeModal(props) {
           <MdContentCopy
             className="copy"
             onClick={() => {
-              handleCopyClipBoard(code);
+              handleCopyClipBoard(code.code);
             }}
           />
         </Code>
