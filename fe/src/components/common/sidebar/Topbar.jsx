@@ -44,12 +44,8 @@ export default function Topbar(props) {
   const userNickname = user.value.loginUserNickname;
   console.log(user);
   const openSetup = () => {
-    setIsOpen(bool => !bool);
-    if (isOpen) {
-      lockScroll();
-    } else {
-      openScroll();
-    }
+    setIsOpen(true);
+    lockScroll();
   };
   const closeModal = () => {
     setIsOpen(false);
@@ -127,7 +123,15 @@ export default function Topbar(props) {
             <ExpandMoreOutlinedIcon />
           </Div>
         </TopDiv>
-        <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)} style={ModalStyle} ariaHideApp={false}>
+        <Modal
+          isOpen={isOpen}
+          onRequestClose={() => {
+            setIsOpen(false);
+            openScroll();
+          }}
+          style={ModalStyle}
+          ariaHideApp={false}
+        >
           <TopbarModal closeModal={closeModal} />
         </Modal>
         <Modal
