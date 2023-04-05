@@ -696,8 +696,6 @@ def get_response(endpoint, size, page, cache_size):
 	data = {"content": ret, "last": limit+1 >= cache_size, "size": size, "number": page, "empty": len(ret) == 0}
 	response = {"data": data, "success": True}
 
-	print(response)
-
 	return response
 
 
