@@ -55,14 +55,16 @@ export default function ManageDiary() {
 
   return (
     <Div>
-      {Array.isArray(diaries) && diaries.length === 0 && <NoDiaries>경험일기를 작성해주세요.</NoDiaries>}
-      {Array.isArray(diaries) && (
-        <Masonry columns={{ xs: 1, md: 2, lg: 3, xl: 4 }} spacing={2}>
-          {diaries.map(diary => (
-            <DiaryCard diary={diary} key={diary.seq} loading="lazy" />
-          ))}
-        </Masonry>
-      )}
+      {Array.isArray(diaries) &&
+        (diaries.length === 0 ? (
+          <NoDiaries>경험일기를 작성해주세요.</NoDiaries>
+        ) : (
+          <Masonry columns={{ xs: 1, md: 2, lg: 3, xl: 4 }} spacing={2}>
+            {diaries.map(diary => (
+              <DiaryCard diary={diary} key={diary.seq} loading="lazy" />
+            ))}
+          </Masonry>
+        ))}
       {!paging.last && !loading && <RefreshIcon ref={ref} />}
     </Div>
   );
