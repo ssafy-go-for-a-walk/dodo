@@ -68,12 +68,12 @@ public class BucketListController {
 
     @PostMapping("/{bucketlist-seq}/buckets/{public-bucket-seq}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addBucket(
+    public DataResponse<?> addBucket(
             @PathVariable("bucketlist-seq") Long bucketListSeq,
             @PathVariable("public-bucket-seq") Long publicBucketSeq,
             @AuthenticationPrincipal UserDetails userDetails
     ){
-        bucketListService.addSearchedBucket(bucketListSeq, publicBucketSeq, userDetails);
+        return new DataResponse<>(bucketListService.addSearchedBucket(bucketListSeq, publicBucketSeq, userDetails));
     }
 
     @PatchMapping("/{bucketlist-seq}")
