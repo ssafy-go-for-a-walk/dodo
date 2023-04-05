@@ -43,6 +43,8 @@ export default function SearchPage() {
     async categoryName => {
       const params = { category: categoryName };
       setLoading(true);
+      setSelectCate(categoryName);
+      setBuckets([]);
       await axios
         .get("https://j8b104.p.ssafy.io/api/recomm/buckets", {
           params: params,
@@ -56,9 +58,6 @@ export default function SearchPage() {
           setPaging({ page: resData.number + 1, last: resData.last });
         })
         .catch(err => console.log(err));
-      setSelectCate(categoryName);
-      setPaging({ last: false, page: 0 });
-      setBuckets([]);
       setLoading(false);
     },
     [userToken],
