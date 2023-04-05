@@ -51,7 +51,7 @@ const SearchIcon = styled.div`
 
 const SearchResult = styled.div`
   width: 100%;
-  max-height: 560px;
+  max-height: 320px;
   border-radius: 8px;
   overflow: scroll;
   position: absolute;
