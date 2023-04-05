@@ -54,9 +54,8 @@ export default function Topbar(props) {
     setIsOpenProfile(false);
     openScroll();
   };
-  let scrollPosition = 0;
   const lockScroll = useCallback(() => {
-    scrollPosition = window.pageYOffset;
+    const scrollPosition = window.pageYOffset;
     document.body.style.overflow = "scroll";
     document.body.style.position = "fixed";
     document.body.style.top = `-${scrollPosition}px`;
@@ -64,6 +63,7 @@ export default function Topbar(props) {
   }, []);
 
   const openScroll = useCallback(() => {
+    const scrollPosition = window.pageYOffset;
     document.body.style.removeProperty("overflow");
     document.body.style.removeProperty("position");
     document.body.style.removeProperty("top");
