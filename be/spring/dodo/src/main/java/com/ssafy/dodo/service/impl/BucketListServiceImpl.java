@@ -134,6 +134,10 @@ public class BucketListServiceImpl implements BucketListService {
 
         List<AddedBucket> allByBucketList = addedBucketRepository.findAllByBucketList(bucketList);
 
+        List<AddedBucketDto> addedBucketDtos = allByBucketList.stream()
+                .map(AddedBucketDto::of)
+                .collect(Collectors.toList());
+
         double part = allByBucketList.stream().filter(bl -> bl.isComplete()).collect(Collectors.toList()).size();
         double total = allByBucketList.size();
 
@@ -142,6 +146,7 @@ public class BucketListServiceImpl implements BucketListService {
         Map<String, Object> ret = new HashMap<>();
         ret.put("bucketListInfo", new BucketListInfoDto(bucketList));
         ret.put("completeRate", completeRate);
+        ret.put("buckets", addedBucketDtos);
 
         return ret;
     }
