@@ -55,7 +55,7 @@ export default function ManageDiary() {
 
   return (
     <Div>
-      {diaries.length === 0 && <NoDiaries>경험일기를 작성해주세요.</NoDiaries>}
+      {Array.isArray(diaries) && diaries.length === 0 && <NoDiaries>경험일기를 작성해주세요.</NoDiaries>}
       {Array.isArray(diaries) && (
         <Masonry columns={{ xs: 1, md: 2, lg: 3, xl: 4 }} spacing={2}>
           {diaries.map(diary => (
