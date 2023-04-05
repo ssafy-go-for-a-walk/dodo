@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { reBucketList } from "../../redux/user";
+import { reBucketList, changeCompleteRate } from "../../redux/user";
 import ManageSearchBucket from "./ManageSearchBucket";
 import { HiPlus } from "react-icons/hi";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -137,7 +137,11 @@ export default function ManageSearchBar() {
             },
           },
         )
-        .then(res => dispatch(reBucketList(res.data.data)))
+        .then(res => {
+          const resData = res.data.data;
+          dispatch(reBucketList(resData.buckets));
+          dispatch(changeCompleteRate(resData.completeRate));
+        })
         .catch(err => console.log(err));
       resetValue();
     }
