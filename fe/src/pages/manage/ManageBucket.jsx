@@ -130,7 +130,7 @@ export default function Bucket(props) {
         })
         .then(res => {
           const resData = res.data.data;
-          dispatch(reBucketList(resData.bucekts));
+          dispatch(reBucketList(resData.buckets));
           dispatch(changeCompleteRate(resData.completeRate));
         })
         .catch(err => console.log(err));
