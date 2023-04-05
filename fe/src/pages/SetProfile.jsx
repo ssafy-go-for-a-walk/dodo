@@ -124,8 +124,7 @@ export default function SetProfile() {
           };
           dispatch(profile(data));
           navigate("/");
-        })
-        .catch(err => console.log(err));
+        });
     }
   };
   const changeNickname = eve => {

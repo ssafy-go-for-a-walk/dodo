@@ -36,8 +36,7 @@ export default function ManagePage() {
           buckets: resData.addedBuckets,
         };
         dispatch(setBucketList(data));
-      })
-      .catch(err => console.log(err));
+      });
   }, [dispatch, listId, userToken]);
   return (
     <>

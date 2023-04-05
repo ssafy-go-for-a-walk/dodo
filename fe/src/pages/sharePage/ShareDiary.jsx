@@ -33,8 +33,7 @@ export default function ManageDiary(props) {
         const resData = res.data.data;
         setDiaries(pre => [...pre, ...resData.content]);
         setPaging({ page: resData.number + 1, last: resData.last });
-      })
-      .catch(err => console.log(err));
+      });
     setLoading(false);
   }, [token, paging.page]);
 

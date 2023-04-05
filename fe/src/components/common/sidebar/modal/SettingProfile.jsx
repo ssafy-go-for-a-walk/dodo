@@ -153,8 +153,7 @@ export default function SettingProfile(props) {
             "Content-Type": "multipart/form-data",
           },
         })
-        .then(getUser())
-        .catch(err => console.log(err));
+        .then(getUser());
     }
   };
   return (

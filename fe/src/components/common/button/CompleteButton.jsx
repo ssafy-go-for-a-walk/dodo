@@ -39,8 +39,7 @@ export default function CompleteButton(props) {
       .then(res => {
         dispatch(reBucketList(res.data.data.buckets));
         dispatch(changeCompleteRate(res.data.data.completeRate));
-      })
-      .catch(err => console.log(err));
+      });
   };
 
   return (

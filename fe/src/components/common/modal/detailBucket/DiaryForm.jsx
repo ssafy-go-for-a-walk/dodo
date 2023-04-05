@@ -101,8 +101,7 @@ export default function DiaryForm(props) {
           props.changeDiaries(res.data.data);
           setDiaryContent("");
           setDiaryImg({ image: "", imageConfirm: "" });
-        })
-        .catch(err => console.log(err));
+        });
     }
   };
   return (

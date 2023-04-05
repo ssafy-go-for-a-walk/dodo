@@ -56,8 +56,7 @@ export default function SearchPage() {
           const resData = res.data.data;
           setBuckets(resData.content);
           setPaging({ page: resData.number + 1, last: resData.last });
-        })
-        .catch(err => console.log(err));
+        });
       setLoading(false);
     },
     [userToken],
@@ -91,8 +90,7 @@ export default function SearchPage() {
           const resData = res.data.data;
           setBuckets(pre => [...pre, ...resData.content]);
           setPaging({ page: resData.number + 1, last: resData.last });
-        })
-        .catch(err => console.log(err));
+        });
     } else {
       const params = { q: searchValue, bucketlist: listId, page: paging.page };
       await axios
@@ -106,8 +104,7 @@ export default function SearchPage() {
           const resData = res.data.data;
           setBuckets(pre => [...pre, ...resData.content]);
           setPaging({ page: resData.number + 1, last: resData.last });
-        })
-        .catch(err => console.log(err));
+        });
     }
     setLoading(false);
   }, [selectCate, paging.page, userToken, listId, searchValue]);
