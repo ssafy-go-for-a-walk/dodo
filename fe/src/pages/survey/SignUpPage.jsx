@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import Logo from "../../imges/logo.jpg";
+import Logo from "../../assets/images/logo3.png";
 // import Kakao from "../../imges/kakaologin.png"
-import KakaoLogo from "../../imges/kakaologo.png";
+import KakaoLogo from "../../assets/images/kakaologo.png";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
@@ -13,10 +13,10 @@ const Div = styled.div`
 `;
 
 const LogoImg = styled.img`
-  height: 35vw;
+  height: 65vh;
   min-height: 400px;
   max-height: 600px;
-  margin-top: 5vw;
+  margin-top: 5vh;
 `;
 
 const PTag = styled.p`
