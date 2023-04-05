@@ -42,7 +42,6 @@ export default function Topbar(props) {
   const open = props.isOpen;
   const userImg = user.value.loginUserImg;
   const userNickname = user.value.loginUserNickname;
-  console.log(user);
   const openSetup = () => {
     setIsOpen(true);
     lockScroll();
@@ -50,7 +49,6 @@ export default function Topbar(props) {
   const closeModal = () => {
     setIsOpen(false);
     setIsOpenProfile(true);
-    lockScroll();
   };
   const closeProfileModal = () => {
     setIsOpenProfile(false);
@@ -134,12 +132,7 @@ export default function Topbar(props) {
         >
           <TopbarModal closeModal={closeModal} />
         </Modal>
-        <Modal
-          isOpen={isOpenProfile}
-          // onRequestClose={closeProfileModal}
-          style={ProfileModalStyle}
-          ariaHideApp={false}
-        >
+        <Modal isOpen={isOpenProfile} style={ProfileModalStyle} ariaHideApp={false}>
           <SettingProfile closeProfileModal={closeProfileModal} signUp={false} />
         </Modal>
       </Toolbar>
