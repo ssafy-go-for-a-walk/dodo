@@ -56,7 +56,7 @@ export default function ManageBucketList() {
         <Filter bucketFilter={bucketFilter} propFunction={changeBucketFilter} />
         <ManageSearchBar />
       </FilterSearch>
-      {myBuckets.length === 0 && <NoBuckets>버킷리스트를 추가해주세요.</NoBuckets>}
+      {Array.isArray(myBuckets) && myBuckets.length === 0 && <NoBuckets>버킷리스트를 추가해주세요.</NoBuckets>}
       <ImageBox id="bucketlist">
         {bucketFilter === "전체" &&
           myBuckets.map((bucket, index) => (
