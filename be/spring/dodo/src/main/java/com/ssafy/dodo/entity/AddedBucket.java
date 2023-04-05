@@ -60,4 +60,8 @@ public class AddedBucket extends BaseEntity {
     public void completeToggleBucket() {
         this.isComplete = this.isComplete ? false : true;
     }
+
+    public void delete() {
+        this.isDelete = true;
+    }
 }

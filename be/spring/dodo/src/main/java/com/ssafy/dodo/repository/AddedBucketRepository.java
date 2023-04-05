@@ -28,4 +28,8 @@ public interface AddedBucketRepository extends JpaRepository<AddedBucket, Long> 
     int countByBucketListAndIsComplete(BucketList bucketList, boolean isComplete);
 
     int countByBucketList(BucketList bucketList);
+
+    @Modifying(flushAutomatically = true)
+    @Query("UPDATE AddedBucket ab SET ab.isDelete = true WHERE ab.seq = :seq")
+    void deleteById(Long seq);
 }

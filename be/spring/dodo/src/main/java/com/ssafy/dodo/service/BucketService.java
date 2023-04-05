@@ -18,5 +18,5 @@ public interface BucketService {
 
     Page<PublicBucketDto> searchBucket(String word, Long category, Long bucketListSeq, Pageable pageable, UserDetails userDetails);
 
-    List<AddedBucketDto> deleteBucket(Long bucketSeq, UserDetails userDetails);
+    Map<String, Object> deleteBucket(Long bucketSeq, UserDetails userDetails);
 }
