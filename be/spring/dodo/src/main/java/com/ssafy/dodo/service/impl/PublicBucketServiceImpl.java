@@ -86,7 +86,6 @@ public class PublicBucketServiceImpl implements PublicBucketService {
         double completeRate = (double) Math.round(part / total * 100 * 10) / 10;
 
         Map<String, Object> ret = new HashMap<>();
-        ret.put("bucketListInfo", new BucketListInfoDto(bucketList));
         ret.put("buckets", addedBucketDtos);
         ret.put("completeRate", completeRate);
 

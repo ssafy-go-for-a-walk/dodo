@@ -104,10 +104,6 @@ public class BucketServiceImpl implements BucketService {
 
         double completeRate = (double) Math.round(part / total * 100 * 10) / 10;
 
-//        Double completeRate = bucketListRepository.getBucketListCompleteRate(bucketList);
-//        completeRate = completeRate == null ? 0.0 : Math.round(completeRate * 10) / 10.0;
-
-        log.info("달성률 : " + completeRate);
         Map<String, Object> ret = new HashMap<>();
         ret.put("completeRate", completeRate);
         ret.put("buckets", addedBucketDtos);
