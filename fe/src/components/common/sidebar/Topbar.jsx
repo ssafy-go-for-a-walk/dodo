@@ -45,6 +45,11 @@ export default function Topbar(props) {
   console.log(user);
   const openSetup = () => {
     setIsOpen(bool => !bool);
+    if (isOpen) {
+      lockScroll();
+    } else {
+      openScroll();
+    }
   };
   const closeModal = () => {
     setIsOpen(false);
