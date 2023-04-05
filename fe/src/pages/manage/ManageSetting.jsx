@@ -121,8 +121,7 @@ export default function ManageSetting() {
         })
         .then(res => {
           dispatch(changeListInfo(res.data.data));
-        })
-        .catch(err => console.log(err));
+        });
     }
   };
   const createCode = () => {
@@ -139,8 +138,7 @@ export default function ManageSetting() {
       .then(res => {
         setCode({ title: "참여코드", code: res.data.data.inviteToken });
         setIsOpen(true);
-      })
-      .catch(err => console.log(err));
+      });
   };
   const shareLink = () => {
     axios
@@ -156,8 +154,7 @@ export default function ManageSetting() {
       .then(res => {
         setCode({ title: "공유링크", code: res.data.data.shareLink });
         setIsOpen(true);
-      })
-      .catch(err => console.log(err));
+      });
   };
   const deleteList = () => {
     axios
@@ -170,9 +167,8 @@ export default function ManageSetting() {
         dispatch(deleteBucketlist());
         navigate("/");
       })
-      .catch(err => {
-        const errMessage = err.response.data.message;
-        alert(errMessage);
+      .catch(() => {
+        alert("삭제하는데 실패하였습니다. \n처음에 생성된 버킷리스트는 삭제가 불가능합니다.");
       });
   };
   const saveImage = () => {

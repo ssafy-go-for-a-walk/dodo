@@ -23,8 +23,8 @@ const ProfileModalStyle = {
     borderRadius: "16px",
     zIndex: 9999,
     padding: "16px",
-		fontSize: "14px",
-  }
-}
+    fontSize: "14px",
+  },
+};
 
-export default ProfileModalStyle
+export default ProfileModalStyle;
