@@ -60,7 +60,7 @@ export default function SelectedItem() {
       <PercentCompo percent={completedPercent} />
       <Buckitlist>
         <BuckitlistName>{selectedBucketlist}</BuckitlistName>
-        <SelectedButton text={"수정"} />
+        <SelectedButton text={"관리"} />
       </Buckitlist>
     </Div>
   );
