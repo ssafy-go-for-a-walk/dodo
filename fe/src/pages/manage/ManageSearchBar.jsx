@@ -170,7 +170,7 @@ export default function ManageSearchBar() {
           <HiPlus className="searchIcon" />
         </SearchIcon>
       </InputBox>
-      <SearchResult onMouseDown={handleMouseDown}>
+      <SearchResult>
         {Array.isArray(buckets) && buckets.map(bucket => <ManageSearchBucket bucket={bucket} key={bucket.publicBucketSeq} />)}
         {!paging.last && !loading && <RefreshIcon ref={ref} />}
       </SearchResult>
