@@ -26,5 +26,5 @@ export default configureStore({
         ignoredActions: [PERSIST, PURGE],
       },
     }),
-    // }).concat(logger),
+  // }).concat(logger),
 });

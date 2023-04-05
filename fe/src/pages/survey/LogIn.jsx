@@ -7,7 +7,7 @@ const Div = styled.div`
   align-items: center;
   height: 35px;
   margin-top: 16px;
-`
+`;
 
 const LogInButton = styled.button`
   border: none;
@@ -30,5 +30,5 @@ export default function LogIn() {
       <p>✨ 이미 가입하셨나요?</p>
       <LogInButton onClick={() => window.location.replace("https://j8b104.p.ssafy.io/api/oauth2/authorization/kakao", "_blank")}>로그인</LogInButton>
     </Div>
-  )
+  );
 }

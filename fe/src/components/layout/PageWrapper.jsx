@@ -11,7 +11,5 @@ export default function PageWrapper(props) {
     }
   }, [dispatch, props]);
 
-  return (
-    <>{props.children}</>
-  );
-};
+  return <>{props.children}</>;
+}

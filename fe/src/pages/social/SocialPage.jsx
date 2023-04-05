@@ -17,44 +17,44 @@ const Div = styled.div`
 
 export default function SocialPage() {
   const [items, setItems] = useState([]);
-  const [pages, setPages] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [last, setLast] = useState(false)
-  const { user } = useSelector((state) => state);
+  const [pages, setPages] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [last, setLast] = useState(false);
+  const { user } = useSelector(state => state);
   const [ref, inView] = useInView();
 
   const getItems = useCallback(async () => {
-    setLoading(true)
+    setLoading(true);
     await axios
-    .get("https://j8b104.p.ssafy.io/api/recomm/social/bucketlists", {
-      headers: {
-        Authorization: `Bearer ${user.value.token}`,
-      },
-      params: {
-        page: pages,
-        size: 1,
-      },
-    })
-    .then(res => {
-      setItems(pre => [...pre, ...res.data.data.content]);
-      setPages(pre => pre + 1)
-      if (res.data.data.last) {
-        setLast(true)
-      }
-    })
-    setLoading(false)
+      .get("https://j8b104.p.ssafy.io/api/recomm/social/bucketlists", {
+        headers: {
+          Authorization: `Bearer ${user.value.token}`,
+        },
+        params: {
+          page: pages,
+          size: 1,
+        },
+      })
+      .then(res => {
+        setItems(pre => [...pre, ...res.data.data.content]);
+        setPages(pre => pre + 1);
+        if (res.data.data.last) {
+          setLast(true);
+        }
+      });
+    setLoading(false);
   }, [user, pages, setLoading]);
-  
+
   useEffect(() => {
-    if (inView) { 
+    if (inView) {
       getItems();
     }
   }, [inView, getItems]);
 
   return (
     <Div>
-      {items.length !== 0 ? items.map((data, index) => <SocialItem data={data} key={index} />) : last && <NoItem/>}
-      {last ? null : loading ? null: <RefreshIcon ref={ref} />}
+      {items.length !== 0 ? items.map((data, index) => <SocialItem data={data} key={index} />) : last && <NoItem />}
+      {last ? null : loading ? null : <RefreshIcon ref={ref} />}
       <SlideUp />
     </Div>
   );

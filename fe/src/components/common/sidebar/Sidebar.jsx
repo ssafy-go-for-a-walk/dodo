@@ -1,13 +1,13 @@
-import { Drawer, List} from "@mui/material";
+import { Drawer, List } from "@mui/material";
 import colorConfigs from "../../../configs/colorConfigs";
 import sizeConfigs from "../../../configs/sizeConfigs";
 import SidebarNav from "./SidebarNav";
 
-const Sidebar = (props) => {
+const Sidebar = props => {
   return (
     <Drawer
       PaperProps={{
-        sx: { top: "64px"}
+        sx: { top: "64px" },
       }}
       variant="permanent"
       sx={{
@@ -25,7 +25,7 @@ const Sidebar = (props) => {
           color: colorConfigs.sidebar.color,
           "&::-webkit-scrollbar": {
             display: "none",
-          }
+          },
         },
       }}
     >

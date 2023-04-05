@@ -24,10 +24,10 @@ const Div = styled.div`
 
 const Emoji = styled.div`
   margin-right: 8px;
-`
+`;
 
 export default function Survey(props) {
-  const emoji = props.emoji
+  const emoji = props.emoji;
   const content = props.content;
   const id = props.id;
   const background = props.select;

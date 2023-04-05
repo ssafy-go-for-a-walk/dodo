@@ -14,7 +14,7 @@ export default function SidebarNav() {
     group: [],
   });
   const { user } = useSelector(state => state);
-  const signal = user.sidebar
+  const signal = user.sidebar;
   const getBuckitlist = useCallback(async () => {
     await axios
       .get("https://j8b104.p.ssafy.io/api/users/bucketlists", {
