@@ -37,7 +37,6 @@ logger = logging.getLogger(__name__)
 @router.get('/test')
 def session_test(db: Session = Depends(engine.get_session)):
 	example = db.query(Category).all()
-	example = db.query(User).filter(User.nickname != 'null').all()
 	return example
 
 @router.get('/redistest')
