@@ -165,7 +165,7 @@ export default function ManageSearchBar() {
   return (
     <SearchBox>
       <InputBox>
-        <SearchInput onChange={searchBucket} onBlur value={value} onKeyPress={onKeyPress} />
+        <SearchInput onChange={searchBucket} onBlur={resetValue} value={value} onKeyPress={onKeyPress} />
         <SearchIcon onClick={addBucket} onMouseDown={handleMouseDown}>
           <HiPlus className="searchIcon" />
         </SearchIcon>
