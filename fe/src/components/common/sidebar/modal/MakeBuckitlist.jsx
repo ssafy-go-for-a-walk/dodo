@@ -140,8 +140,7 @@ export default function MakeBuckitlist(props) {
         .then(() => {
           props.closeModal();
           dispatch(uploadBucketlist());
-        })
-        .catch(err => console.log(err));
+        });
     }
   };
   return (

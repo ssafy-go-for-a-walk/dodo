@@ -45,8 +45,7 @@ export default function AddButton(props) {
         const resData = res.data.data;
         dispatch(changeCompleteRate(resData.completeRate));
         setSelected(true);
-      })
-      .catch(err => console.log(err));
+      });
   };
 
   return (

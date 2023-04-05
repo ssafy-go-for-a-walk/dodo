@@ -94,8 +94,7 @@ export default function ManageSearchBar() {
           const resData = res.data.data;
           setBuckets(resData.content);
           setPaging({ page: resData.number + 1, last: resData.last });
-        })
-        .catch(err => console.log(err));
+        });
       setLoading(false);
     } else setBuckets([]);
   };
@@ -114,8 +113,7 @@ export default function ManageSearchBar() {
         const resData = res.data.data;
         setBuckets(pre => [...pre, ...resData.content]);
         setPaging({ page: resData.number + 1, last: resData.last });
-      })
-      .catch(err => console.log(err));
+      });
     setLoading(false);
   }, [listId, userToken, paging.page, value]);
 
@@ -141,8 +139,7 @@ export default function ManageSearchBar() {
           const resData = res.data.data;
           dispatch(reBucketList(resData.buckets));
           dispatch(changeCompleteRate(resData.completeRate));
-        })
-        .catch(err => console.log(err));
+        });
       resetValue();
     }
   };

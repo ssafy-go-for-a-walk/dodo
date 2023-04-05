@@ -132,8 +132,7 @@ export default function Bucket(props) {
           const resData = res.data.data;
           dispatch(reBucketList(resData.buckets));
           dispatch(changeCompleteRate(resData.completeRate));
-        })
-        .catch(err => console.log(err));
+        });
     } else {
       setActivateDelete(true);
     }

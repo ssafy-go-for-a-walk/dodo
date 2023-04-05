@@ -193,8 +193,7 @@ export default function GroupModal(props) {
         })
         .then(res => {
           dispatch(reBucketList(res.data.data));
-        })
-        .catch(err => console.log(err));
+        });
     }
     props.closeModal();
   };
@@ -218,8 +217,7 @@ export default function GroupModal(props) {
         const resData = res.data.data;
         setDiaries(pre => [...pre, ...resData.content]);
         setPaging({ page: resData.number + 1, last: resData.last });
-      })
-      .catch(err => console.log(err));
+      });
     setLoading(false);
   }, [paging.page, bucket.seq, userToken]);
 

@@ -47,8 +47,7 @@ export default function SearchAddButton(props) {
         dispatch(reBucketList(resData.buckets));
         dispatch(changeCompleteRate(resData.completeRate));
         setSelected(true);
-      })
-      .catch(err => console.log(err));
+      });
   };
 
   return (
