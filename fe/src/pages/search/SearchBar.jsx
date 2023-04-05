@@ -155,7 +155,7 @@ export default function SearchBar(props) {
           <MdSearch className="searchIcon" />
         </SearchIcon>
       </InputBox>
-      <SearchResult>
+      <SearchResult onMouseDown={handleMouseDown}>
         {Array.isArray(buckets) && buckets.map(bucket => <SearchBucket bucket={bucket} key={bucket.publicBucketSeq} />)}
         {!paging.last && !loading && <RefreshIcon ref={ref} />}
       </SearchResult>
