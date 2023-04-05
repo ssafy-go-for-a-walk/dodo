@@ -187,7 +187,7 @@ export default function ManageSetting() {
   let scrollPosition = 0;
   const lockScroll = useCallback(() => {
     scrollPosition = window.pageYOffset;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = "scroll";
     document.body.style.position = "fixed";
     document.body.style.top = `-${scrollPosition}px`;
     document.body.style.width = "100%";

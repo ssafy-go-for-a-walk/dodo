@@ -4,7 +4,7 @@ import ReorderIcon from "@mui/icons-material/Reorder";
 import { useSelector } from "react-redux";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import styled from "styled-components";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Modal from "react-modal";
 import ModalStyle from "./TopbarModalStyle";
 import TopbarModal from "./TopbarModal";
@@ -45,14 +45,37 @@ export default function Topbar(props) {
   console.log(user);
   const openSetup = () => {
     setIsOpen(bool => !bool);
+    if (isOpen) {
+      lockScroll();
+    } else {
+      openScroll();
+    }
   };
   const closeModal = () => {
     setIsOpen(false);
     setIsOpenProfile(true);
+    lockScroll();
   };
   const closeProfileModal = () => {
     setIsOpenProfile(false);
+    openScroll();
   };
+  let scrollPosition = 0;
+  const lockScroll = useCallback(() => {
+    scrollPosition = window.pageYOffset;
+    document.body.style.overflow = "scroll";
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollPosition}px`;
+    document.body.style.width = "100%";
+  }, []);
+
+  const openScroll = useCallback(() => {
+    document.body.style.removeProperty("overflow");
+    document.body.style.removeProperty("position");
+    document.body.style.removeProperty("top");
+    document.body.style.removeProperty("width");
+    window.scrollTo(0, scrollPosition);
+  }, []);
   return (
     <AppBar
       position="fixed"
@@ -109,7 +132,7 @@ export default function Topbar(props) {
         </Modal>
         <Modal
           isOpen={isOpenProfile}
-          // onRequestClose={() => setIsOpenProfile(false)}
+          // onRequestClose={closeProfileModal}
           style={ProfileModalStyle}
           ariaHideApp={false}
         >
