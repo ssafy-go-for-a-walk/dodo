@@ -73,6 +73,7 @@ const addStyle = {
 export default function ManageSetting() {
   const { user } = useSelector(state => state);
   const info = user.bucketList.info;
+  const bucketList = user.bucketList.buckets;
   const userToken = user.value.token;
   const listId = info.seq;
   const [bucketListInfo, setBucketListInfo] = useState({
@@ -178,11 +179,15 @@ export default function ManageSetting() {
       });
   };
   const saveImage = () => {
-    const imageUrl = user.myBucketlist;
-    const link = window.document.createElement("a");
-    link.download = "my_bucketlist.png";
-    link.href = imageUrl;
-    link.click();
+    if (bucketList.length > 3) {
+      const imageUrl = user.myBucketlist;
+      const link = window.document.createElement("a");
+      link.download = "my_bucketlist.png";
+      link.href = imageUrl;
+      link.click();
+    } else {
+      alert("버킷을 조금 더 채워주세요!");
+    }
   };
   const lockScroll = useCallback(() => {
     const scrollPosition = window.pageYOffset;
