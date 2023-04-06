@@ -475,6 +475,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 			.filter(PublicBucket.category_seq == Category.seq)\
 			.all()
 		
+
 		if (len(user_data) != 0):
 			
 			buckets = []
@@ -488,16 +489,15 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 			user = User_dto(user_data[0].UserProfileNickname, user_data[0].UserProfileImage)
 			bucketlist = Bucketlist_dto(user_data[0].bucketListTitle, user_data[0].bucketListImage)
 			
-		
-		temp = User_recoomm_dto(user, bucketlist, buckets)
-		print(temp)
-		result.append(temp)
+			temp = User_recoomm_dto(user, bucketlist, buckets)
+			print(temp)
+			result.append(temp)
 
-	logger.info(f"cache endpoint: {endpoint}")
+			logger.info(f"cache endpoint: {endpoint}")
 
-	for i in result:
-		rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8') )
-	rd.expire(endpoint, 180)
+			for i in result:
+				rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8') )
+			rd.expire(endpoint, 180)
 
 	logger.info(f"response data size: {len(result[skip:limit])}")
 	
