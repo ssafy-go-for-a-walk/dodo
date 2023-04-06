@@ -47,6 +47,11 @@ const SearchIcon = styled.div`
     font-size: 24px;
     color: #5f5f5f;
   }
+
+  .searchIcon:hover {
+    transform: rotate(90deg);
+    transition: all 0.5s linear;
+  }
 `;
 
 const SearchResult = styled.div`
@@ -141,6 +146,8 @@ export default function ManageSearchBar() {
           dispatch(changeCompleteRate(resData.completeRate));
         });
       resetValue();
+    } else {
+      document.getElementById("searchInput").focus();
     }
   };
 
@@ -162,7 +169,7 @@ export default function ManageSearchBar() {
   return (
     <SearchBox>
       <InputBox>
-        <SearchInput onChange={searchBucket} onBlur={resetValue} value={value} onKeyPress={onKeyPress} />
+        <SearchInput onChange={searchBucket} onBlur={resetValue} value={value} onKeyPress={onKeyPress} id="searchInput" />
         <SearchIcon onClick={addBucket} onMouseDown={handleMouseDown}>
           <HiPlus className="searchIcon" />
         </SearchIcon>

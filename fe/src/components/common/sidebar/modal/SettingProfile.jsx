@@ -12,6 +12,11 @@ import { profile } from "../../../../redux/user";
 const TopDiv = styled.div`
   display: flex;
   flex-direction: column;
+  font-family: "pretendard";
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-use-select: none;
+  user-select: none;
 `;
 
 const Div = styled.div`

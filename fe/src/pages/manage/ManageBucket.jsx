@@ -71,6 +71,10 @@ const DeleteBox = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+
+  &:hover ~ .infoBox {
+    width: 89%;
+  }
 `;
 
 const DeleteBtn = styled.div`
@@ -90,6 +94,7 @@ export default function Bucket(props) {
   const signal = props.signal;
   const [activateDelete, setActivateDelete] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [complete, setComplete] = useState(bucket.complete);
   const dispatch = useDispatch();
 
   const openDetailModal = () => {
@@ -143,17 +148,21 @@ export default function Bucket(props) {
     }
   }, [signal, props]);
 
+  const changeComplete = () => {
+    setComplete(bool => !bool);
+  };
+
   return (
     <BucketBox>
-      <BucketInfo activate={activateDelete} complete={bucket.complete} onClick={openDetailModal}>
+      <BucketInfo activate={activateDelete} complete={complete} onClick={openDetailModal}>
         <BucketHeader>
           <Tag category={bucket.category !== null ? bucket.category.item : null} />
           <BucketEmoji role="img">{bucket.emoji}</BucketEmoji>
           <BucketTitle activate={activateDelete}>{bucket.title}</BucketTitle>
         </BucketHeader>
-        <CompleteButton complete={bucket.complete} bucketId={bucket.seq} />
+        <CompleteButton complete={complete} bucketId={bucket.seq} changeComplete={changeComplete} />
       </BucketInfo>
-      <DeleteBox onClick={deleteBucket}>
+      <DeleteBox onClick={deleteBucket} onMouseEnter={() => setActivateDelete(true)} onMouseLeave={() => setActivateDelete(false)}>
         <DeleteBtn>삭제</DeleteBtn>
       </DeleteBox>
       <Modal isOpen={isOpen} onRequestClose={closeModal} style={DetailModalStyle} ariaHideApp={false}>

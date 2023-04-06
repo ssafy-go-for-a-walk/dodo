@@ -4,9 +4,9 @@ import { MdShare } from "react-icons/md";
 import { TbShare2 } from "react-icons/tb";
 
 const ButtonBox = styled.button`
-  width: 49%;
-  max-width: 260px;
-  height: 67px;
+  width: 50%;
+  max-width: 190px;
+  height: 56px;
   border-radius: 16px;
   border: 1px solid #1c9bff;
   display: flex;
@@ -14,7 +14,7 @@ const ButtonBox = styled.button`
   align-items: center;
   color: #1c9bff;
   background: #ffffff;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -24,7 +24,7 @@ const ButtonBox = styled.button`
   }
 
   .icon {
-    font-size: 32px;
+    font-size: 24px;
     color: #1c9bff;
     margin-right: 16px;
   }

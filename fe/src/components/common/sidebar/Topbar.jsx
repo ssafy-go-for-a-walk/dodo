@@ -19,6 +19,10 @@ const TopDiv = styled.div`
   width: 100%;
   justify-content: space-between;
   align-items: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-use-select: none;
+  user-select: none;
 `;
 
 const Div = styled.div`

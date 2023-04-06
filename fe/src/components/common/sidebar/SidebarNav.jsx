@@ -7,6 +7,14 @@ import EnterNewBuckitlist from "./newbuckitlist/EnterNewBuckitlist";
 import MakeNewBuckitlist from "./newbuckitlist/MakeNewBuckitlist";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import styled from "styled-components";
+
+const Div = styled.div`
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-use-select: none;
+  user-select: none;
+`;
 
 export default function SidebarNav() {
   const [form, setForm] = useState({
@@ -35,13 +43,13 @@ export default function SidebarNav() {
   }, [getBuckitlist, signal]);
 
   return (
-    <>
+    <Div>
       <MakeNewBuckitlist />
       <EnterNewBuckitlist />
       {appRoutes.map((route, index) => (route.sidebarProps ? <SidebarItem item={route} key={index} /> : null))}
       <SelectedItem />
       <SidebarItemCollapse item={form.single} type={"single"} name={"나의 버킷리스트"} />
       <SidebarItemCollapse item={form.group} type={"group"} name={"그룹 버킷리스트"} />
-    </>
+    </Div>
   );
 }

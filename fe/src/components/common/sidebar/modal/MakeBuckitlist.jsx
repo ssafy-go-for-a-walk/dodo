@@ -13,6 +13,11 @@ import { uploadBucketlist } from "../../../../redux/user";
 const TopDiv = styled.div`
   display: flex;
   flex-direction: column;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-use-select: none;
+  user-select: none;
+  font-family: "pretendard";
 `;
 
 const Div = styled.div`

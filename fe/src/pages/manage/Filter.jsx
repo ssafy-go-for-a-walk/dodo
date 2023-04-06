@@ -25,6 +25,10 @@ const SelectedLabel = styled.button`
   cursor: pointer;
   margin-bottom: 4px;
 
+  &:hover {
+    background: #e9f5ff;
+  }
+
   .icon {
     color: #1c9bff;
     font-size: 16px;

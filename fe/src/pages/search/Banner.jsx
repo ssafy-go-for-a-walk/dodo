@@ -20,7 +20,7 @@ const BannerTitle = styled.div`
 `;
 
 const BannerContent = styled.div`
-  font-size: 10px;
+  font-size: 12px;
   white-space: pre-line;
 `;
 
