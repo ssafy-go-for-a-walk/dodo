@@ -30,9 +30,12 @@ public class ExpDiaryInfoDto {
                 .map(DiaryImage::getPath)
                 .collect(Collectors.toList());
 
-        CategoryInfoDto category = CategoryInfoDto.of(expDiary.getAddedBucket()
-                .getPublicBucket()
-                .getCategory());
+        CategoryInfoDto category = null;
+        if (expDiary.getAddedBucket().getPublicBucket().getCategory() != null) {
+            category = CategoryInfoDto.of(expDiary.getAddedBucket()
+                    .getPublicBucket()
+                    .getCategory());
+        }
 
         ExpDiaryInfoDto dto = new ExpDiaryInfoDto();
         dto.seq = expDiary.getSeq();

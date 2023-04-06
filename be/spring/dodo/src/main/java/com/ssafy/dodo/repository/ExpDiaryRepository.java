@@ -14,7 +14,7 @@ public interface ExpDiaryRepository extends JpaRepository<ExpDiary, Long> {
     @Query(value = "select ed from ExpDiary ed " +
             "join fetch ed.addedBucket ab " +
             "join fetch ab.publicBucket pb " +
-            "join fetch pb.category c " +
+            "left outer join fetch pb.category c " +
 //            "left outer join fetch ed.images edi " +
             "where ab = :addedBucket " +
             "order by ed.createdAt desc",
