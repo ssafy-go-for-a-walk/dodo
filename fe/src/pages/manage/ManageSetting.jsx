@@ -24,32 +24,32 @@ const BucketImg = styled.img`
   width: 200px;
   height: 200px;
   border-radius: 50px;
-  margin-left: 56px;
 `;
 
 const BucketTitle = styled.div`
   width: 80%;
-  max-width: 528px;
+  max-width: 400px;
   height: 32px;
-  margin: 40px 0;
+  margin: 40px 0 24px 0;
   display: flex;
   justify-content: space-between;
 `;
 
 const TitleLadel = styled.label`
-  width: 72px;
+  width: 64px;
   text-align: center;
-  font-size: 24px;
+  font-size: 20px;
   color: #868e96;
   margin-right: 16px;
 `;
 
 const TitleInput = styled.input`
   width: 440px;
-  font-size: 24px;
+  font-size: 20px;
   border: none;
   border-bottom: 1px solid #ced4da;
   text-align: center;
+  border-radius: 8px;
   &:focus {
     outline: none;
   }
@@ -59,7 +59,7 @@ const HalfButtons = styled.div`
   display: flex;
   justify-content: space-between;
   width: 80%;
-  max-width: 528px;
+  max-width: 400px;
 `;
 
 const addStyle = {

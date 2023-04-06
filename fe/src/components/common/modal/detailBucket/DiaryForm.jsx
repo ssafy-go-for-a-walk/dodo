@@ -22,11 +22,14 @@ const UploadBtn = styled.div`
   border-radius: 8px;
   background: #acabab;
   color: #ffffff;
-  font-size: 18px;
+  font-size: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const UploadImg = styled.img`
@@ -38,12 +41,13 @@ const UploadImg = styled.img`
 const DiaryContent = styled.textarea`
   width: 480px;
   height: 100%;
-
   font-size: 16px;
   border: none;
   border-bottom: 1px solid #acabab;
   overflow-y: scroll;
   overflow: hidden;
+  resize: none;
+  font-family: "pretendard";
   &:focus {
     outline: none;
   }
@@ -63,8 +67,8 @@ const CreateBtn = styled.button`
   border-radius: 8px;
   cursor: pointer;
   &:hover {
-    color: #acabab;
-    background: #e9f5ff;
+    color: #1c9bff;
+    background: #ffffff;
   }
 `;
 

@@ -7,6 +7,11 @@ import { MdContentCopy } from "react-icons/md";
 const Modal = styled.div`
   display: flex;
   flex-direction: column;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-use-select: none;
+  user-select: none;
+  font-family: "pretendard";
 `;
 
 const Div = styled.div`
@@ -34,6 +39,10 @@ const Code = styled.div`
   align-items: center;
   margin-bottom: 16px;
   font-size: 22px;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-use-select: text;
+  user-select: text;
 
   .copy {
     color: #1c9bff;

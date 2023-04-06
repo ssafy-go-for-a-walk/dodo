@@ -17,6 +17,11 @@ const ButtonBox = styled.button`
   font-size: 14px;
   cursor: ${props => (props.selected ? "" : "pointer")};
 
+  &:hover {
+    background: #1c9bff;
+    color: #ffffff;
+  }
+
   .checkIcon {
     color: #1c9bff;
     font-size: 32px;

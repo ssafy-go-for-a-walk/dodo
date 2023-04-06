@@ -19,8 +19,8 @@ const Div = styled.div`
   &::-webkit-scrollbar-thumb {
     background: rgb(28 155 255);
     border-radius: 16px;
-}
-`
+  }
+`;
 
 export default function SidebarNav() {
   const [form, setForm] = useState({

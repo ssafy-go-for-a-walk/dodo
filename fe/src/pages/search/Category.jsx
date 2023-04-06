@@ -7,6 +7,11 @@ const CategoryBox = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  &:hover {
+    font-weight: bold;
+    color: #1c9bff;
+    transform: scale(1.08);
+  }
 `;
 
 const CategoryImg = styled.img`
@@ -19,11 +24,6 @@ const CategoryName = styled.div`
   font-size: 12px;
   font-weight: ${props => props.select && "bold"};
   color: ${props => props.select && "#1C9BFF"};
-
-  &:hover {
-    font-weight: bold;
-    color: #1c9bff;
-  }
 `;
 
 export default function Category(props) {

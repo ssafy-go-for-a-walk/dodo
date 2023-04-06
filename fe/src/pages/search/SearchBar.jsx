@@ -47,11 +47,16 @@ const SearchIcon = styled.div`
     font-size: 24px;
     color: #5f5f5f;
   }
+
+  .searchIcon:hover {
+    color: #1c9bff;
+    transform: scale(1.08);
+  }
 `;
 
 const SearchResult = styled.div`
   width: 100%;
-  max-height: 560px;
+  max-height: 320px;
   border-radius: 8px;
   overflow: scroll;
   position: absolute;

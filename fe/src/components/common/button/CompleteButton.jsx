@@ -16,6 +16,11 @@ const ButtonBox = styled.button`
   color: ${props => (props.complete ? "#ffffff" : "#000000")};
   font-size: 14px;
   cursor: pointer;
+
+  &:hover {
+    background: ${props => (props.complete ? "#ffffff" : "#1c9bff")};
+    color: ${props => (props.complete ? "#000000" : "#ffffff")};
+  }
 `;
 
 export default function CompleteButton(props) {
@@ -26,6 +31,7 @@ export default function CompleteButton(props) {
   const completeBucket = event => {
     event.stopPropagation();
     event.preventDefault();
+    props.changeComplete();
     axios
       .post(
         `https://j8b104.p.ssafy.io/api/buckets/${bucketId}/complete`,

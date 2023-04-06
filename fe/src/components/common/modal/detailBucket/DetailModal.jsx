@@ -21,6 +21,11 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 const Modal = styled.div`
   display: flex;
   flex-direction: column;
+  font-family: "pretendard";
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-use-select: none;
+  user-select: none;
 `;
 
 const Div = styled.div`
@@ -56,6 +61,11 @@ const EmojiBtn = styled.img`
 const Emoji = styled.span`
   font-size: 24px;
   cursor: pointer;
+  border-radius: 8px;
+  &:hover {
+    transform: scale(1.1);
+    background: #f1f3f5;
+  }
 `;
 
 const EmojiPicker = styled.div`
@@ -82,7 +92,7 @@ const Detail = styled.div`
 `;
 
 const Calendar = styled.div`
-  font-size: 32px;
+  font-size: 30px;
   margin-right: 8px;
 `;
 
@@ -112,7 +122,9 @@ const Place = styled.input`
   font-size: 16px;
   border: none;
   padding-top: 8px;
-  &:focus {
+  font-family: "pretendard";
+  &:focus,
+  :hover {
     outline: none;
     border-bottom: 1px solid #acabab;
   }
@@ -128,6 +140,8 @@ const Content = styled.textarea`
   font-size: 16px;
   margin-bottom: 8px;
   overflow: hidden;
+  resize: none;
+  font-family: "pretendard";
 `;
 
 const Diaries = styled.div`
@@ -256,15 +270,7 @@ export default function GroupModal(props) {
             <Calendar>
               <FcCalendar />
             </Calendar>
-            <SDatePicker
-              locale={ko}
-              dateFormat="yyyy.MM.dd"
-              selected={endDate}
-              onChange={date => setEndDate(date)}
-              selectsEnd
-              endDate={endDate}
-              minDate={new Date()}
-            />
+            <SDatePicker locale={ko} dateFormat="yyyy.MM.dd" selected={endDate} onChange={date => setEndDate(date)} endDate={endDate} minDate={new Date()} />
             <Map>
               <BsFlag />
             </Map>

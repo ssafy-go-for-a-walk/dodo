@@ -8,6 +8,14 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setBucketList } from "../../redux/user";
 import SidebarController from "../../components/common/sidebar/SidebarController";
+import styled from "styled-components";
+
+const TopDiv = styled.div`
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-use-select: none;
+  user-select: none;
+`;
 
 export default function ManagePage() {
   const [pageFilter, setpageFilter] = useState("bucketList");
@@ -40,13 +48,13 @@ export default function ManagePage() {
       });
   }, [dispatch, listId, userToken]);
   return (
-    <>
+    <TopDiv>
       <ManageHeader pageFilter={pageFilter} propFunction={changePageFilter} />
       {pageFilter === "bucketList" && <ManageBucketList />}
       {pageFilter === "diary" && <ManageDiary />}
       {pageFilter === "setting" && <ManageSetting />}
       <SlideUp />
       <SidebarController />
-    </>
+    </TopDiv>
   );
 }
