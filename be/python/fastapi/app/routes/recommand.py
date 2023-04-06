@@ -442,21 +442,6 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 
 	logger.info(f"user list length: {len(user_list)}")
 
-	# if((page*size+size) <= len(user_list)-1):
-	# 	start = page*size
-	# 	end = page*size + size
-	# 	is_end = False
-	# elif(((page*size) < len(user_list)-1) & ((page*size+size) > len(user_list)-1)):
-	# 	start = page*size
-	# 	end = len(user_list)-1
-	# 	is_end = True
-	# else:
-	# 	data = {"content": [], "last": True, "size": size, "number": page, "empty": True}
-	# 	response = {"data": data, "success": True}
-	# 	return response
-	
-	# logger.info(f"start: {start}, end: {end}")
-
 	result = []
 
 	# TODO 0개부터 100명의 유저
@@ -493,14 +478,14 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 			for j in user_data:
 				temp = Bucket_dto(j.BucketTitle, j.BucketEmoji, j.CategoryItem)
 				buckets.append(temp)
-				print(temp)
+				# print(temp)
 		
 			
 			user = User_dto(user_data[0].UserProfileNickname, user_data[0].UserProfileImage)
 			bucketlist = Bucketlist_dto(user_data[0].bucketListTitle, user_data[0].bucketListImage)
 			
 			temp = User_recoomm_dto(user, bucketlist, buckets)
-			print(temp)
+			# print(temp)
 			result.append(temp)
 
 	if(len(result) != 0):
@@ -544,7 +529,7 @@ def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 	for i in user_list_data_temp:
 		user_list_data.append(i.seq)
 	
-	print(user_list_data)
+	# print(user_list_data)
 	user_sum = db.query(User).count()
 
 	if(size > user_sum): 
@@ -588,7 +573,7 @@ def social_random_recomm(db: Session, userSeq: int, size: int, page: int):
 			for j in user_data:
 				temp = Bucket_dto(j.BucketTitle, j.BucketEmoji, j.CategoryItem)
 				buckets.append(temp)			
-				print(temp)
+				# print(temp)
 			
 			user = User_dto(user_data[0].UserProfileNickname, user_data[0].UserProfileImage)
 			# logger.info(f"user: {user.__str__}")
@@ -723,7 +708,6 @@ def get_response(endpoint, size, page, cache_size, *args):
 		temp = json.loads(r)
 		if(len(args) != 0):
 			temp['isAdded'] = temp['title'] in list_prefer_data
-			print(temp)
 		ret.append(temp)
 
 		
