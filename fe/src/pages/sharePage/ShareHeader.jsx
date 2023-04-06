@@ -6,21 +6,18 @@ const Div = styled.div`
   top: 64px;
   width: 100%;
   height: 112px;
-  /* height: 128px; */
   border-bottom: 1px solid #757575;
   display: flex;
   flex-direction: column;
   align-items: center;
   z-index: 3;
   background: #ffffff;
-  /* margin-bottom: 24px; */
 `;
 
 const Header = styled.div`
   height: 64px;
   width: 80%;
   max-width: 800px;
-  /* margin-top: 16px; */
   padding: 0 24px;
   display: flex;
   align-items: center;
@@ -41,21 +38,22 @@ const Title = styled.div`
 
 const Filter = styled.div`
   display: flex;
-  margin-top: 24px;
+  margin-top: 16px;
 `;
 
 const FilterDiv = styled.div`
-  height: 24px;
-  font-size: 16px;
+  height: 32px;
+  font-size: 18px;
   font-weight: ${props => props.selected && "bold"};
-  color: ${props => (props.selected ? "#424242" : "#757575")};
-  border-bottom: ${props => (props.selected ? "3px solid #424242" : "none")};
+  color: ${props => (props.selected ? "#1c9bff" : "#757575")};
+  border-bottom: ${props => (props.selected ? "3px solid #1c9bff" : "none")};
   margin: 0 48px;
+  padding-bottom: auto;
   cursor: pointer;
   &:hover {
     font-weight: bold;
-    color: #424242;
-    border-bottom: 3px solid #424242;
+    color: #1c9bff;
+    border-bottom: 3px solid #1c9bff;
   }
 `;
 
