@@ -15,14 +15,13 @@ const Div = styled.div`
 `;
 
 const MainLayout = () => {
-  const { user } = useSelector(state => state)
-  const open = user.sidebarIsOpen
+  const { user } = useSelector(state => state);
+  const open = user.sidebarIsOpen;
   return (
     <Box sx={{ display: "flex" }}>
       <Topbar />
-      {console.log(user.sidebarIsOpen)}
       <Div component="nav" open={open}>
-        <Sidebar open={open}/>
+        <Sidebar open={open} />
       </Div>
       <Box
         component="main"

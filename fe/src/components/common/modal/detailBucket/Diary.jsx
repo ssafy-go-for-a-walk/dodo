@@ -3,7 +3,7 @@ import styled from "styled-components";
 // import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const DiaryDiv = styled.div`
-  height: 72px;
+  min-height: 72px;
   width: 100%;
   padding-bottom: 8px;
   border-bottom: 1px solid #acabab;

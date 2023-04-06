@@ -18,8 +18,8 @@ const ButtonBox = styled.button`
   cursor: ${props => (props.selected ? "" : "pointer")};
 
   &:hover {
-    background: #1c9bff;
-    color: #ffffff;
+    background: ${props => !props.selected && "#1c9bff"};
+    color: ${props => !props.selected && "#ffffff"};
   }
 
   .checkIcon {
