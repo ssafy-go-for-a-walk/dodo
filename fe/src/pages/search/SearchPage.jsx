@@ -77,7 +77,9 @@ export default function SearchPage() {
   };
 
   useEffect(() => {
-    changeCate(selectCate);
+    if (selectCate !== null) {
+      changeCate(selectCate);
+    }
   }, [changeCate, selectCate]);
 
   const addBuckets = useCallback(async () => {
