@@ -50,7 +50,7 @@ def redis_test():
 
 # Preference - title을 활용한 CBF - 코사인 유사도 활용
 @router.get("/buckets", status_code=200)
-def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20,
+def bucket_recommand_cbf(bucketlist: int = 0, category: str = "전체", page: int = 0, size: int = 20,
 		    db: Session = Depends(engine.get_session), 
 	      	credentials: HTTPAuthorizationCredentials= Depends(security)):
 	
@@ -61,6 +61,7 @@ def bucket_recommand_cbf(category: str = "전체", page: int = 0, size: int = 20
 	logger.info(f"page: {page}, size: {size}")
 	logger.info(f"skip: {skip}, limit: {limit}")
 
+	logger.info(f"버킷리스트 정보: {bucketlist}")
 	logger.info(f"카테고리 정보: {category}")
 	logger.info(credentials)
 	token = decodeJWT(credentials.credentials)
