@@ -34,6 +34,7 @@ const Div = styled.div`
 const Img = styled.img`
   margin-right: 8px;
   height: 40px;
+  cursor: pointer;
 `;
 
 export default function Topbar() {
