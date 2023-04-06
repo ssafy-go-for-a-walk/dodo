@@ -131,6 +131,7 @@ export default function SearchBar(props) {
   const search = () => {
     if (value !== "") {
       const data = { buckets: buckets, value: value, paging: paging };
+      props.search(data);
       resetValue();
     } else {
       document.getElementById("searchInput").focus();
