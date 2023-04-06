@@ -32,7 +32,7 @@ export default function SearchBucket(props) {
 
   return (
     <BucketBox>
-      <Tag category={bucket.category !== null ? bucket.category.item : null} disabled="disabled" />
+      <Tag category={bucket.category !== null ? bucket.category.item : null} />
       <BucketEmoji role="img">{bucket.emoji}</BucketEmoji>
       <BucketTitle disabled="disabled">{bucket.title}</BucketTitle>
     </BucketBox>

@@ -46,7 +46,7 @@ export default function SearchPage() {
 
   const changeCate = useCallback(
     async categoryName => {
-      const params = { category: categoryName };
+      const params = { bucketlist: listId, category: categoryName };
       setLoading(true);
       setSelectCate(categoryName);
       setBuckets([]);
@@ -64,7 +64,7 @@ export default function SearchPage() {
         });
       setLoading(false);
     },
-    [userToken],
+    [userToken, listId],
   );
 
   const search = data => {
@@ -83,7 +83,7 @@ export default function SearchPage() {
   const addBuckets = useCallback(async () => {
     setLoading(true);
     if (selectCate !== null) {
-      const params = { category: selectCate, page: paging.page };
+      const params = { bucketlist: listId, category: selectCate, page: paging.page };
       await axios
         .get("https://j8b104.p.ssafy.io/api/recomm/buckets", {
           params: params,
