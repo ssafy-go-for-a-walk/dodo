@@ -102,6 +102,7 @@ export default function DiaryForm(props) {
           },
         })
         .then(res => {
+          console.log(res.data.data);
           props.changeDiaries(res.data.data);
           setDiaryContent("");
           setDiaryImg({ image: "", imageConfirm: "" });
