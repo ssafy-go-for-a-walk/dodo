@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface BucketListMemberRepository extends JpaRepository<BucketListMember, BucketListMemberSeq> {
 
     Boolean existsByUserAndBucketList(User user, BucketList bucketList);
+    Boolean existsByUserSeqAndBucketListSeq(Long userSeq, Long bucketListSeq);
 }

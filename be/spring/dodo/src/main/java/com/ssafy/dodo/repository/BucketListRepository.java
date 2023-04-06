@@ -43,4 +43,6 @@ public interface BucketListRepository extends JpaRepository<BucketList, Long> {
             "where bm.user.seq = :userSeq and bm.bucketList.seq = :bucketListSeq")
     Optional<BucketList> findByUserSeqAndBucketListSeq(@Param("userSeq") Long userSeq,
                                                        @Param("bucketListSeq") Long bucketListSeq);
+
+    Optional<BucketList> findByShareToken(String shareToken);
 }

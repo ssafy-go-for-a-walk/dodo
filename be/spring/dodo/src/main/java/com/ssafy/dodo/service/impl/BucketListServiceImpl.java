@@ -6,6 +6,7 @@ import com.ssafy.dodo.exception.CustomException;
 import com.ssafy.dodo.exception.ErrorCode;
 import com.ssafy.dodo.repository.*;
 import com.ssafy.dodo.service.BucketListService;
+import com.ssafy.dodo.util.RandomStringTokenCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +34,6 @@ public class BucketListServiceImpl implements BucketListService {
     private final S3FileService s3FileService;
     private final BucketListMemberRepository bucketListMemberRepository;
     private final InviteTokenRepository inviteTokenRepository;
-    private final ShareTokenRepository shareTokenRepository;
 
     @Override
     public Map<String, Object> getBucketListInfo(UserDetails userDetails, Long bucketListSeq) {
@@ -277,26 +277,11 @@ public class BucketListServiceImpl implements BucketListService {
             throw new CustomException(ErrorCode.SINGLE_TYPE_CAN_NOT_INVITE);
         }
 
-        String inviteTokenKey = createRandomStringToken();
+        String inviteTokenKey = RandomStringTokenCreator.create();
         InviteToken inviteToken = new InviteToken(inviteTokenKey, bucketListSeq, inviterSeq);
         inviteTokenRepository.save(inviteToken);
 
         return inviteTokenKey;
-    }
-
-    private String createRandomStringToken() {
-        int leftLimit = 48; // numeral '0'
-        int rightLimit = 122; // letter 'z'
-        int targetStringLength = 10;
-        Random random = new Random();
-
-        String generatedString = random.ints(leftLimit, rightLimit + 1)
-                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
-
-        return generatedString;
     }
 
     @Override
@@ -333,26 +318,20 @@ public class BucketListServiceImpl implements BucketListService {
         BucketList bucketList = bucketListRepository.findByUserSeqAndBucketListSeq(userSeq, bucketListSeq)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_BUCKET_LIST_OWNER));
 
-        // 공유토큰 생성
-        ShareToken shareToken = ShareToken.builder()
-                .id(createRandomStringToken())
-                .sharerSeq(userSeq)
-                .bucketListSeq(bucketList.getSeq())
-                .bucketListTitle(bucketList.getTitle())
-                .build();
+        if (!bucketListMemberRepository.existsByUserSeqAndBucketListSeq(userSeq, bucketListSeq)) {
+            throw new CustomException(ErrorCode.NOT_BUCKET_LIST_MEMBER);
+        }
 
-        // 공유토큰 저장
-        shareTokenRepository.save(shareToken);
+        if (bucketList.getShareToken() == null) {
+            bucketList.updateShareToken(RandomStringTokenCreator.create());
+        }
 
-        return domain + "/share/" + shareToken.getId();
+        return domain + "/share/" + bucketList.getShareToken();
     }
 
     @Override
     public Map<String, Object> getSharedBucketListInfo(String shareToken) {
-        ShareToken token = shareTokenRepository.findById(shareToken)
-                .orElseThrow(() -> new CustomException(ErrorCode.EXPIRE_OR_NOT_EXIST_TOKEN));
-
-        BucketList bucketList = bucketListRepository.findById(token.getBucketListSeq())
+        BucketList bucketList = bucketListRepository.findByShareToken(shareToken)
                 .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
 
         List<AddedBucket> addedBuckets = addedBucketRepository.findAllByBucketList(bucketList);
