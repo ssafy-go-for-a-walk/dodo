@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import SelectedButton from "./SelectedButton";
 import PercentCompo from "./PercentCompo";
 
 const Div = styled.div`
@@ -28,23 +27,8 @@ const Percent = styled.div`
   color: #0e5ab7;
 `;
 
-const Buckitlist = styled.div`
-  display: flex;
-  margin-top: 8px;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const BuckitlistName = styled.div`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 200px;
-`;
-
 export default function SelectedItem() {
   const { user } = useSelector(state => state);
-  const selectedBucketlist = user.value.selectedBucketlist.title;
   const completedPercent = `${user.value.selectedBucketlist.completeRate}%`;
   return (
     <Div>
@@ -58,10 +42,6 @@ export default function SelectedItem() {
         <Percent>{completedPercent}</Percent>
       </ColmletedComment>
       <PercentCompo percent={completedPercent} />
-      <Buckitlist>
-        <BuckitlistName>{selectedBucketlist}</BuckitlistName>
-        <SelectedButton text={"관리"} />
-      </Buckitlist>
     </Div>
   );
 }

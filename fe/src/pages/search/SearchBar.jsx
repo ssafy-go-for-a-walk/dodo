@@ -93,7 +93,8 @@ export default function SearchBar(props) {
           const resData = res.data.data;
           setBuckets(resData.content);
           setPaging({ page: resData.number + 1, last: resData.last });
-        });
+        })
+        .catch(err => console.log(err));
     } else setBuckets([]);
   };
 
@@ -111,7 +112,8 @@ export default function SearchBar(props) {
         const resData = res.data.data;
         setBuckets(pre => [...pre, ...resData.content]);
         setPaging({ page: resData.number + 1, last: resData.last });
-      });
+      })
+      .catch(err => console.log(err));
     setLoading(false);
   }, [listId, userToken, value, paging.page]);
 

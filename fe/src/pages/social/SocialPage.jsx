@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import SlideUp from "../../components/common/button/SlideUp";
 import NoItem from "./NoItem";
+import SidebarController from "../../components/common/sidebar/SidebarController";
 
 const Div = styled.div`
   display: flex;
@@ -56,6 +57,7 @@ export default function SocialPage() {
       {items.length !== 0 ? items.map((data, index) => <SocialItem data={data} key={index} />) : last && <NoItem />}
       {last ? null : loading ? null : <RefreshIcon ref={ref} />}
       <SlideUp />
+      <SidebarController />
     </Div>
   );
 }

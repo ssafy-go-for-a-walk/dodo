@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Div = styled.div`
@@ -14,22 +13,11 @@ const Div = styled.div`
   height: 30px;
   color: white;
   margin-right: 8px;
-  background-color: ${props => props.color};
+  background-color: #1C9BFF;
 `;
 
-export default function SelectedButton(props) {
-  const navigate = useNavigate();
-  const innerText = props.text;
+export default function SelectedButton() {
   return (
-    <Div
-      color={innerText === "선택됨" ? "#D9D9D9" : "#1C9BFF"}
-      onClick={() => {
-        if (innerText === "관리") {
-          navigate("/manage");
-        }
-      }}
-    >
-      {innerText}
-    </Div>
+    <Div>선택됨</Div>
   );
 }

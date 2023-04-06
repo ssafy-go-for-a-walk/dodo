@@ -27,6 +27,7 @@ export const userSlice = createSlice({
     bucketList: { info: {}, buckets: [] },
     myBucketlist: "",
     sidebar: true,
+    sidebarIsOpen: true,
   },
   reducers: {
     login: (state, action) => {
@@ -77,10 +78,14 @@ export const userSlice = createSlice({
     uploadBucketlist: state => {
       state.sidebar = !state.sidebar;
     },
+    changeSidebarIsOpen: state => {
+      state.sidebarIsOpen = ! state.sidebarIsOpen
+    }
   },
 });
 
 export const {
+  changeSidebarIsOpen,
   uploadBucketlist,
   deleteBucketlist,
   changeMyBucketlist,

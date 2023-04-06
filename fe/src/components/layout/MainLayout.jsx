@@ -5,7 +5,7 @@ import sizeConfigs from "../../configs/sizeConfigs";
 import Sidebar from "../common/sidebar/Sidebar";
 import Topbar from "../common/sidebar/Topbar";
 import styled from "styled-components";
-import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const Div = styled.div`
   left: 0px;
@@ -15,15 +15,14 @@ const Div = styled.div`
 `;
 
 const MainLayout = () => {
-  const [open, setOpen] = useState(true);
-  const controlSidevar = () => {
-    setOpen(bool => !bool);
-  };
+  const { user } = useSelector(state => state)
+  const open = user.sidebarIsOpen
   return (
     <Box sx={{ display: "flex" }}>
-      <Topbar open={controlSidevar} isOpen={open} />
+      <Topbar />
+      {console.log(user.sidebarIsOpen)}
       <Div component="nav" open={open}>
-        <Sidebar open={open} />
+        <Sidebar open={open}/>
       </Div>
       <Box
         component="main"
