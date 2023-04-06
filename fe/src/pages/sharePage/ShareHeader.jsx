@@ -5,21 +5,22 @@ const Div = styled.div`
   position: sticky;
   top: 64px;
   width: 100%;
-  height: 128px;
+  height: 112px;
+  /* height: 128px; */
   border-bottom: 1px solid #757575;
   display: flex;
   flex-direction: column;
   align-items: center;
   z-index: 3;
   background: #ffffff;
-  margin-bottom: 24px;
+  /* margin-bottom: 24px; */
 `;
 
 const Header = styled.div`
   height: 64px;
   width: 80%;
   max-width: 800px;
-  margin-top: 16px;
+  /* margin-top: 16px; */
   padding: 0 24px;
   display: flex;
   align-items: center;

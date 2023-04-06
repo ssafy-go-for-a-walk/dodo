@@ -45,13 +45,16 @@ export default function ManageDiary(props) {
 
   return (
     <Div>
-      {Array.isArray(diaries) && (
-        <Masonry columns={{ xs: 1, md: 2, lg: 3, xl: 4 }} spacing={2}>
-          {diaries.map(diary => (
-            <ShareDiaryCard diary={diary} key={diary.seq} loading="lazy" />
-          ))}
-        </Masonry>
-      )}
+      {Array.isArray(diaries) &&
+        (diaries.length !== 0 ? (
+          <Masonry columns={{ xs: 1, md: 2, lg: 3, xl: 4 }} spacing={2}>
+            {diaries.map(diary => (
+              <ShareDiaryCard diary={diary} key={diary.seq} loading="lazy" />
+            ))}
+          </Masonry>
+        ) : (
+          <h1>작성한 경험일기가 없습니다.</h1>
+        ))}
       {!paging.last && !loading && <RefreshIcon ref={ref} />}
     </Div>
   );

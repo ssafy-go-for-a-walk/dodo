@@ -47,6 +47,11 @@ const SearchIcon = styled.div`
     font-size: 24px;
     color: #5f5f5f;
   }
+
+  .searchIcon:hover {
+    color: #1c9bff;
+    transform: scale(1.08);
+  }
 `;
 
 const SearchResult = styled.div`

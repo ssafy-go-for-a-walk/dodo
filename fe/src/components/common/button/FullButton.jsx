@@ -6,8 +6,8 @@ import { BsToggleOn } from "react-icons/bs";
 
 const ButtonBox = styled.button`
   width: 80%;
-  max-width: 530px;
-  height: 67px;
+  max-width: 400px;
+  height: 56px;
   border-radius: 16px;
   border: 1px solid #1c9bff;
   display: flex;
@@ -15,7 +15,7 @@ const ButtonBox = styled.button`
   align-items: center;
   color: #1c9bff;
   background: #ffffff;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
