@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Tag from "../../components/common/bucket/Tag";
 import AddButton from "../../components/common/button/AddButton";
+import Tooltip from "@mui/material/Tooltip";
 
 const BucketBox = styled.div`
   width: 80%;
@@ -61,7 +62,13 @@ export default function RecommBucket(props) {
         <BucketHeader>
           <Tag category={bucket.category.item} />
           <BucketEmoji role="img">{bucket.emoji}</BucketEmoji>
-          <BucketTitle>{bucket.title}</BucketTitle>
+          {bucket.title.length > 36 ? (
+            <Tooltip title={bucket.title} placement="bottom-start" arrow>
+              <BucketTitle>{bucket.title}</BucketTitle>
+            </Tooltip>
+          ) : (
+            <BucketTitle>{bucket.title}</BucketTitle>
+          )}
         </BucketHeader>
         <BucketChallenger>현재 {bucket.addedCount}명이 도전중</BucketChallenger>
       </BucketInfo>

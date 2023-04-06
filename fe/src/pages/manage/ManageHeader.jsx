@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import Tooltip from "@mui/material/Tooltip";
 
 const Div = styled.div`
   position: sticky;
@@ -35,7 +36,11 @@ const Img = styled.img`
 `;
 
 const Title = styled.div`
+  width: calc(100vw - 500px);
   font-size: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Filter = styled.div`
@@ -70,7 +75,13 @@ export default function ManageHeader(props) {
     <Div>
       <Header>
         <Img src={info.image} />
-        <Title>{info.title}</Title>
+        {info.title.length > 36 ? (
+          <Tooltip title={info.title} placement="bottom-start" arrow>
+            <Title>{info.title}</Title>
+          </Tooltip>
+        ) : (
+          <Title>{info.title}</Title>
+        )}
       </Header>
       <Filter>
         <FilterDiv select={pageFilter === "bucketList"} onClick={() => changePageFilter("bucketList")}>

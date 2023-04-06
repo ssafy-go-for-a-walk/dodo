@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Tag from "../../components/common/bucket/Tag";
 import { FcCalendar } from "react-icons/fc";
+import Tooltip from "@mui/material/Tooltip";
 
 const Card = styled.div`
   display: flex;
@@ -20,7 +21,6 @@ const CardHeader = styled.div`
   height: 32px;
   justify-content: space-between;
   align-items: center;
-  font-size: 24px;
 `;
 
 const BucketEmoji = styled.span`
@@ -29,6 +29,7 @@ const BucketEmoji = styled.span`
 
 const BucketTitle = styled.div`
   width: 200px;
+  font-size: 18px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -40,7 +41,7 @@ const CreateDate = styled.div`
   height: 32px;
   align-items: center;
   margin-bottom: 16px;
-  font-size: 16px;
+  font-size: 14px;
 
   .calendar {
     margin-right: 8px;
@@ -54,7 +55,7 @@ const DiaryImg = styled.img`
 
 const DiaryContent = styled.div`
   width: 100%;
-  font-size: 16px;
+  font-size: 14px;
   word-break: break-all;
 `;
 
@@ -64,7 +65,13 @@ export default function DiaryCard(props) {
     <Card images={diary.images}>
       <CardHeader>
         <BucketEmoji role="img">{diary.emoji}</BucketEmoji>
-        <BucketTitle>{diary.title}</BucketTitle>
+        {diary.title.length > 9 ? (
+          <Tooltip title={diary.title} placement="bottom-start" arrow>
+            <BucketTitle>{diary.title}</BucketTitle>
+          </Tooltip>
+        ) : (
+          <BucketTitle>{diary.title}</BucketTitle>
+        )}
         <Tag category={diary.category !== null ? diary.category.item : null} />
       </CardHeader>
       <CreateDate>
