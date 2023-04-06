@@ -1,4 +1,4 @@
-![logo](README.assets/logo.png)
+<img src="https://i.ibb.co/DRS4Zs6/logo.png" />
 
 ## 사용자 맞춤형 버킷리스트 제작 사이트
 
