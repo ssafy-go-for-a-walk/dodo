@@ -1,5 +1,6 @@
 package com.ssafy.dodo.entity;
 
+import com.ssafy.dodo.util.RandomStringTokenCreator;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class BucketList extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private BucketListType type;
 
+    private String shareToken;
     private boolean isDefault;
     private boolean isDelete;
 
@@ -41,6 +43,7 @@ public class BucketList extends BaseEntity {
         this.isPublic = isPublic;
         this.type = type;
         this.isDefault = isDefault;
+        this.shareToken = RandomStringTokenCreator.create();
     }
 
     public BucketList(Long seq, String title, String image, boolean isPublic, BucketListType type, boolean isDefault, boolean isDelete) {
@@ -61,5 +64,9 @@ public class BucketList extends BaseEntity {
 
     public void updateBucketListImage(String image){
         this.image = image;
+    }
+
+    public void updateShareToken(String shareToken) {
+        this.shareToken = shareToken;
     }
 }

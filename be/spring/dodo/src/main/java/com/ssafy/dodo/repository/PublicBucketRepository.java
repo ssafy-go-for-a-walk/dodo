@@ -34,5 +34,6 @@ public interface PublicBucketRepository extends JpaRepository<PublicBucket, Long
 
     Page<PublicBucket> findAllByTitleContainingAndCategoryAndIsPublic(String title, Category category, boolean isPublic, Pageable pageable);
 
+    @Query("select pb from PublicBucket pb order by seq asc")
     Page<PublicBucket> findAll(Pageable pageable);
 }

@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,19 +30,15 @@ public class ExpDiaryServiceImpl implements ExpDiaryService {
     private final BucketListMemberRepository bucketListMemberRepository;
     private final AddedBucketRepository addedBucketRepository;
     private final S3FileService s3FileService;
-    private final ShareTokenRepository shareTokenRepository;
 
     @Override
     public ExpDiary write(Long userSeq, Long bucketSeq, WriteExpDiaryDto dto, MultipartFile[] files) {
-        // 버킷이 요청한 사람의 것인 맞는지 확인
-        User writer = userRepository.findById(userSeq)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
         AddedBucket bucket = addedBucketRepository.findById(bucketSeq)
                 .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_NOT_FOUND));
 
-        if (!writer.getSeq().equals(bucket.getCreatedBy())) {
-            throw new CustomException(ErrorCode.NOT_BUCKET_OWNER);
+        // 버킷리스트의 맴버인지 확인
+        if (!bucketListMemberRepository.existsByUserSeqAndBucketListSeq(userSeq, bucket.getBucketList().getSeq())) {
+            throw new CustomException(ErrorCode.NOT_BUCKET_LIST_MEMBER);
         }
 
         // 경험일기 생성 및 저장
@@ -114,10 +109,7 @@ public class ExpDiaryServiceImpl implements ExpDiaryService {
 
     @Override
     public Page<ExpDiary> getExpDiaryBySharedBucketList(String shareToken, Pageable pageable) {
-        ShareToken token = shareTokenRepository.findById(shareToken)
-                .orElseThrow(() -> new CustomException(ErrorCode.EXPIRE_OR_NOT_EXIST_TOKEN));
-
-        BucketList bucketList = bucketListRepository.findById(token.getBucketListSeq())
+        BucketList bucketList = bucketListRepository.findByShareToken(shareToken)
                 .orElseThrow(() -> new CustomException(ErrorCode.BUCKET_LIST_NOT_FOUND));
 
         return expDiaryRepository.findAllByBucketList(bucketList, pageable);
