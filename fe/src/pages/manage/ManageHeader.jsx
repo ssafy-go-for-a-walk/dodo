@@ -75,7 +75,7 @@ export default function ManageHeader(props) {
     <Div>
       <Header>
         <Img src={info.image} />
-        {info.title.length > 36 ? (
+        {typeof info.title === "string" && info.title.length > 36 ? (
           <Tooltip title={info.title} placement="bottom-start" arrow>
             <Title>{info.title}</Title>
           </Tooltip>
