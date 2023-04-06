@@ -154,9 +154,20 @@ def bucket_recommand_cbf(bucketlist: int = 0, category: str = "전체", page: in
 	# idx = (title_to_index['등산하면서 경치 구경하기'])
 	# print(idx)
 
+	# 리스트별 버킷
+	bucketlist_data = db.query(PublicBucket.title)\
+			.filter(BucketList.seq == bucketlist)\
+			.filter(BucketList.seq == AddedBucket.bucketlist_seq)\
+			.filter(AddedBucket.bucket_seq == PublicBucket.seq)\
+			.filter(AddedBucket.is_delete == 0)\
+			.filter(PublicBucket.category_seq != 'null')\
+			.all()
+
+	print(bucketlist_data)
+
 	list_prefer_data = []
 
-	for i in prefer_data:
+	for i in bucketlist_data:
 		list_prefer_data.append(i.title)
 	
 	# logger.info(f"prefernce title data list: {list_prefer_data}")
