@@ -5,6 +5,10 @@ import PercentCompo from "./PercentCompo";
 
 const Div = styled.div`
   margin: 8px 8px 8px 24px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-use-select: none;
+  user-select: none;
 `;
 
 const Title = styled.div`

@@ -9,6 +9,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { reBucketList, changeCompleteRate } from "../../redux/user";
 import { useEffect } from "react";
+import Tooltip from "@mui/material/Tooltip";
 
 const BucketBox = styled.div`
   width: 80%;
@@ -32,7 +33,7 @@ const BucketInfo = styled.div`
   padding: 8px 16px;
   z-index: 1;
   cursor: pointer;
-  transition: all 0.5s ease-out;
+  transition: all 0.3s ease-out;
 `;
 
 const BucketHeader = styled.div`
@@ -72,10 +73,6 @@ const DeleteBox = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-
-  &:hover ~ .infoBox {
-    width: 89%;
-  }
 `;
 
 const DeleteBtn = styled.div`
@@ -159,7 +156,13 @@ export default function Bucket(props) {
         <BucketHeader>
           <Tag category={bucket.category !== null ? bucket.category.item : null} />
           <BucketEmoji role="img">{bucket.emoji}</BucketEmoji>
-          <BucketTitle activate={activateDelete}>{bucket.title}</BucketTitle>
+          {bucket.title.length > 36 ? (
+            <Tooltip title={bucket.title} placement="bottom-start" arrow>
+              <BucketTitle activate={activateDelete}>{bucket.title}</BucketTitle>
+            </Tooltip>
+          ) : (
+            <BucketTitle activate={activateDelete}>{bucket.title}</BucketTitle>
+          )}
         </BucketHeader>
         <CompleteButton complete={complete} bucketId={bucket.seq} changeComplete={changeComplete} />
       </BucketInfo>
