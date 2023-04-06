@@ -11,7 +11,7 @@ import numpy as np
 from fastapi import Depends, APIRouter, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import func
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from config import conn, redis_config
 from database.models import Category, Preference, PublicBucket, User, BucketListMember, BucketList, AddedBucket
@@ -124,10 +124,35 @@ def bucket_recommand_cbf(bucketlist: int = 0, category: str = "전체", page: in
 
 	# TODO 유저가 몇명 이상이면 협업 필터링을 해야할까?
 	user_sum = db.query(User).count()
+	prefer_sum = db.query(Preference).filter(Preference.bucket_seq == PublicBucket.seq).filter(PublicBucket.is_public == 1)\
+			.filter(PublicBucket.is_delete == 0).filter(PublicBucket.category_seq != 'null').count()
+	sql_query = select(Preference.user_seq, func.count(PublicBucket.title).label("counting")).join_from(PublicBucket, Preference)\
+			.where(Preference.bucket_seq == PublicBucket.seq and Preference.is_delete == 0 and PublicBucket.is_delete == 1)\
+			.group_by(Preference.user_seq).having(func.count(PublicBucket.title) >= 5)
+	prefer_sum = len(db.execute(sql_query).all())
 	logger.info(f"유저 수: {user_sum}")
+	logger.info(f"5개 이상 선호도를 가진 유저 수: {prefer_sum}")
 
-	# if(user_sum >= 10): 협업필터링
-	# else:
+
+	# 협업필터링(CF)
+	# if(user_sum >= 10 and (user_sum == prefer_sum)):
+		
+	# 	endpoint = "buckets/" + str(user_seq) + "/" + "cf/" + str(search_category_seq)
+	# 	cache_size = rd.llen(endpoint)
+		
+	# 	if(cache_size != 0):
+	# 		logger.info(f"redis cache O: {endpoint}")
+	# 		response = get_response(endpoint, size, page, cache_size)
+	# 		return response
+
+	# 	response = bucket_recommand_cf(prefer_data, pb_data, user_seq, page, size, search_category_seq)
+		
+	# 	if(type(response) == str):
+	# 		response = bucket_random_recomm(db, user_seq, size, page, search_category_seq)
+	# 		return response
+	# 	else:
+	# 		return response
+
 
 	# json 형태로 변환
 	# pb_data = jsonable_encoder(pb_data)
@@ -456,7 +481,7 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 		logger.info(f"now_user_seq: {now_user_seq}")
 
 		user_data = db.query(BucketList.title.label('bucketListTitle'), BucketList.image.label('bucketListImage'), \
-		        User.profile_image.label('UserProfileImage'), User.nickname.label('UserProfileNickname'), \
+		       User.profile_image.label('UserProfileImage'), User.nickname.label('UserProfileNickname'), \
 				Category.item.label('CategoryItem'), \
 				AddedBucket.emoji.label('BucketEmoji'), PublicBucket.title.label('BucketTitle'))\
 			.filter(BucketListMember.bucketlist_seq == BucketList.seq)\
@@ -716,3 +741,136 @@ def get_response(endpoint, size, page, cache_size, *args):
 
 	return response
 
+
+# def bucket_recommand_cf(prefer_data, pb_data, userSeq, page, size, search_category_seq):
+
+# 	# json 형태로 변환
+# 	prefer_data = jsonable_encoder(prefer_data)
+# 	pb_data = jsonable_encoder(pb_data)
+
+# 	# DataFrame 형태로 변환
+# 	prefer_data = pd.DataFrame(prefer_data)
+# 	pb_data = pd.DataFrame(pb_data)
+# 	buckets = pb_data.set_index('bucket_seq')
+
+# 	# is_delete 값을 rating으로 사용
+# 	prefer_data['is_delete'] = prefer_data['is_delete']+1
+# 	# if(prefer_data['is_delete'] == 1):
+# 	# 	prefer_data['is_delete']+1
+
+# 	# print(pb_data.head(3))
+# 	# print(prefer_data.head(3))
+
+# 	# reader = Reader(rating_scale=(0.5, 5.0))
+# 	# temp = Dataset.load_from_df(prefer_data[['seq', 'bucket_seq', 'user_seq']], reader)
+	
+# 	userlen = len(prefer_data["user_seq"].unique())
+# 	pblen = len(pb_data["seq"].unique())
+
+# 	logger.info(f"고유 아이디 수: {userlen}")
+# 	logger.info(f"공개된 버킷리스트 수: {pblen}")
+
+# 	# index = user_seq, column = bucket_seq 행렬 만들기
+# 	x = prefer_data.copy()
+# 	y = prefer_data['user_seq']
+
+# 	iteration = np.arange(0.20, 1.00, 0.01)
+
+# 	global a
+# 	a = "train_test_split"
+
+# 	for i in iteration:
+# 		try:
+# 			logger.info(f"try test size: {round(i, 5)}")
+# 			x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=round(i, 5), stratify=y, random_state=0)
+# 			logger.info(f"success {a}")
+# 			a = "pivot"
+# 			x_train = x_train.reset_index(drop=True)
+# 			# test_size = 0.25, 25% 랜덤 데이터가 x_test로 추출됨
+# 			prefer_matrix = x_train.pivot(values='is_delete', index='user_seq', columns='bucket_seq')
+# 			logger.info(f"success {a}")
+# 			break
+# 		except:
+# 			logger.info(f"fail {a}")
+# 			a = "train_test_split"
+# 			if(i >= 0.60):
+# 				return "fail"
+# 				# raise HTTPException(status_code=400, detail="too low data")
+# 			pass
+
+# 	# user sim matrix
+# 	matrix_dummy = prefer_matrix.copy().fillna(0)
+# 	user_sim = cosine_similarity(matrix_dummy, matrix_dummy)
+# 	user_sim = pd.DataFrame(user_sim, index=prefer_matrix.index, columns=prefer_matrix.index)
+
+# 	# temp = user_sim[['user_seq', userSeq]]
+# 	# print(temp)
+
+
+# 	def cf_simple(userSeq, bucketSeq):
+# 		if(bucketSeq in prefer_matrix):
+# 			sim_scores = user_sim[userSeq]
+# 			bucket_ratings = prefer_matrix[bucketSeq]
+
+# 			none_rating_idx = bucket_ratings[bucket_ratings.isnull()].index
+
+# 			bucket_ratings = bucket_ratings.dropna()
+
+# 			sim_scores = sim_scores.drop(none_rating_idx)
+
+# 			mean_rating = np.dot(sim_scores, bucket_ratings) / sim_scores.sum()
+
+# 		else:
+# 			mean_rating = 0
+
+# 		return mean_rating
+	
+# 	# RMSE 계산 함수
+# 	def RMSE(y_true, y_pred):
+# 			return np.sqrt(np.mean((np.array(y_true) - np.array(y_pred))**2))
+	
+	
+# 	# score 함수 정의 : 모델을 입력값으로 받음 
+# 	def score(model):
+# 			id_pairs = zip(x_test['userSeq'], x_test['bucketSeq'])
+# 			y_pred = np.array([model(user, bucket) for (user, bucket) in id_pairs])
+# 			y_true = np.array(x_test['rating'])
+# 			return RMSE(y_true, y_pred)
+		
+# 	# 정확도 계산
+# 	score(cf_simple)
+
+# 	def recommender(userSeq):
+# 		rd = redis_config()
+
+# 		skip = page*size
+# 		limit = page*size+size
+
+# 		predictions = []
+# 		# 이미 담은 버킷의 인덱스 추출 -> 추천 시 제외해야 함 
+# 		rated_index = prefer_matrix.loc[userSeq][prefer_matrix.loc[userSeq].notnull()].index
+# 		# 해당 사용자가 담지 않은 버킷만 선택 
+# 		items = prefer_matrix.loc[userSeq].drop(rated_index)
+		
+# 		# 예상평점 계산
+# 		for item in items.index:
+# 				predictions.append(cf_simple(userSeq, item))
+																		
+# 		recommendations = pd.Series(data=predictions, index=items.index, dtype=float)
+# 		recommendations = recommendations.sort_values(ascending=False)       
+# 		recommended_items = buckets.loc[recommendations.index]['title']
+
+# 		endpoint = "buckets/" + str(userSeq) + "/" + "cf/" + str(search_category_seq)
+
+# 		for i in recommended_items:
+# 			rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8') )
+# 		rd.expire(endpoint, 180)
+
+# 		logger.info(f"response data size: {len(recommended_items[skip:limit])}")
+
+# 		data = {"content": recommended_items[skip:limit], "last": len(pb_data) < limit, "size": size, "number": page, "empty": len(recommended_items) == 0}
+# 		response = {"data": data, "success": True}
+
+# 		return response
+
+# 	recommender(userSeq)
