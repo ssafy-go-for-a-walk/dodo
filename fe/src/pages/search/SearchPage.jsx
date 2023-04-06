@@ -12,6 +12,7 @@ import SlideUp from "../../components/common/button/SlideUp";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { CircularProgress } from "@mui/material";
 import { lightBlue } from "@mui/material/colors";
+import SidebarController from "../../components/common/sidebar/SidebarController";
 
 const Div = styled.div`
   display: flex;
@@ -138,6 +139,7 @@ export default function SearchPage() {
       {!paging.last && !loading && <RefreshIcon ref={ref} />}
       {loading && <CircularProgress sx={{ color: lightBlue[500] }} />}
       <SlideUp />
+      <SidebarController />
     </Div>
   );
 }

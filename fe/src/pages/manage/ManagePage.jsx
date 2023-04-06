@@ -7,6 +7,7 @@ import SlideUp from "../../components/common/button/SlideUp";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setBucketList } from "../../redux/user";
+import SidebarController from "../../components/common/sidebar/SidebarController";
 import styled from "styled-components";
 
 const TopDiv = styled.div`
@@ -53,6 +54,7 @@ export default function ManagePage() {
       {pageFilter === "diary" && <ManageDiary />}
       {pageFilter === "setting" && <ManageSetting />}
       <SlideUp />
+      <SidebarController />
     </TopDiv>
   );
 }

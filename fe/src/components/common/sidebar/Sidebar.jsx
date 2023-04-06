@@ -3,7 +3,7 @@ import colorConfigs from "../../../configs/colorConfigs";
 import sizeConfigs from "../../../configs/sizeConfigs";
 import SidebarNav from "./SidebarNav";
 
-const Sidebar = props => {
+export default function Sidebar(props) {
   return (
     <Drawer
       PaperProps={{
@@ -35,5 +35,3 @@ const Sidebar = props => {
     </Drawer>
   );
 };
-
-export default Sidebar;
