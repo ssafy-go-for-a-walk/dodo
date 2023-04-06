@@ -6,6 +6,8 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import { CircularProgress } from "@mui/material";
+import { lightBlue } from "@mui/material/colors";
 
 const Div = styled.div`
   display: flex;
@@ -65,6 +67,7 @@ export default function ManageDiary() {
           </Masonry>
         ))}
       {!paging.last && !loading && <RefreshIcon ref={ref} />}
+      {loading && <CircularProgress sx={{ color: lightBlue[500] }} />}
     </Div>
   );
 }
