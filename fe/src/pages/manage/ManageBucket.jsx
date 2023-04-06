@@ -32,6 +32,7 @@ const BucketInfo = styled.div`
   padding: 8px 16px;
   z-index: 1;
   cursor: pointer;
+  transition: all 0.5s ease-out;
 `;
 
 const BucketHeader = styled.div`
