@@ -56,7 +56,7 @@ const BucketEmoji = styled.span`
 `;
 
 const BucketTitle = styled.div`
-  max-width: 80%;
+  width: calc(70vw - 380px);
   font-size: 16px;
   padding: 8px 0;
   white-space: nowrap;
