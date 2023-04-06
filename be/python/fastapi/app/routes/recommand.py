@@ -442,20 +442,20 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 
 	logger.info(f"user list length: {len(user_list)}")
 
-	if((page*size+size) <= len(user_list)-1):
-		start = page*size
-		end = page*size + size
-		is_end = False
-	elif(((page*size) < len(user_list)-1) & ((page*size+size) > len(user_list)-1)):
-		start = page*size
-		end = len(user_list)-1
-		is_end = True
-	else:
-		data = {"content": [], "last": True, "size": size, "number": page, "empty": True}
-		response = {"data": data, "success": True}
-		return response
+	# if((page*size+size) <= len(user_list)-1):
+	# 	start = page*size
+	# 	end = page*size + size
+	# 	is_end = False
+	# elif(((page*size) < len(user_list)-1) & ((page*size+size) > len(user_list)-1)):
+	# 	start = page*size
+	# 	end = len(user_list)-1
+	# 	is_end = True
+	# else:
+	# 	data = {"content": [], "last": True, "size": size, "number": page, "empty": True}
+	# 	response = {"data": data, "success": True}
+	# 	return response
 	
-	logger.info(f"start: {start}, end: {end}")
+	# logger.info(f"start: {start}, end: {end}")
 
 	result = []
 
@@ -503,13 +503,14 @@ def user_recommand_cf(page: int = 0, size: int = 4,
 			print(temp)
 			result.append(temp)
 
-			logger.info(f"cache endpoint: {endpoint}")
+	if(len(result) != 0):
+		logger.info(f"cache endpoint: {endpoint}")
 
-			for i in result:
-				rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8') )
-			rd.expire(endpoint, 180)
+		for i in result:
+			rd.rpush(endpoint, json.dumps(i, default=lambda x: x.__dict__, ensure_ascii=False).encode('utf-8') )
+		rd.expire(endpoint, 180)
 
-	logger.info(f"response data size: {len(result[skip:limit])}")
+		logger.info(f"response data size: {len(result[skip:limit])}")
 	
 	# data = {"content": result, "last": is_end, "size": size, "number": page, "empty": len(result) == 0}
 	data = {"content": result[skip:limit], "last": limit >= len(result), "size": size, "number": page, "empty": len(result[skip:limit]) == 0}
@@ -722,6 +723,7 @@ def get_response(endpoint, size, page, cache_size, *args):
 		temp = json.loads(r)
 		if(len(args) != 0):
 			temp['isAdded'] = temp['title'] in list_prefer_data
+			print(temp)
 		ret.append(temp)
 
 		
