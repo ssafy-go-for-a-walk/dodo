@@ -117,7 +117,7 @@ def bucket_recommand_cbf(bucketlist: int = 0, category: str = "전체", page: in
 	cache_size = rd.llen(endpoint)
 	if(cache_size != 0):
 		logger.info(f"redis cache O: {endpoint}")
-		response = get_response(endpoint, size, page, cache_size)
+		response = get_response(endpoint, size, page, cache_size, db, bucketlist)
 		return response
 
 	logger.info("redis cache X")
@@ -162,8 +162,6 @@ def bucket_recommand_cbf(bucketlist: int = 0, category: str = "전체", page: in
 			.filter(AddedBucket.is_delete == 0)\
 			.filter(PublicBucket.category_seq != 'null')\
 			.all()
-
-	print(bucketlist_data)
 
 	list_prefer_data = []
 
@@ -690,8 +688,26 @@ def bucket_random_recomm(db: Session, userSeq: int, size: int, page: int, search
 
 
 # redis 읽어오기
-def get_response(endpoint, size, page, cache_size):
+def get_response(endpoint, size, page, cache_size, *args):
 	rd = redis_config()
+
+	if(len(args) != 0):
+		db = args[0]
+		bucketlist = args[1]
+
+		bucketlist_data = db.query(PublicBucket.title)\
+		.filter(BucketList.seq == bucketlist)\
+		.filter(BucketList.seq == AddedBucket.bucketlist_seq)\
+		.filter(AddedBucket.bucket_seq == PublicBucket.seq)\
+		.filter(AddedBucket.is_delete == 0)\
+		.filter(PublicBucket.category_seq != 'null')\
+		.all()
+
+		list_prefer_data = []
+
+		for i in bucketlist_data:
+			list_prefer_data.append(i.title)
+
 
 	skip = size*page
 	limit = size*page+size-1
@@ -701,12 +717,16 @@ def get_response(endpoint, size, page, cache_size):
 
 	result = rd.lrange(endpoint, skip, limit)
 	ret = []
+	
 	for r in result:
-		ret.append(json.loads(r))
+		temp = json.loads(r)
+		if(len(args) != 0):
+			temp['isAdded'] = temp['title'] in list_prefer_data
+		ret.append(temp)
+
 		
 	data = {"content": ret, "last": limit+1 >= cache_size, "size": size, "number": page, "empty": len(ret) == 0}
 	response = {"data": data, "success": True}
 
 	return response
-
 
