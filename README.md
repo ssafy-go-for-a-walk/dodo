@@ -113,9 +113,7 @@
 
 #### Figma
 
-- [Figma]: https://www.figma.com/file/aoJdWaHvSGDClShwiXPxUW/B104?node-id=0-1
-
-  
+- <a href="https://www.figma.com/file/aoJdWaHvSGDClShwiXPxUW/B104?node-id=0-1">Figma</a>
 
 
 
@@ -126,7 +124,7 @@
 <img src="https://im5.ezgif.com/tmp/ezgif-5-6225d2b2ec.gif" />
 
 - 사용자의 취향을 알기 위한 사전 설문 페이지입니다.
-- 많은 양의 버킷리스트를 보여주기 위하여 무한 스크롤을 적용했습니다
+- 많은 양의 버킷리스트를 보여주기 위하여 무한 스크롤을 적용했습니다.
 
 
 
