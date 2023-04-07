@@ -1,0 +1,8 @@
+.App * {
+  font-family: "pretendard";
+}
+
+@font-face {
+  font-family: "pretendard";
+  src: url("./font/PretendardVariable.ttf");
+}

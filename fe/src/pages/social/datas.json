@@ -1,0 +1,88 @@
+{
+  "datas": [
+    {
+      "userImg": "https://upload.wikimedia.org/wikipedia/ko/4/4a/%EC%8B%A0%EC%A7%B1%EA%B5%AC.png",
+      "userNickname": "짱구는 못말려 1",
+      "bucketlistImg": "https://cdn.docdocdoc.co.kr/news/photo/202112/2018296_2022740_371.jpg",
+      "bucketlistName": "죽기 전에 해야 할 100가지 버킷리스트",
+      "bucketlist": [
+        {
+          "category": "여행",
+          "emoji": "🎁",
+          "content": "지금 당장 여행 떠나기긱ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ"
+        },
+        {
+          "category": "대자연",
+          "emoji": "🎁",
+          "content": "염유리 바보"
+        }
+      ]
+    },
+    {
+      "userImg": "https://upload.wikimedia.org/wikipedia/ko/4/4a/%EC%8B%A0%EC%A7%B1%EA%B5%AC.png",
+      "userNickname": "짱구는 못말려 1",
+      "bucketlistImg": "https://cdn.docdocdoc.co.kr/news/photo/202112/2018296_2022740_371.jpg",
+      "bucketlistName": "죽기 전에 해야 할 100가지 버킷리스트",
+      "bucketlist": [
+        {
+          "category": "여행",
+          "emoji": "🎁",
+          "content": "지금 당장 여행 떠나기긱ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ"
+        }
+      ]
+    },
+    {
+      "userImg": "https://upload.wikimedia.org/wikipedia/ko/4/4a/%EC%8B%A0%EC%A7%B1%EA%B5%AC.png",
+      "userNickname": "짱구는 못말려 1",
+      "bucketlistImg": "https://cdn.docdocdoc.co.kr/news/photo/202112/2018296_2022740_371.jpg",
+      "bucketlistName": "죽기 전에 해야 할 100가지 버킷리스트",
+      "bucketlist": [
+        {
+          "category": "여행",
+          "emoji": "🎁",
+          "content": "지금 당장 여행 떠나기긱ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ"
+        },
+        {
+          "category": "대자연",
+          "emoji": "🎁",
+          "content": "염유리 바보"
+        },
+        {
+          "category": "일상",
+          "emoji": "🎁",
+          "content": "자유시간 먹기"
+        },
+        {
+          "category": "쇼핑",
+          "emoji": "🎁",
+          "content": "고등어 먹기"
+        },
+        {
+          "category": "문화예술",
+          "emoji": "🎁",
+          "content": "집에 가서 놀기"
+        },
+        {
+          "category": "자기계발",
+          "emoji": "🎁",
+          "content": "집에 가서 놀기"
+        },
+        {
+          "category": "푸드",
+          "emoji": "🎁",
+          "content": "집에 가서 놀기"
+        },
+        {
+          "category": "아웃도어",
+          "emoji": "🎁",
+          "content": "집에 가서 놀기"
+        },
+        {
+          "category": "스포츠",
+          "emoji": "🎁",
+          "content": "집에 가서 놀기"
+        }
+      ]
+    }
+  ]
+}
