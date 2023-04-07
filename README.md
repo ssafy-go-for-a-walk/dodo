@@ -1,6 +1,6 @@
 <img src="https://i.ibb.co/DRS4Zs6/logo.png" />
 
-## 사용자 맞춤형 버킷리스트 제작 사이트
+## 사용자 맞춤형 버킷리스트 제작 사이트 (23.02.20 ~ 23.04.07)
 
 
 
@@ -14,7 +14,7 @@
 |                           FrontEnd                           |                           FrontEnd                           |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | <img src="https://i.ibb.co/f8G2CwJ/Kakao-Talk-20230316-184621852.jpg" height="200px"/> | <img src="https://i.ibb.co/3YwdfYz/Image-Pasted-at-2023-4-6-15-29-3.png" height="200px"/> |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;😎 박승재&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |                           🐭 이진욱                           |
+| 😎 박승재|                           🐭 이진욱                           |
 
 
 
@@ -104,3 +104,80 @@
 #### 서비스 구조도
 
 <img src="https://i.ibb.co/VN4MTcz/SSAFY-DODO-1.png" />
+
+
+
+#### ERD
+
+<img src="https://user-images.githubusercontent.com/43941336/230526103-f6ce14f7-d618-4cb5-af5e-82fb50ab761d.png" />
+
+#### Figma
+
+- [Figma]: https://www.figma.com/file/aoJdWaHvSGDClShwiXPxUW/B104?node-id=0-1
+
+  
+
+
+
+### 주요 기능
+
+#### 설문조사
+
+<img src="https://im5.ezgif.com/tmp/ezgif-5-6225d2b2ec.gif" />
+
+- 사용자의 취향을 알기 위한 사전 설문 페이지입니다.
+- 많은 양의 버킷리스트를 보여주기 위하여 무한 스크롤을 적용했습니다
+
+
+
+#### 추천 서비스
+
+<img src="https://im5.ezgif.com/tmp/ezgif-5-5ec116820c.gif" />
+
+- 추천 알고리즘을 적용한 검색 페이지입니다.
+- 검색어를 입력하여 검색시 검색기능이 되고 전체 카테고리를 클릭시 추천 알고리즘에 의한 결과가 나오게 됩니다.
+- 무한스크롤이 적용되었습니다.
+
+
+
+#### 관리 페이지
+
+<img src="https://im5.ezgif.com/tmp/ezgif-5-d3684bab18.gif" />
+
+<img src="https://i.ibb.co/NxBZDHQ/image.png" />
+
+- 관리페이지에서는 담아놓은 버킷리스트를 확인할 수 있고 경험일기를 작성할 수 있습니다.
+- 경험일기 탭에서 그동안 작성한 경험일기를 모아볼 수 있습니다.
+- 설정 탭에서 버킷리스트의 사진, 이름, 공개여부, 공유하기, 내보내기 기능이 있습니다.
+
+
+
+#### 구경하기
+
+<img src="https://im.ezgif.com/tmp/ezgif-1-716a1a90d5.gif" />
+
+- 관리 페이지에서 공개한 버킷리스트들을 나와 유사한 성향을 가진 유저를 찾아내서 구경할 수 있습니다.
+- 무한스크롤이 적용되었습니다.
+
+
+
+#### 버킷리스트 생성
+
+<img src="https://i.ibb.co/KLRhSmY/1.png" />
+
+<img src="https://i.ibb.co/tHwk8gz/2.png" />
+
+- 나의 버킷리스트와 그룹 버킷리스트를 생성할 수 있습니다.
+
+
+
+#### 그룹 버킷리스트 참여
+
+<img src="https://i.ibb.co/9V3jQGQ/image.png" />
+
+<img src="https://i.ibb.co/kcHZSyk/image.png" />
+
+- 관리페이지의 설정 탭의 참여코드 생성으로 참여코드를 생성하여 참여코드를 통해 그룹 버킷리스트에 참여할 수 있습니다.
+
+
+
