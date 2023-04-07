@@ -15,7 +15,8 @@ const ButtonBox = styled.button`
   font-size: 24px;
   font-weight: bold;
   cursor: pointer;
-  &:hover {
+  &:hover,
+  :active {
     box-shadow: none;
     background: rgba(28, 155, 255, 0.75);
   }

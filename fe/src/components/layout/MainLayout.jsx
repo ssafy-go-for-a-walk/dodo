@@ -5,34 +5,31 @@ import sizeConfigs from "../../configs/sizeConfigs";
 import Sidebar from "../common/sidebar/Sidebar";
 import Topbar from "../common/sidebar/Topbar";
 import styled from "styled-components";
-import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const Div = styled.div`
   left: 0px;
-  width: ${props => props.open ? sizeConfigs.sidebar.width : "0"};
+  width: ${props => (props.open ? sizeConfigs.sidebar.width : "0")};
   flex-shrink: 0;
   transition: all 0.5s ease-out;
-`
+`;
 
 const MainLayout = () => {
-  const [open, setOpen] = useState(true)
-  const controlSidevar = () => {
-    setOpen(bool => !bool)
-  }
+  const { user } = useSelector(state => state);
+  const open = user.sidebarIsOpen;
   return (
     <Box sx={{ display: "flex" }}>
-      <Topbar open={controlSidevar}/>
+      <Topbar />
       <Div component="nav" open={open}>
-        <Sidebar open={open}/>
+        <Sidebar open={open} />
       </Div>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
           width: "100%",
           minHeight: "100vh",
-          backgroundColor: colorConfigs.mainBg
+          backgroundColor: colorConfigs.mainBg,
         }}
       >
         <Toolbar />

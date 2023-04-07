@@ -1,13 +1,13 @@
-import { Drawer, List} from "@mui/material";
+import { Drawer, List } from "@mui/material";
 import colorConfigs from "../../../configs/colorConfigs";
 import sizeConfigs from "../../../configs/sizeConfigs";
 import SidebarNav from "./SidebarNav";
 
-const Sidebar = (props) => {
+export default function Sidebar(props) {
   return (
     <Drawer
       PaperProps={{
-        sx: { top: "64px"}
+        sx: { top: "64px" },
       }}
       variant="permanent"
       sx={{
@@ -17,12 +17,16 @@ const Sidebar = (props) => {
         "& .MuiDrawer-paper": {
           left: props.open ? "0px" : "-300px",
           width: "300px",
+          height: `calc(100% - 64px)`,
           transition: "all 0.5s ease-out",
           boxSizing: "border-box",
           borderRight: "0px",
           backgroundColor: colorConfigs.sidebar.bg,
-          color: colorConfigs.sidebar.color
-        }
+          color: colorConfigs.sidebar.color,
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        },
       }}
     >
       <List>
@@ -31,5 +35,3 @@ const Sidebar = (props) => {
     </Drawer>
   );
 };
-
-export default Sidebar;

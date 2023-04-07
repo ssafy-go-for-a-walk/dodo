@@ -1,76 +1,70 @@
 import React from "react";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Setting from "./modal/Setting";
 import Logout from "./modal/Logout";
 
 const TopDiv = styled.div`
-	display: flex;
-	flex-direction: column;
-`
+  display: flex;
+  flex-direction: column;
+  font-family: "pretendard";
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-use-select: none;
+  user-select: none;
+`;
 
 const Div = styled.div`
-	display: flex;
-	align-items: center;
-	
-`
+  display: flex;
+  align-items: center;
+`;
 
 const UserImg = styled.img`
   /* margin-right: 8px; */
-	height: 32px;
+  height: 32px;
   width: 32px;
   border-radius: 100px;
-
-`
+`;
 
 const User = styled.div`
-	display: flex;
-	flex-direction: column;
-	margin-left: 8px;
-`
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+`;
 
 const Nickname = styled.div`
-	color: #3d3d3d;
-`
+  color: #3d3d3d;
+`;
 
 const Email = styled.div`
-	font-weight: 100;
-	color: #9D9D9D;
-	max-width: 180px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-`
+  font-weight: 100;
+  color: #9d9d9d;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 export default function TopbarModal(props) {
-	const closeModal = () => {
-		props.closeModal()
-	}
-	// const { user } = useSelector((state) => state)
-	const userImg = "https://img.danawa.com/prod_img/500000/017/350/img/13350017_1.jpg?shrink=330:*&_v=20210224095944"
-	const userNickname = "짱구는 못말려"
-	const userEmail = "emailemail@ssafy.com"
-	// const userImg = user.value.loginUserImg
-	// const userNickname = user.value.loginUserNickname
-	// const userEmail = user.value.loginUserNickname
-	return (
-		<TopDiv>
-			<Div>
-				<UserImg src={userImg} alt="#"/>
-				<User>
-					<Nickname>
-						{userNickname}
-					</Nickname>
-					<Email>
-						{userEmail}
-					</Email>
-				</User>
-			</Div>
-			<Setting closeModal={closeModal}/>
-			<Logout />
-			<p style={{color: "#C0C0BF", margin: "0px"}}>
-				V.0.1
-			</p>
-		</TopDiv>
-	)
+  const closeModal = () => {
+    props.closeModal();
+  };
+  const { user } = useSelector(state => state);
+  const userImg = user.value.loginUserImg;
+  const userNickname = user.value.loginUserNickname;
+  const userEmail = user.value.loginUserEmail;
+  return (
+    <TopDiv>
+      <Div>
+        <UserImg src={userImg} alt="#" />
+        <User>
+          <Nickname>{userNickname}</Nickname>
+          <Email>{userEmail}</Email>
+        </User>
+      </Div>
+      <Setting closeModal={closeModal} />
+      <Logout />
+      <p style={{ color: "#C0C0BF", margin: "0px" }}>V.0.1</p>
+    </TopDiv>
+  );
 }

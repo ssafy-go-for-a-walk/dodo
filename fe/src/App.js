@@ -1,33 +1,30 @@
 import { Routes, Route } from "react-router-dom";
-import SearchPage from "./pages/SearchPage";
 import SurveyPage from "./pages/survey/SurveyPage";
 import SignUpPage from "./pages/survey/SignUpPage";
-// import LoginPage from "./pages/LoginPage";
-// import InfoPage from "./pages/InfoPage";
-import ManagePage from "./pages/ManagePage";
-// import SocialPage from "./pages/SocialPage";
-// import SharePage from "./pages/SharePage";
-// import Page404 from "./pages/Page404";
-
+import LoginPage from "./pages/login/LoginPage";
+import SetProfile from "./pages/SetProfile";
+import SharePage from "./pages/sharePage/SharePage";
 import MainLayout from "./components/layout/MainLayout";
+import Page404 from "./pages/Page404";
 import { routes } from "./routes";
+import CheckLogin from "./checklogin/CheckLogin";
+import "./App.css";
 
 function App() {
   return (
-    <div>
+    <div className="App">
       <Routes>
-        <Route path="/" element={<MainLayout />}>
-          {routes}
+        <Route path="/" element={<CheckLogin />}>
+          <Route path="/" element={<MainLayout />}>
+            {routes}
+          </Route>
+          <Route path="/setprofile" element={<SetProfile />} />
         </Route>
-        <Route path="/search" element={<SearchPage />} />
         <Route path="/survey" element={<SurveyPage />} />
         <Route path="/survey/signup" element={<SignUpPage />} />
-        <Route path="/manage" element={<ManagePage />} />
-        {/* <Route path="/login" element={<LoginPage />} />
-        <Route path="/info" element={<InfoPage />} />
-        <Route path="/social" element={<SocialPage />} />
-        <Route path="/share" element={<SharePage />} />
-        <Route path="*" element={<Page404 />} /> */}
+        <Route path="/login/:token" element={<LoginPage />} />
+        <Route path="/share/:token" element={<SharePage />} />
+        <Route path="*" element={<Page404 />} />
       </Routes>
     </div>
   );

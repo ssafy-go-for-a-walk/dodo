@@ -1,8 +1,8 @@
-import SearchPage from "../pages/SearchPage";
-import SocialPage from "../pages/social/SocialPage"
-import SearchIcon from '@mui/icons-material/Search';
-import LanguageIcon from '@mui/icons-material/Language';
-import ManagePage from "../pages/ManagePage";
+import SearchPage from "../pages/search/SearchPage";
+import SocialPage from "../pages/social/SocialPage";
+import ManagePage from "../pages/manage/ManagePage";
+import SearchIcon from "@mui/icons-material/Search";
+import LanguageIcon from "@mui/icons-material/Language";
 
 const appRoutes = [
   {
@@ -11,8 +11,8 @@ const appRoutes = [
     state: "home",
     sidebarProps: {
       displayText: "담으러 가기",
-      icon: <SearchIcon />
-    }
+      icon: <SearchIcon />,
+    },
   },
   {
     path: "/socialPage",
@@ -20,14 +20,14 @@ const appRoutes = [
     state: "socialPage",
     sidebarProps: {
       displayText: "구경하러 가기",
-      icon: <LanguageIcon />
-    }
+      icon: <LanguageIcon />,
+    },
   },
   {
     path: "/manage",
     element: <ManagePage />,
     state: "manage",
-  }
+  },
 ];
 
 export default appRoutes;
