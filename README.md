@@ -144,7 +144,9 @@
 
 <img src="https://im5.ezgif.com/tmp/ezgif-5-d3684bab18.gif" />
 
-<img src="https://i.ibb.co/NxBZDHQ/image.png" />
+
+
+<img src="https://i.ibb.co/NxBZDHQ/image.png" height="400px" weight="500px" />
 
 - 관리페이지에서는 담아놓은 버킷리스트를 확인할 수 있고 경험일기를 작성할 수 있습니다.
 - 경험일기 탭에서 그동안 작성한 경험일기를 모아볼 수 있습니다.
@@ -163,9 +165,11 @@
 
 #### 버킷리스트 생성
 
-<img src="https://i.ibb.co/KLRhSmY/1.png" />
+<img src="https://i.ibb.co/KLRhSmY/1.png" height="400px" weight="500px" />
 
-<img src="https://i.ibb.co/tHwk8gz/2.png" />
+
+
+<img src="https://i.ibb.co/tHwk8gz/2.png" height="400px" weight="500px" />
 
 - 나의 버킷리스트와 그룹 버킷리스트를 생성할 수 있습니다.
 
@@ -175,7 +179,9 @@
 
 <img src="https://i.ibb.co/9V3jQGQ/image.png" />
 
-<img src="https://i.ibb.co/kcHZSyk/image.png" />
+
+
+<img src="https://i.ibb.co/kcHZSyk/image.png" height="400px" weight="500px"/>
 
 - 관리페이지의 설정 탭의 참여코드 생성으로 참여코드를 생성하여 참여코드를 통해 그룹 버킷리스트에 참여할 수 있습니다.
 
