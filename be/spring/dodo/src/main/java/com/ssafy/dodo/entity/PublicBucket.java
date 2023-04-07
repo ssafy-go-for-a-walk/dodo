@@ -1,6 +1,9 @@
 package com.ssafy.dodo.entity;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -9,6 +12,9 @@ import javax.persistence.*;
 @Getter
 @ToString(exclude = {"category"})
 @NoArgsConstructor
+@Where(clause = "is_delete = false")
+@SQLDelete(sql = "UPDATE public_buckets SET is_delete = true WHERE seq = ?")
+@DynamicUpdate
 public class PublicBucket extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +29,20 @@ public class PublicBucket extends BaseEntity {
     @JoinColumn(name = "category_seq")
     private Category category;
 
+    private boolean isDelete;
+
+    public void updateCategory(Category category){
+        this.category = category;
+    }
+
     @Builder
-    public PublicBucket(Long seq, String emoji, String title, boolean isPublic, Long addedCount) {
+    public PublicBucket(Long seq, String emoji, String title, boolean isPublic, Long addedCount, Category category, boolean isDelete) {
         this.seq = seq;
         this.emoji = emoji;
         this.title = title;
         this.isPublic = isPublic;
         this.addedCount = addedCount;
+        this.category = category;
+        this.isDelete = isDelete;
     }
 }
