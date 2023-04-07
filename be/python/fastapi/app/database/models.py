@@ -19,7 +19,8 @@ class User(Base):
     auth_provider = Column(VARCHAR(10), nullable=False)
     last_login_at = Column(DATETIME, nullable=True)
     refresh_token = Column(VARCHAR(255), nullable=True)
-
+    is_delete = Column(TINYINT, nullable=False, default=0)
+    
 
 class BucketList(Base):
     __tablename__ = "bucketlists"
@@ -29,6 +30,7 @@ class BucketList(Base):
     image = Column(VARCHAR(255), nullable=False)
     is_public = Column(TINYINT, default=0, nullable=False)
     type = Column(VARCHAR(10), nullable=False)
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
 
 class Category(Base):
@@ -36,8 +38,7 @@ class Category(Base):
 
     seq = Column(BIGINT, primary_key=True, autoincrement=True, nullable=False)
     item = Column(VARCHAR(50), nullable=False)
-
-
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
 
 class PublicBucket(Base):
@@ -48,9 +49,10 @@ class PublicBucket(Base):
     title = Column(VARCHAR(100), nullable=False)
     is_public = Column(TINYINT, nullable=False, default=0)
     added_count = Column(BIGINT, nullable=False, default=1)
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
     category_seq = Column(BIGINT, ForeignKey("categories.seq"))
-
+    category = relationship("Category", backref="categories")
 
 class AddedBucket(Base):
     __tablename__ = "added_buckets"
@@ -61,22 +63,27 @@ class AddedBucket(Base):
     d_day = Column(VARCHAR(100), nullable=False)
     location = Column(VARCHAR(255), nullable=True)
     desc = Column(TEXT, nullable=True)
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
     bucketlist_seq = Column(BIGINT, ForeignKey('bucketlists.seq'))
     bucket_seq = Column(BIGINT, ForeignKey("public_buckets.seq"))
+    
+    bucketlist = relationship("BucketList", backref="ab_bucketlists")
+    bucket = relationship("PublicBucket", backref="pb_buckets")
 
-    # 이렇게 해야하는지는 좀 더 고민중
-    BucketList = relationship("BucketList")
 
-
-# 경험일기 - 경험일기 이미지 양방향 해야댐
 class ExpDiary(Base):
     __tablename__ = "exp_diaries"
 
     seq = Column(BIGINT, primary_key=True, autoincrement=True, nullable=False)
     content = Column(TEXT, nullable=False)
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
     bucket_seq = Column(BIGINT, ForeignKey("added_buckets.seq"))
+
+    # 양방향
+    # diaryImages = relationship("DiaryImage", back_populates="expDiaries")
+    diaryImages = relationship("DiaryImage", backref="exp_diaries")
 
 
 class DiaryImage(Base):
@@ -85,8 +92,12 @@ class DiaryImage(Base):
     seq = Column(BIGINT, primary_key=True, autoincrement=True, nullable=False)
     path = Column(VARCHAR(255), nullable=False)
     original_name = Column(VARCHAR(255), nullable=False)
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
     exp_diary_seq = Column(BIGINT, ForeignKey("exp_diaries.seq"))
+    
+    # 양방향
+    # expDiaries = relationship("ExpDiary", back_populates="diaryImages")
        
 class Bookmark(Base):
     __tablename__ = "bookmarks"
@@ -95,9 +106,7 @@ class Bookmark(Base):
     __table_args__ = (PrimaryKeyConstraint("user_seq", "bucketlist_seq", name = "bookmark_id"), )
     user_seq = Column(BIGINT, ForeignKey("users.seq"))
     bucketlist_seq = Column(BIGINT, ForeignKey("bucketlists.seq"))
-
-    # def __init__(self):
-    #     print(self.user_seq)
+    is_delete = Column(TINYINT, nullable=False, default=0)
 
 
 class BucketListMember(Base):
@@ -106,6 +115,10 @@ class BucketListMember(Base):
     __table_args__ = (PrimaryKeyConstraint("user_seq", "bucketlist_seq", name = "bucketlist_mamber_id"), )
     user_seq = Column(BIGINT, ForeignKey("users.seq"))
     bucketlist_seq = Column(BIGINT, ForeignKey("bucketlists.seq"))
+    is_delete = Column(TINYINT, nullable=False, default=0)
+    
+    user = relationship("User", backref="list_user")
+    bucketlist = relationship("BucketList", backref="bucketlists")
 
 
 class Preference(Base):
@@ -113,7 +126,11 @@ class Preference(Base):
 
     seq = Column(BIGINT, primary_key=True, autoincrement=True, nullable=False)
     user_seq = Column(BIGINT, ForeignKey("users.seq"))
-    bucketlist_seq = Column(BIGINT, ForeignKey("bucketlists.seq"))
+    bucket_seq = Column(BIGINT, ForeignKey("public_buckets.seq"))
+    is_delete = Column(TINYINT, nullable=False, default=0)
+
+    publicBucket = relationship("PublicBucket", backref="preferences")
+    user = relationship("User", backref="users")
 
 
 # enum
