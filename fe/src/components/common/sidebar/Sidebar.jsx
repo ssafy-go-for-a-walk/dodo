@@ -34,4 +34,4 @@ export default function Sidebar(props) {
       </List>
     </Drawer>
   );
-};
+}

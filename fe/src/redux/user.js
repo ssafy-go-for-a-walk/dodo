@@ -79,8 +79,8 @@ export const userSlice = createSlice({
       state.sidebar = !state.sidebar;
     },
     changeSidebarIsOpen: state => {
-      state.sidebarIsOpen = ! state.sidebarIsOpen
-    }
+      state.sidebarIsOpen = !state.sidebarIsOpen;
+    },
   },
 });
 

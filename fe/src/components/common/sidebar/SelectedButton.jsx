@@ -13,11 +13,9 @@ const Div = styled.div`
   height: 30px;
   color: white;
   margin-right: 8px;
-  background-color: #1C9BFF;
+  background-color: #1c9bff;
 `;
 
 export default function SelectedButton() {
-  return (
-    <Div>선택됨</Div>
-  );
+  return <Div>선택됨</Div>;
 }

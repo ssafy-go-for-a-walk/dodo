@@ -11,15 +11,15 @@ const Div = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 30px;
-`
+`;
 
 const PTag = styled.p`
   margin: 0px 8px 0px 0px;
-  width: ${props => props.selected ? "200px" : "300px"};
+  width: ${props => (props.selected ? "200px" : "300px")};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-`
+`;
 
 export default function SidebarBuckitlists(props) {
   const dispatch = useDispatch();
@@ -35,9 +35,9 @@ export default function SidebarBuckitlists(props) {
           title: info.title,
           completeRate: info.completeRate,
         }),
-        );
-      }
-    navigate("/manage")
+      );
+    }
+    navigate("/manage");
   };
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
