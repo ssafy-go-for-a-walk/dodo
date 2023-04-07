@@ -121,7 +121,7 @@
 
 #### 설문조사
 
-<img src="https://im5.ezgif.com/tmp/ezgif-5-6225d2b2ec.gif" />
+![설문](https://user-images.githubusercontent.com/109258034/230552400-5fa39ba5-33b0-46ed-a75e-23b4fbc8e1b5.gif)
 
 - 사용자의 취향을 알기 위한 사전 설문 페이지입니다.
 - 많은 양의 버킷리스트를 보여주기 위하여 무한 스크롤을 적용했습니다.
@@ -130,7 +130,7 @@
 
 #### 추천 서비스
 
-<img src="https://im5.ezgif.com/tmp/ezgif-5-5ec116820c.gif" />
+![추천](https://user-images.githubusercontent.com/109258034/230553186-86ff8ad7-c7c8-4a01-b8dd-29ff4f047fea.gif)
 
 - 추천 알고리즘을 적용한 검색 페이지입니다.
 - 검색어를 입력하여 검색시 검색기능이 되고 전체 카테고리를 클릭시 추천 알고리즘에 의한 결과가 나오게 됩니다.
@@ -140,7 +140,11 @@
 
 #### 관리 페이지
 
-<img src="https://im5.ezgif.com/tmp/ezgif-5-d3684bab18.gif" />
+![관리](https://user-images.githubusercontent.com/109258034/230553255-cb3fe351-b8d1-4a96-8cd0-00ec5da6ee69.gif)
+
+
+
+![경험일기 모아보기](https://user-images.githubusercontent.com/109258034/230553401-2a1a7335-1b50-4216-be4e-1ae5f9025a76.gif)
 
 
 
@@ -154,7 +158,7 @@
 
 #### 구경하기
 
-<img src="https://im.ezgif.com/tmp/ezgif-1-716a1a90d5.gif" />
+![소셜](https://user-images.githubusercontent.com/109258034/230552806-05bf694d-1be5-4dbb-908f-a06a5a55bd6f.gif)
 
 - 관리 페이지에서 공개한 버킷리스트들을 나와 유사한 성향을 가진 유저를 찾아내서 구경할 수 있습니다.
 - 무한스크롤이 적용되었습니다.
