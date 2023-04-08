@@ -142,11 +142,11 @@
 
 ![관리](https://user-images.githubusercontent.com/109258034/230553255-cb3fe351-b8d1-4a96-8cd0-00ec5da6ee69.gif)
 
-
+<br />
 
 ![경험일기 모아보기](https://user-images.githubusercontent.com/109258034/230553401-2a1a7335-1b50-4216-be4e-1ae5f9025a76.gif)
 
-
+<br />
 
 <img src="https://i.ibb.co/NxBZDHQ/image.png" height="400px" weight="500px" />
 
@@ -169,7 +169,7 @@
 
 <img src="https://i.ibb.co/KLRhSmY/1.png" height="400px" weight="500px" />
 
-
+<br />
 
 <img src="https://i.ibb.co/tHwk8gz/2.png" height="400px" weight="500px" />
 
@@ -181,7 +181,7 @@
 
 <img src="https://i.ibb.co/9V3jQGQ/image.png" />
 
-
+<br />
 
 <img src="https://i.ibb.co/kcHZSyk/image.png" height="400px" weight="500px"/>
 
