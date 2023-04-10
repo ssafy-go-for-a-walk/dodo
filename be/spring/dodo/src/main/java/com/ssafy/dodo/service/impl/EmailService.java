@@ -31,7 +31,7 @@ public class EmailService {
 
     @Async
 //    @Scheduled(cron = "0 0 18 1/1 * ?") // 매일 18시
-    @Scheduled(cron="0 0 9 1/1 * ?") // 매일 9시
+//    @Scheduled(cron="0 0 9 1/1 * ?") // 매일 9시
     public void sendRemindEmail() {
         // 마지막 로그인으로부터 1분이 지난 사용자에게 리마인드 메일 발송
 //        log.info("리마인드 메일 전송 시작");
