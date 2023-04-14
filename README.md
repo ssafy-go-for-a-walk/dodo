@@ -1,191 +1,158 @@
-<img src="https://i.ibb.co/DRS4Zs6/logo.png" />
+![그림1](https://user-images.githubusercontent.com/109948739/232065983-3e87ddcf-c9fd-4977-a551-a4f3bbf191f0.png)
 
-## 사용자 맞춤형 버킷리스트 제작 사이트 (23.02.20 ~ 23.04.07)
+## ✅ 목차
 
+1. [**서비스 소개**](#1)
+2. [**기능 소개**](#2)
+3. [**기술 스택**](#3)
+4. [**프로젝트 일정 및 산출물**](#4)
+5. [**팀 소개**](#5)
 
+---
 
-### Contributors 👩‍👧‍👧
+<br/>
 
-|                           BackEnd                            |                           BackEnd                            |                           BackEnd                            |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| <img src="https://i.ibb.co/1Qh4BJQ/Image-Pasted-at-2023-4-6-15-29.jpg" height="200px"/> | <img src="https://i.ibb.co/VWXtTnr/Image-Pasted-at-2023-4-6-15-29-2.png" height="200px"/> | <img src="https://i.ibb.co/bB30NK8/Image-Pasted-at-2023-4-6-15-29-1.png" height="200px"/> |
-|                           😀 김종성                           |                           💜 이희진                           |                           🍀 염유리                           |
+<div id="1"></div>
 
-|                           FrontEnd                           |                           FrontEnd                           |
-| :----------------------------------------------------------: | :----------------------------------------------------------: |
-| <img src="https://i.ibb.co/f8G2CwJ/Kakao-Talk-20230316-184621852.jpg" height="200px"/> | <img src="https://i.ibb.co/3YwdfYz/Image-Pasted-at-2023-4-6-15-29-3.png" height="200px"/> |
-| 😎 박승재|                           🐭 이진욱                           |
+## ✅ 1. 서비스 소개
 
+### 🖼️ 개요
 
+- 서비스명 : Do? Do!
+- 소개글 : 나만의 버킷리스트 추천 및 관리 서비스
 
-<hr />
+### 🎯 타켓
 
-### 서비스 배경
+- 나만의 버킷리스트를 만들고 싶으신 분
+- 버킷리스트를 체계적으로 관리하고 기록하고 싶으신 분
+- 버킷리스트를 종이가 아닌 온라인 상에서 만들고 싶으신 분
 
-버킷리스트를 작성해본 경험이 있나요?
+### ✨ 기획 배경
 
-보통 버킷리스트를 만들 때 열심히 검색해보고 고민하여 종이에 작성합니다.
+1️⃣ 나만의 버킷리스트가 없으신가요?
+2️⃣ 종이에 작성했던 수많은 버킷리스트들 지금 어디에 있는지 기억 나시나요?
+3️⃣ 혹은 얼마나 체계적으로 관리되고 있는지 아시나요?
+💌 여러분의 버킷리스트를 잃어버리지 않고 더 체계적으로 관리하고 기록할 수 있도록 돕고 싶어요!
 
-그 후 시간이 지나면 작성한 버킷리스트를 잃어버리거나 작성한 사실을 까먹기도 합니다.
+---
 
-이러한 이유로 프로젝트 "Do? Do!"를 제작하게 되었습니다.
+<br/>
 
+<div id="2"></div>
 
+## ✅ 2. 기능 소개
 
-### 서비스 설명
+### 1️⃣ 설문 조사
 
-"Do? Do!"는 간단한 설문조사를 통해 사용자의 성향을 파악하여 성향에 맞는 Challenge(버킷)을 추천해줍니다.
+![설문](https://user-images.githubusercontent.com/109948739/232066652-47d7f24c-7da2-4f11-8b34-b3e8123e6597.gif)
 
-간편한 로그인과 이메일 리마인드를 위하여 카카오로그인을 제공합니다.
+- 초기 추천을 위한 설문 조사 페이지
+- 무한 스크롤 적용
 
-사용자는 여러개의 버킷리스트를 만들 수 있고 친구들끼리 같이 만들 수 있는 그룹 버킷리스트도 제공합니다.
+### 2️⃣ 버킷리스트 항목 추천
 
-사용자가 일정 기간 담은 Challenge(버킷)을 완료하지 않는다면 카카오에 등록된 이메일로 리마인드 메일이 도착하게 됩니다.
+![추천 무한 스크롤](https://user-images.githubusercontent.com/109948739/232066671-0ff6d598-4fd6-4216-9acf-bdac6395fa52.gif)
 
-완료한 Challenge(버킷)에 대하여 경험을 작성할 수 있는 경험일기 기능 또한 제공합니다.
+- **CBF & CF**를 활용한 버킷리스트 추천
+- 무한 스크롤 적용
 
-마지막으로 작성된 버킷리스트를 서로 공유하고 이미지 파일로 내보낼 수 있습니다.
+### 3️⃣ 버킷리스트 항목 담기
 
+![담기](https://user-images.githubusercontent.com/109948739/232066647-42ef5430-ec6e-4026-aa43-970aa17c5a60.gif)
 
+### 4️⃣ 버킷리스트 관리
 
-### 개발 환경 및 기술 스택
+![완료 및 삭제](https://user-images.githubusercontent.com/109948739/232066662-1efdcc75-c250-4a45-8357-f640bb7c3dbc.gif)
 
-#### FrontEnd
+- 버킷리스트 항목별 완료/미완료 처리 기능
+- 버킷리스트 항목 삭제 기능
 
-- HTML
-- Styled Component
-- JavaScript
-- Node.js
-- React
-- Redux
-- Router-Dom
+### 5️⃣ 버킷리스트 항목 만들기
 
+![만들기 및 수정](https://user-images.githubusercontent.com/109948739/232066678-e24c4065-c7e9-4bce-b161-238976f57bc4.gif)
 
+- 검색어 자동 완성 기능
+- 이모지, 카테고리, 장소, 설명 설정 기능
+- 버킷리스트 항목별 경험일기 작성 기능
 
-#### BackEnd
+### 6️⃣ 경험일기 모아보기
 
-- Spring Boot 2.7.9
-- Gradle
-- JPA
-- openjdk 11
-  - https://github.com/ojdkbuild/ojdkbuild
-  - https://jdk.java.net/java-se-ri/11
-- MySQL Driver
-- FAST API
+![경험일기 모아보기](https://user-images.githubusercontent.com/109948739/232066642-737cd823-4c4c-4cf9-bc35-67ff77d76a7b.gif)
 
+- 선택된 버킷리스트의 전체 경험일기 조회
 
+### 7️⃣ 공유하기
 
-#### Infra
+![공유하기](https://user-images.githubusercontent.com/109948739/232066634-924571c5-03d8-4840-b3c0-db4fe0fc34cf.gif)
 
-- Docker
-- Jenkins
-- EC2
-- S3
-  - RDS
+- 읽기 전용 페이지 생성 및 공유
 
+### 8️⃣ 내보내기
 
+![내보내기](https://user-images.githubusercontent.com/109948739/232066683-21412b42-f95c-46aa-a9d8-5942455b4243.gif)
 
-#### 버전/이슈 관리
+- 버킷리스트를 이미지로 저장
 
-- Jira
-- Gitlab
-- Notion
+### 9️⃣ 참여하기
 
+![참가하기](https://user-images.githubusercontent.com/109948739/232066666-f82ed999-6efe-4248-a429-fd6fc82c5879.gif)
 
+- 참여코드 생성
+- 다른 사람의 버킷리스트에 참여
 
-#### Tool
+### 🔟 소셜 추천
 
-- Postman
-- Figma
-- ERDcloud
+![소셜](https://user-images.githubusercontent.com/109948739/232066659-cda69236-1876-4eb8-92a7-103f2002fd43.gif)
 
+- **코사인 유사도** 활용한 다른 사용자의 버킷리스트 추천
 
+---
 
-#### 서비스 구조도
+<br/>
 
-<img src="https://i.ibb.co/VN4MTcz/SSAFY-DODO-1.png" />
+<div id="3"></div>
 
+## ✅ 3. 기술 스택
 
+- **FRONT-END**<br/>
+  <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white"> <img src="https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white"> <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white"> <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=Html5&logoColor=white"> <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white"> <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=css3&logoColor=black">
+  
+- **BACK-END**<br/>
+  <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"> <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"> <img src="https://img.shields.io/badge/jpa-6DB33F?style=for-the-badge&logo=jpa&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/openjdk-FFFFFF?style=for-the-badge&logo=openjdk&logoColor=black"> <img src="https://img.shields.io/badge/fastapi-009688?style=for-the-badge&logo=fastapi&logoColor=white"> <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/alchemy-0C0C0E?style=for-the-badge&logo=alchemy&logoColor=white"> <img src="https://img.shields.io/badge/uvicorn-499848?style=for-the-badge&logo=uvicorn&logoColor=black"> <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=black"> <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=black">
+  
+- **Collaboration**<br/>
+  <img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white"> <img src="https://img.shields.io/badge/mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white"> <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
 
-#### ERD
+---
 
-<img src="https://user-images.githubusercontent.com/43941336/230526103-f6ce14f7-d618-4cb5-af5e-82fb50ab761d.png" />
+<br/>
 
-#### Figma
+<div id="4"></div>
 
-- <a href="https://www.figma.com/file/aoJdWaHvSGDClShwiXPxUW/B104?node-id=0-1">Figma</a>
+## ✅ 4. 프로젝트 일정 및 산출물
 
+### 프로젝트 일정
 
+**: 2023. 02. 20. ~ 2023. 04. 07.**
 
-### 주요 기능
+### 1️⃣ 아키텍처
 
-#### 설문조사
+<img src="https://user-images.githubusercontent.com/109948739/232074188-11bc597f-5876-4b27-8256-fd89a81e81fd.png" width="545.6" height="323.4"/>
 
-![설문](https://user-images.githubusercontent.com/109258034/230552400-5fa39ba5-33b0-46ed-a75e-23b4fbc8e1b5.gif)
+### 2️⃣ ERD
 
-- 사용자의 취향을 알기 위한 사전 설문 페이지입니다.
-- 많은 양의 버킷리스트를 보여주기 위하여 무한 스크롤을 적용했습니다.
+<img src="https://user-images.githubusercontent.com/109948739/232074192-bc57dc7f-43b5-4ea6-a0b9-d9c53275f540.png" width="504.9" height="314.05"/>
 
+### 3️⃣ API 명세서
 
+<img src="https://user-images.githubusercontent.com/109948739/232074177-4a66c6f4-e503-414e-b7af-bffceddaa583.png" width="519.96" height="233.4"/>
 
-#### 추천 서비스
+---
 
-![추천](https://user-images.githubusercontent.com/109258034/230553186-86ff8ad7-c7c8-4a01-b8dd-29ff4f047fea.gif)
+<br/>
 
-- 추천 알고리즘을 적용한 검색 페이지입니다.
-- 검색어를 입력하여 검색시 검색기능이 되고 전체 카테고리를 클릭시 추천 알고리즘에 의한 결과가 나오게 됩니다.
-- 무한스크롤이 적용되었습니다.
+<div id="5"></div>
 
+## ✅ 5. 팀소개
 
-
-#### 관리 페이지
-
-![관리](https://user-images.githubusercontent.com/109258034/230553255-cb3fe351-b8d1-4a96-8cd0-00ec5da6ee69.gif)
-
-<br />
-
-![경험일기 모아보기](https://user-images.githubusercontent.com/109258034/230553401-2a1a7335-1b50-4216-be4e-1ae5f9025a76.gif)
-
-<br />
-
-<img src="https://i.ibb.co/NxBZDHQ/image.png" height="400px" weight="500px" />
-
-- 관리페이지에서는 담아놓은 버킷리스트를 확인할 수 있고 경험일기를 작성할 수 있습니다.
-- 경험일기 탭에서 그동안 작성한 경험일기를 모아볼 수 있습니다.
-- 설정 탭에서 버킷리스트의 사진, 이름, 공개여부, 공유하기, 내보내기 기능이 있습니다.
-
-
-
-#### 구경하기
-
-![소셜](https://user-images.githubusercontent.com/109258034/230552806-05bf694d-1be5-4dbb-908f-a06a5a55bd6f.gif)
-
-- 관리 페이지에서 공개한 버킷리스트들을 나와 유사한 성향을 가진 유저를 찾아내서 구경할 수 있습니다.
-- 무한스크롤이 적용되었습니다.
-
-
-
-#### 버킷리스트 생성
-
-<img src="https://i.ibb.co/KLRhSmY/1.png" height="400px" weight="500px" />
-
-<br />
-
-<img src="https://i.ibb.co/tHwk8gz/2.png" height="400px" weight="500px" />
-
-- 나의 버킷리스트와 그룹 버킷리스트를 생성할 수 있습니다.
-
-
-
-#### 그룹 버킷리스트 참여
-
-<img src="https://i.ibb.co/9V3jQGQ/image.png" />
-
-<br />
-
-<img src="https://i.ibb.co/kcHZSyk/image.png" height="400px" weight="500px"/>
-
-- 관리페이지의 설정 탭의 참여코드 생성으로 참여코드를 생성하여 참여코드를 통해 그룹 버킷리스트에 참여할 수 있습니다.
-
-
-
+<img src="https://user-images.githubusercontent.com/109948739/232074198-21ce6602-ed8e-4516-a73b-0df9f8f2597f.png" width="508.65" height="296.4"/>
