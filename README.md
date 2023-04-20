@@ -5,9 +5,9 @@
 ## ✅ 목차
 
 1. [**서비스 소개**](#1)
-2. [**기능 소개**](#2)
+2. [**프로젝트 일정 및 산출물**](#2)
 3. [**기술 스택**](#3)
-4. [**프로젝트 일정 및 산출물**](#4)
+4. [**기능 소개**](#4)
 5. [**팀 소개**](#5)
 
 ---
@@ -42,7 +42,48 @@
 
 <div id="2"></div>
 
-## ✅ 2. 기능 소개
+## ✅ 2. 프로젝트 일정 및 산출물
+
+### 프로젝트 일정
+
+**: 2023. 02. 20. ~ 2023. 04. 07.**
+
+### 1️⃣ 아키텍처
+
+<img src="https://user-images.githubusercontent.com/109948739/232074188-11bc597f-5876-4b27-8256-fd89a81e81fd.png" width="545.6" height="323.4"/>
+
+### 2️⃣ ERD
+
+<img src="https://user-images.githubusercontent.com/109948739/232074192-bc57dc7f-43b5-4ea6-a0b9-d9c53275f540.png" width="504.9" height="314.05"/>
+
+### 3️⃣ API 명세서
+
+<img src="https://user-images.githubusercontent.com/109948739/232074177-4a66c6f4-e503-414e-b7af-bffceddaa583.png" width="519.96" height="233.4"/>
+
+---
+
+<br/>
+
+<div id="3"></div>
+
+## ✅ 3. 기술 스택
+
+- **FRONT-END**<br/>
+  <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white"> <img src="https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white"> <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white"> <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=Html5&logoColor=white"> <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white"> <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=css3&logoColor=black">
+  
+- **BACK-END**<br/>
+  <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"> <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"> <img src="https://img.shields.io/badge/jpa-6DB33F?style=for-the-badge&logo=jpa&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/openjdk-FFFFFF?style=for-the-badge&logo=openjdk&logoColor=black"> <img src="https://img.shields.io/badge/fastapi-009688?style=for-the-badge&logo=fastapi&logoColor=white"> <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/alchemy-0C0C0E?style=for-the-badge&logo=alchemy&logoColor=white"> <img src="https://img.shields.io/badge/uvicorn-499848?style=for-the-badge&logo=uvicorn&logoColor=black"> <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=black"> <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=black">
+  
+- **Collaboration**<br/>
+  <img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white"> <img src="https://img.shields.io/badge/mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white"> <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
+
+---
+
+<br/>
+
+<div id="4"></div>
+
+## ✅ 4. 기능 소개
 
 ### 1️⃣ 설문 조사
 
@@ -107,47 +148,6 @@
 ![소셜](https://user-images.githubusercontent.com/109948739/232066659-cda69236-1876-4eb8-92a7-103f2002fd43.gif)
 
 - **코사인 유사도** 활용한 다른 사용자의 버킷리스트 추천
-
----
-
-<br/>
-
-<div id="3"></div>
-
-## ✅ 3. 기술 스택
-
-- **FRONT-END**<br/>
-  <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white"> <img src="https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white"> <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white"> <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=Html5&logoColor=white"> <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white"> <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=css3&logoColor=black">
-  
-- **BACK-END**<br/>
-  <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"> <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"> <img src="https://img.shields.io/badge/jpa-6DB33F?style=for-the-badge&logo=jpa&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/openjdk-FFFFFF?style=for-the-badge&logo=openjdk&logoColor=black"> <img src="https://img.shields.io/badge/fastapi-009688?style=for-the-badge&logo=fastapi&logoColor=white"> <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/alchemy-0C0C0E?style=for-the-badge&logo=alchemy&logoColor=white"> <img src="https://img.shields.io/badge/uvicorn-499848?style=for-the-badge&logo=uvicorn&logoColor=black"> <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=black"> <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=black">
-  
-- **Collaboration**<br/>
-  <img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white"> <img src="https://img.shields.io/badge/mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white"> <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
-
----
-
-<br/>
-
-<div id="4"></div>
-
-## ✅ 4. 프로젝트 일정 및 산출물
-
-### 프로젝트 일정
-
-**: 2023. 02. 20. ~ 2023. 04. 07.**
-
-### 1️⃣ 아키텍처
-
-<img src="https://user-images.githubusercontent.com/109948739/232074188-11bc597f-5876-4b27-8256-fd89a81e81fd.png" width="545.6" height="323.4"/>
-
-### 2️⃣ ERD
-
-<img src="https://user-images.githubusercontent.com/109948739/232074192-bc57dc7f-43b5-4ea6-a0b9-d9c53275f540.png" width="504.9" height="314.05"/>
-
-### 3️⃣ API 명세서
-
-<img src="https://user-images.githubusercontent.com/109948739/232074177-4a66c6f4-e503-414e-b7af-bffceddaa583.png" width="519.96" height="233.4"/>
 
 ---
 
