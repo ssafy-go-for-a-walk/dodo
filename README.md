@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/ssafy-go-for-a-walk/dodo/assets/109948739/e0a5dbcf-f49b-4599-859b-f448dcca8e58" width="1080" height="440"/>
+  <img src="https://github.com/ssafy-go-for-a-walk/dodo/assets/109948739/e0a5dbcf-f49b-4599-859b-f448dcca8e58" width="865" height="353"/>
 <p/>
 
 ## ✅ 목차
