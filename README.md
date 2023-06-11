@@ -189,4 +189,7 @@
 
 ## ✅ 5. 팀소개
 
-<img src="https://user-images.githubusercontent.com/109948739/232074198-21ce6602-ed8e-4516-a73b-0df9f8f2597f.png" width="508.65" height="296.4"/>
+| 😀 김종성 | 💜 이희진 | 🍀 염유리 | 😎 박승재 | 🐭 이진욱 |
+| :----: | :---: | :---: | :---: | :---: |
+| <img src="https://github.com/lmghee/lmghee/assets/109948739/849e9d87-734d-4d12-ae3a-7b170bdd7b82"/> | <img src="https://github.com/lmghee/lmghee/assets/109948739/4471c2a5-cd2c-410f-bb59-b68a91a2fd5e"/> | <img src="https://github.com/lmghee/lmghee/assets/109948739/3213c795-239c-4607-9314-c4193b6c5ac7"/> | <img src="https://github.com/lmghee/lmghee/assets/109948739/f285dbf5-0e8b-46bb-9db7-d47d77c02418"/> | <img src="https://github.com/lmghee/lmghee/assets/109948739/30eefac0-e7b0-474e-b659-4e781bc603be"/> |
+| **BackEnd** <br> 팀장, 백엔드 리더 | **BackEnd** <br> 추천 알고리즘 | **BackEnd** <br>  인증 및 인가 | **FrontEnd** <br>  프론트 리더 | **FrontEnd** <br>  UI/UX 설계, JIRA |
